@@ -197,28 +197,24 @@ body {
         text-align: right; }
       @media screen and (max-width: 480px) {
         #header nav li {
-          -webkit-transition: -webkit-transform 0.5s cubic-bezier(0.81, 0.14, 0.22, 0.86);
-          -moz-transition: -moz-transform 0.5s cubic-bezier(0.81, 0.14, 0.22, 0.86);
-          transition: transform 0.5s cubic-bezier(0.81, 0.14, 0.22, 0.86);
-          -webkit-transform: translateX(-100%);
-          -moz-transform: translateX(-100%);
-          -ms-transform: translateX(-100%);
-          -o-transform: translateX(-100%);
-          transform: translateX(-100%);
           width: 100%;
           float: none; }
           #header nav li:nth-child(1) {
-            text-align: center;
-            transition-delay: 0.1s; }
+            text-align: center; }
+            #header nav li:nth-child(1) span:before {
+              display: none; }
           #header nav li:nth-child(2) {
-            text-align: center;
-            transition-delay: 0.2s; }
+            text-align: center; }
+            #header nav li:nth-child(2) span:before {
+              display: none; }
           #header nav li:nth-child(3) {
-            text-align: center;
-            transition-delay: 0.3s; }
+            text-align: center; }
+            #header nav li:nth-child(3) span:before {
+              display: none; }
           #header nav li:nth-child(4) {
-            text-align: center;
-            transition-delay: 0.4s; } }
+            text-align: center; }
+            #header nav li:nth-child(4) span:before {
+              display: none; } }
     #header nav a {
       font-size: 22px;
       letter-spacing: .1em;
@@ -286,8 +282,10 @@ body {
           margin: 30px 0;
           font-size: 24px;
           display: block;
-          padding: 10px 0;
-          border: 1px solid rgba(0, 0, 0, 0.1); } }
+          padding: 10px 0; } }
+      @media screen and (max-width: 320px) {
+        #header nav a {
+          margin: 15px 0; } }
     #header nav a span:before {
       position: absolute;
       right: 50%;
@@ -330,11 +328,7 @@ body {
     -o-transform: translateY(0);
     transform: translateY(0); }
   #header[data-open="true"] li {
-    -webkit-transform: translateX(0);
-    -moz-transform: translateX(0);
-    -ms-transform: translateX(0);
-    -o-transform: translateX(0);
-    transform: translateX(0); }
+    opacity: 1; }
 
 #shade {
   position: fixed;

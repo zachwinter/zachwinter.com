@@ -34,7 +34,7 @@ body {
 }
 
 @mixin font-header {
-  @include scale(font-size 120px 32px);
+  @include scale(font-size 120px 36px);
   font-family: 'Elevation';
   font-weight: $light;
   letter-spacing: -.01em;

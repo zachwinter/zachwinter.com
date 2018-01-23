@@ -1,12 +1,22 @@
 export default class Canvas {
   constructor(canvas) {
-    this.width = window.innerWidth;
-    this.height = window.innerHeight;
+    this.isMobile = window.matchMedia('(max-width: 480px)').matches;
     this.node = document.getElementById(canvas);
-    this.node.width = this.node.offsetWidth;
-    this.node.height = this.node.offsetHeight;
-    this.node.style.width = 'auto'
-    this.node.style.height = 'auto'
+
+    this.width = this.node.offsetWidth;
+    this.height = this.node.offsetHeight;
+    this.node.width = this.width;
+    this.node.height = this.height;
+
+    if (this.isMobile) {
+      this.width = this.node.offsetWidth * 2;
+      this.height = this.node.offsetHeight * 2;
+      this.node.width = this.width * 2;
+      this.node.height = this.height * 2;
+    }
+
+    this.node.style.width = this.width + 'px';
+    this.node.style.height = this.height + 'px';
     this.ctx = this.node.getContext('2d');
     this.stars = [];
     this.background = {};
@@ -36,19 +46,16 @@ export default class Canvas {
   }
 
   startPaint() {
-    console.log('startPaint()');
     this.paint();
     this.isPainting = true;
   }
 
   stopPaint() {
-    console.log('stopPaint()');
     cancelAnimationFrame(this.raf);
     this.isPainting = false;
   }
 
   init() {
-    console.log('init()');
     if (this.isInitialized === false) {
       this.startPaint();
       this.isPainting = true;

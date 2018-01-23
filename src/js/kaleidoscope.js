@@ -13,7 +13,7 @@ class Kaleidoscope extends Visualizer {
     this.intervalTimeout = this.interval ? {} : false;
     this.canvas = new Canvas('kaleidoscope');
     this.totalStars = 16; 
-    this.maxSize = .6 * (window.outerHeight > window.innerWidth ? window.outerHeight : window.innerWidth);
+    this.maxSize = (this.canvas.isMobile ? 1.2 : .5) * (window.innerHeight > window.innerWidth ? window.innerHeight : window.innerWidth);
     this.minSize = this.maxSize / 5;
     this.activeSize = this.intervalTimeout !== false ? this.maxSize : this.minSize;
     this.sizeStep = [

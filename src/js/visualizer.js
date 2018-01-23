@@ -55,23 +55,20 @@ class Visualizer extends SpotifyAnalyzer {
   }
 
   /** Start demo. */
-  startDemo(response, delay, callback) {
-    if (typeof(callback) === 'function') {
-      callback()
-    }
-    
-    let interval = setInterval(() => {
-      let progress = this.audio.currentTime * 100;
+  startDemo(response, delay) {
+    this.audio.src = `/static/songs/${window.VISUALIZER.activeDemo}.mp3`
+    this.audio.play()
 
-      if (progress >= 0) {
-        this.trackProgress = { 
-          progress: progress,
-          timestamp: window.performance.now()
-        };
-        this.start(response);
-        clearInterval(interval);
-      }
-    }, 20);
+    const canPlayThrough = () => {
+      this.trackProgress = { 
+        progress: this.audio.currentTime * 100,
+        timestamp: window.performance.now()
+      };
+      this.start(response);
+      this.audio.removeEventListener('canplaythrough', canPlayThrough);
+    }
+
+    this.audio.addEventListener('canplaythrough', canPlayThrough);
   }
 
   /** Stop visualizer. */
@@ -84,17 +81,17 @@ class Visualizer extends SpotifyAnalyzer {
   }
 
   /** Initialize visualizer. */
-  init(callback) {
+  init() {
     this.events.beforeInit.bind(this).call();
 
     this.getCurrentTrack((response, delay) => {
-      this.setState(response, delay, callback)
+      this.setState(response, delay)
     });
 
     if (this.demo !== true) {
       setInterval(() => {
         this.getCurrentTrack((response, delay) => {
-          this.setState(response, delay, callback)
+          this.setState(response, delay)
         });
       }, 5000);
     }
@@ -105,7 +102,7 @@ class Visualizer extends SpotifyAnalyzer {
    * @param {object} response - Server response containing currently playing track.
    * @param {number} delay    - Time elapsed between request and response.
    */
-  setState(response, delay, callback) {
+  setState(response, delay) {
     if (response === 'Blank response.') {
       this.stop();
       this.toast.notPlaying();
@@ -133,7 +130,7 @@ class Visualizer extends SpotifyAnalyzer {
           };
 
           if (this.demo === true) {
-            this.startDemo(response, delay, callback);
+            this.startDemo(response, delay);
           } else {
             this.start(response);
           }
@@ -154,7 +151,7 @@ class Visualizer extends SpotifyAnalyzer {
         }; 
 
         if (this.demo === true) {
-          this.startDemo(response, delay, callback);
+          this.startDemo(response, delay);
           } else {
           this.start(response);
         }

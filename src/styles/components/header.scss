@@ -73,15 +73,14 @@ $mobile-breakpoint: 480;
       &:nth-child(3), &:nth-child(4) { text-align: right; }
 
       @include bp($mobile-breakpoint) {
-        @include transition(transform $nav-transition);
-        @include transform( translateX(-100%) );
         width: 100%;
         float: none;
 
         @for $i from 1 through 4 {
           &:nth-child(#{$i}) {
             text-align: center;
-            transition-delay: #{$i * .1s};
+
+            span:before { display: none; }
           }
         }
       }
@@ -102,7 +101,10 @@ $mobile-breakpoint: 480;
         font-size: 24px;
         display: block;
         padding: 10px 0;
-        border: 1px solid rgba(0, 0, 0, .1);
+      }
+
+      @include bp(320) {
+        margin: $base-margin/2 0;
       }
     }
 
@@ -147,7 +149,7 @@ $mobile-breakpoint: 480;
     }
 
     li {
-      @include transform( translateX(0) );
+      opacity: 1;
     }
   }
 }

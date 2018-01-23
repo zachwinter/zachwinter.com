@@ -1,36 +1,81 @@
 @import '../import.scss';
 
-main {
-  transition: transform 1.5s cubic-bezier(.81,.14,.22,.86);
+.screens {
+  transition: transform 1s cubic-bezier(.81,.14,.22,.86);
 }
 
-.work > * {
+.screens > * {
   @include size(100% 100vh);
   position: relative;
   overflow: hidden;
+}
 
-  .text {
-    @include container(true);
-    @include center-vertically(relative);
-    z-index: 10;
+.screen-navigation {
+  @include position(fixed, null 0 0 0);
+  @include container(true);
+  @include transform(translateY(-50%));
+  z-index: 10;
+  overflow: visible;
 
-    h1 {
-      @include font-block;
+  &.black {
+    li { background: $black; }
+  }
+
+  li {
+    @include transition(all 1s cubic-bezier(.81,.14,.22,.86));
+    @include size(12px);
+    margin: 0 auto;
+    display: block;
+    margin-bottom: 30px;
+    background: $white;
+    overflow: visible;
+    position: relative;
+    opacity: .7;
+
+    &:last-child { margin-bottom: 0; }
+  }
+
+  li.active {
+    @include transform( scale(3) );
+    opacity: 1;
+  } 
+}
+
+.text {
+  @include container(true);
+  @include center-vertically(relative);
+  z-index: 10;
+
+  @include bp(640) {
+    text-align: center;
+  }
+
+  @include bp(320) {
+    top: calc(50% - 90px);
+  }
+
+  h1 {
+    @include font-block;
+  }
+
+  h2 {
+    @include font-header;
+    margin: $base-margin/2 0;
+
+    @include bp(320) {
+      margin-bottom: 10px;
     }
+  }
 
-    h2 {
-      @include font-header;
-      margin: $base-margin/2 0;
-    }
+  p {
+    font-size: 20px;
+    font-weight: $light;
+    margin-bottom: $base-margin;
 
-    p {
-      font-size: 20px;
-      font-weight: $light;
-      margin-bottom: $base-margin;
-    }
+    @include bp(320) { font-size: 16px; }
+  }
 
-    a, button {
-      @include button($white, $white);
-    }
+  a, button {
+    @include button($white, $white);
   }
 }
