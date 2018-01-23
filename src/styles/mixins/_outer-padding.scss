@@ -1,0 +1,6 @@
+@mixin outer-padding($full: null) {
+	padding-left: $outer-padding;
+	padding-right: $outer-padding;
+
+	@if $full { padding: $outer-padding; }
+}

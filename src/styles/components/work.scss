@@ -1,0 +1,36 @@
+@import '../import.scss';
+
+main {
+  transition: transform 1.5s cubic-bezier(.81,.14,.22,.86);
+}
+
+.work > * {
+  @include size(100% 100vh);
+  position: relative;
+  overflow: hidden;
+
+  .text {
+    @include container(true);
+    @include center-vertically(relative);
+    z-index: 10;
+
+    h1 {
+      @include font-block;
+    }
+
+    h2 {
+      @include font-header;
+      margin: $base-margin/2 0;
+    }
+
+    p {
+      font-size: 20px;
+      font-weight: $light;
+      margin-bottom: $base-margin;
+    }
+
+    a, button {
+      @include button($white, $white);
+    }
+  }
+}

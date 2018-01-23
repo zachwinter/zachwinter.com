@@ -1,0 +1,70 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400,700,900");
+@import url("https://fonts.googleapis.com/css?family=PT+Sans+Narrow:700");
+@import url("https://fonts.googleapis.com/css?family=Prata");
+@import url("https://fonts.googleapis.com/css?family=Economica");
+html {
+  box-sizing: border-box; }
+
+*, *::after, *::before {
+  box-sizing: inherit; }
+
+.container {
+  width: 100%;
+  max-width: 1340px;
+  margin: 0 auto;
+  position: relative;
+  padding: 0 30px; }
+
+@font-face {
+  font-family: "Elevation";
+  src: url("/fonts/Elevation.eot");
+  src: url("/fonts/Elevation.eot?#iefix") format("embedded-opentype"), url("/fonts/Elevation.woff2") format("woff2"), url("/fonts/Elevation.woff") format("woff"), url("/fonts/Elevation.ttf") format("truetype"), url("/fonts/Elevation.svg") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+
+@font-face {
+  font-family: "leaguegothic-regular-webfont";
+  src: url("/fonts/leaguegothic-regular-webfont.eot");
+  src: url("/fonts/leaguegothic-regular-webfont.eot?#iefix") format("embedded-opentype"), url("/fonts/leaguegothic-regular-webfont.woff2") format("woff2"), url("/fonts/leaguegothic-regular-webfont.woff") format("woff"), url("/fonts/leaguegothic-regular-webfont.ttf") format("truetype"), url("/fonts/leaguegothic-regular-webfont.svg") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+
+body {
+  font-family: "Prata", serif; }
+
+.home header {
+  height: 600px;
+  -webkit-transition: opacity 2s ease-in-out;
+  -moz-transition: opacity 2s ease-in-out;
+  transition: opacity 2s ease-in-out;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  background-image: url(/img/home-hero.jpg);
+  background-position: center;
+  background-size: cover; }
+  @media screen and (max-width: 1280px) {
+    .home header {
+      height: 557.14286px; } }
+  @media screen and (max-width: 1024px) {
+    .home header {
+      height: 514.28571px; } }
+  @media screen and (max-width: 900px) {
+    .home header {
+      height: 471.42857px; } }
+  @media screen and (max-width: 768px) {
+    .home header {
+      height: 428.57143px; } }
+  @media screen and (max-width: 640px) {
+    .home header {
+      height: 385.71429px; } }
+  @media screen and (max-width: 480px) {
+    .home header {
+      height: 342.85714px; } }
+  @media screen and (max-width: 480px) {
+    .home header {
+      height: 342.85714px; } }
+  @media screen and (max-width: 320px) {
+    .home header {
+      height: 300px; } }

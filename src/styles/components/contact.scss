@@ -1,0 +1,5 @@
+@import '../import.scss';
+
+.contact header {
+  @include hero-image('/img/contact-hero.jpg');
+}

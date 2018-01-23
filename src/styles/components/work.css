@@ -1,0 +1,175 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400,700,900");
+@import url("https://fonts.googleapis.com/css?family=PT+Sans+Narrow:700");
+@import url("https://fonts.googleapis.com/css?family=Prata");
+@import url("https://fonts.googleapis.com/css?family=Economica");
+html {
+  box-sizing: border-box; }
+
+*, *::after, *::before {
+  box-sizing: inherit; }
+
+.container {
+  width: 100%;
+  max-width: 1340px;
+  margin: 0 auto;
+  position: relative;
+  padding: 0 30px; }
+
+@font-face {
+  font-family: "Elevation";
+  src: url("/fonts/Elevation.eot");
+  src: url("/fonts/Elevation.eot?#iefix") format("embedded-opentype"), url("/fonts/Elevation.woff2") format("woff2"), url("/fonts/Elevation.woff") format("woff"), url("/fonts/Elevation.ttf") format("truetype"), url("/fonts/Elevation.svg") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+
+@font-face {
+  font-family: "leaguegothic-regular-webfont";
+  src: url("/fonts/leaguegothic-regular-webfont.eot");
+  src: url("/fonts/leaguegothic-regular-webfont.eot?#iefix") format("embedded-opentype"), url("/fonts/leaguegothic-regular-webfont.woff2") format("woff2"), url("/fonts/leaguegothic-regular-webfont.woff") format("woff"), url("/fonts/leaguegothic-regular-webfont.ttf") format("truetype"), url("/fonts/leaguegothic-regular-webfont.svg") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+
+body {
+  font-family: "Prata", serif; }
+
+main {
+  transition: transform 1.5s cubic-bezier(0.81, 0.14, 0.22, 0.86); }
+
+.work > * {
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow: hidden; }
+  .work > * .text {
+    padding-left: 30px;
+    padding-right: 30px;
+    width: 100%;
+    clear: both;
+    max-width: 1340px;
+    margin: 0 auto;
+    position: relative;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    z-index: 10; }
+    .work > * .text::after {
+      clear: both;
+      content: "";
+      display: table; }
+    .work > * .text h1 {
+      font-size: 22px;
+      letter-spacing: .1em;
+      font-family: "Economica", sans-serif;
+      font-weight: normal;
+      text-transform: uppercase;
+      text-decoration: none; }
+      @media screen and (max-width: 1280px) {
+        .work > * .text h1 {
+          font-size: 21.14286px; } }
+      @media screen and (max-width: 1024px) {
+        .work > * .text h1 {
+          font-size: 20.28571px; } }
+      @media screen and (max-width: 900px) {
+        .work > * .text h1 {
+          font-size: 19.42857px; } }
+      @media screen and (max-width: 768px) {
+        .work > * .text h1 {
+          font-size: 18.57143px; } }
+      @media screen and (max-width: 640px) {
+        .work > * .text h1 {
+          font-size: 17.71429px; } }
+      @media screen and (max-width: 480px) {
+        .work > * .text h1 {
+          font-size: 16.85714px; } }
+      @media screen and (max-width: 480px) {
+        .work > * .text h1 {
+          font-size: 16.85714px; } }
+      @media screen and (max-width: 320px) {
+        .work > * .text h1 {
+          font-size: 16px; } }
+    .work > * .text h2 {
+      font-size: 120px;
+      font-family: 'Elevation';
+      font-weight: 300;
+      letter-spacing: -.01em;
+      margin: 15px 0; }
+      @media screen and (max-width: 1280px) {
+        .work > * .text h2 {
+          font-size: 107.42857px; } }
+      @media screen and (max-width: 1024px) {
+        .work > * .text h2 {
+          font-size: 94.85714px; } }
+      @media screen and (max-width: 900px) {
+        .work > * .text h2 {
+          font-size: 82.28571px; } }
+      @media screen and (max-width: 768px) {
+        .work > * .text h2 {
+          font-size: 69.71429px; } }
+      @media screen and (max-width: 640px) {
+        .work > * .text h2 {
+          font-size: 57.14286px; } }
+      @media screen and (max-width: 480px) {
+        .work > * .text h2 {
+          font-size: 44.57143px; } }
+      @media screen and (max-width: 480px) {
+        .work > * .text h2 {
+          font-size: 44.57143px; } }
+      @media screen and (max-width: 320px) {
+        .work > * .text h2 {
+          font-size: 32px; } }
+    .work > * .text p {
+      font-size: 20px;
+      font-weight: 300;
+      margin-bottom: 30px; }
+    .work > * .text a, .work > * .text button {
+      font-size: 22px;
+      letter-spacing: .1em;
+      font-family: "Economica", sans-serif;
+      font-weight: normal;
+      text-transform: uppercase;
+      text-decoration: none;
+      -webkit-transition: all 0.15s ease-in-out;
+      -moz-transition: all 0.15s ease-in-out;
+      transition: all 0.15s ease-in-out;
+      display: inline-block;
+      border: 2px solid #ffffff;
+      background: transparent;
+      padding: 10px 20px;
+      color: #ffffff;
+      border-radius: 0;
+      min-width: 100px;
+      line-height: 26px;
+      height: 50px; }
+      @media screen and (max-width: 1280px) {
+        .work > * .text a, .work > * .text button {
+          font-size: 21.14286px; } }
+      @media screen and (max-width: 1024px) {
+        .work > * .text a, .work > * .text button {
+          font-size: 20.28571px; } }
+      @media screen and (max-width: 900px) {
+        .work > * .text a, .work > * .text button {
+          font-size: 19.42857px; } }
+      @media screen and (max-width: 768px) {
+        .work > * .text a, .work > * .text button {
+          font-size: 18.57143px; } }
+      @media screen and (max-width: 640px) {
+        .work > * .text a, .work > * .text button {
+          font-size: 17.71429px; } }
+      @media screen and (max-width: 480px) {
+        .work > * .text a, .work > * .text button {
+          font-size: 16.85714px; } }
+      @media screen and (max-width: 480px) {
+        .work > * .text a, .work > * .text button {
+          font-size: 16.85714px; } }
+      @media screen and (max-width: 320px) {
+        .work > * .text a, .work > * .text button {
+          font-size: 16px; } }
+      .work > * .text a:active, .work > * .text a:focus, .work > * .text button:active, .work > * .text button:focus {
+        outline: 0; }
+      .work > * .text a:hover, .work > * .text button:hover {
+        color: #ffffff;
+        border: 2px solid #ffffff;
+        cursor: pointer; }

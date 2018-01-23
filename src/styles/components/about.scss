@@ -1,0 +1,5 @@
+@import '../import.scss';
+
+.about header {
+  @include hero-image('/img/about-hero.jpg');
+}

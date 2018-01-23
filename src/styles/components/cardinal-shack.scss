@@ -1,0 +1,12 @@
+@import '../import.scss';
+
+.cardinal-shack {
+  background: url('/img/cardinal-shack.jpg') no-repeat;
+  background-size: cover;
+  background-position: 35%;
+
+  .text {
+    color: $white;
+    text-align: right;
+  }
+} 
