@@ -1,19 +1,19 @@
-import _ from 'lib/lodash';
-import Visualizer from 'visualizer';
-import Canvas from 'classes/canvas';
-import Star from 'classes/star';
-import Rectangle from 'classes/rectangle';
+import _ from 'lodash';
+import Visualizer from './visualizer';
+import Canvas from './canvas';
+import Star from './star';
+import Rectangle from './rectangle';
 
-export default class Kaleidoscope extends Visualizer {
+class Kaleidoscope extends Visualizer {
   constructor(demo, interval) {
-    super(demo)
+    super(demo, interval)
 
     this.initialized = false;
     this.interval = interval;
     this.intervalTimeout = this.interval ? {} : false;
     this.canvas = new Canvas('kaleidoscope');
     this.totalStars = 16; 
-    this.maxSize = .7 * (window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight);
+    this.maxSize = (this.canvas.isMobile ? 1.2 : .5) * (window.innerHeight > window.innerWidth ? window.innerHeight : window.innerWidth);
     this.minSize = this.maxSize / 5;
     this.activeSize = this.intervalTimeout !== false ? this.maxSize : this.minSize;
     this.sizeStep = [
@@ -29,8 +29,7 @@ export default class Kaleidoscope extends Visualizer {
       ['rgb(118,229,252)', 'rgb(27,154,170)',  'rgb(157,172,255)', 'rgb(61,52,139)',   'rgb(238,251,255)'],
       ['rgb(10,36,99)',    'rgb(62,146,204)',  'rgb(255,250,255)', 'rgb(216,49,91)',   'rgb(39,27,24)']
     ];
-    this.setActive
-    this.duration = 100; 
+    this.duration = 2000; 
     this.radiusDuration = 1000;
     this.colorDuration = 1000;
     this.backgroundDuration = 1000;
@@ -115,7 +114,7 @@ export default class Kaleidoscope extends Visualizer {
 
       if (size < this.minSize ) {
         size = this.minSize;
-      }
+      } 
 
       clearInterval(this.canvas.stars[i].radiusTween);
 
@@ -288,13 +287,11 @@ export default class Kaleidoscope extends Visualizer {
 
   setEventHooks() {
     this.events.beforeInit = () => {
-      this.initElements();
+      if (this.demo === false && this.interval === false) {
+        this.initElements();
+      }
 
-      if (this.interval !== true) {
-        this.setActiveColorScheme();
-        this.setColorState();
-        this.setRadiusState(true);
-      } else {
+      if (this.interval === true) {
         clearTimeout(this.intervalTimeout.timer);
       }
 
@@ -339,3 +336,5 @@ export default class Kaleidoscope extends Visualizer {
     };
   } 
 }
+
+export default Kaleidoscope

@@ -1,10 +1,24 @@
 export default class Canvas {
   constructor(canvas) {
+    this.isMobile = window.matchMedia('(max-width: 480px)').matches;
+    this.hidpi = window.matchMedia('only screen and (-webkit-min-device-pixel-ratio: 1.3), not all, not all, only screen and (-webkit-min-device-pixel-ratio: 1.30208333333333), not all, only screen and (min-resolution: 125dpi), not all, only screen and (min-resolution: 1.3dppx)');
+    this.node = document.getElementById(canvas);
     this.width = window.innerWidth;
     this.height = window.innerHeight;
-    this.node = document.getElementById(canvas);
     this.node.width = this.width;
     this.node.height = this.height;
+    this.node.style.width = this.width + 'px';
+    this.node.style.height = this.height + 'px';
+
+    if (this.isMobile) {
+      this.width = window.innerWidth * 2;
+      this.height = window.innerHeight * 2;
+      this.node.width = this.width;
+      this.node.height = this.height;
+      this.node.style.width = this.width/2 + 'px';
+      this.node.style.height = this.height/2 + 'px';
+    }
+
     this.ctx = this.node.getContext('2d');
     this.stars = [];
     this.background = {};

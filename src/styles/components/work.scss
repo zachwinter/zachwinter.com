@@ -11,9 +11,9 @@
 }
 
 .screen-navigation {
-  @include position(fixed, null 0 0 0);
+  @include position(fixed, null 0 20px 0);
+  @include scale(bottom 50px 20px);
   @include container(true);
-  @include transform(translateY(-50%));
   z-index: 10;
   overflow: visible;
 
@@ -23,20 +23,20 @@
 
   li {
     @include transition(all 1s cubic-bezier(.81,.14,.22,.86));
+    @include scale(margin-bottom 32px 12px);
     @include size(12px);
     margin: 0 auto;
     display: block;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     background: $white;
     overflow: visible;
     position: relative;
-    opacity: .7;
+    opacity: .3;
 
     &:last-child { margin-bottom: 0; }
   }
 
   li.active {
-    @include transform( scale(3) );
     opacity: 1;
   } 
 }
@@ -48,10 +48,6 @@
 
   @include bp(640) {
     text-align: center;
-  }
-
-  @include bp(320) {
-    top: calc(50% - 90px);
   }
 
   h1 {

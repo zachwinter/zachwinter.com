@@ -2,65 +2,10 @@ import React, { Component } from 'react'
 import Vivus from 'vivus'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
-import { TOGGLE_MENU, BEGIN_PAGE_TRANSITION, FINISH_PAGE_TRANSITION, RESET_PAGE_TRANSITION } from '../constants'
+import { TOGGLE_NAV, BEGIN_PAGE_TRANSITION, FINISH_PAGE_TRANSITION, RESET_PAGE_TRANSITION } from '../constants'
 import '../styles/components/header.css'
  
 class Header extends Component {
-  constructor(props) {
-    super(props)
-
-    this.shade = null
-    this.shadeEvent = 'transitionend'
-  }
-
-  componentDidMount = () => {
-    this.shade = document.getElementById('shade')
-  }
-
-  drawLogo = () => {
-    if (this.props.header.open === false) {
-      new Vivus('logo', { duration: 30 })
-    }
-  } 
-
-  toggleMenu = () => {
-    this.props.dispatch({ type: TOGGLE_MENU })
-  }
-
-  navigate = (e) => {
-    e.preventDefault()
-
-    const route = e.currentTarget.getAttribute('href')
-    const shadeClass = e.currentTarget.dataset.target
-
-    this.beginPageTransition(route, shadeClass)
-  }
-
-  beginPageTransition = (route, shadeClass) => {
-    const transitionEnd = () => {
-      this.props.store.dispatch( push(route) )
-      this.finishPageTransition()
-      this.shade.removeEventListener(this.shadeEvent, transitionEnd)
-    }
-
-    this.shade.addEventListener(this.shadeEvent, transitionEnd)
-
-    this.toggleMenu()
-
-    this.props.store.dispatch({ type: BEGIN_PAGE_TRANSITION, payload: shadeClass })
-  }
-
-  finishPageTransition = () => {
-    const transitionEnd = () => {
-      this.props.store.dispatch({ type: RESET_PAGE_TRANSITION })
-      this.shade.removeEventListener(this.shadeEvent, transitionEnd)
-    }
-
-    this.shade.addEventListener(this.shadeEvent, transitionEnd)
-
-    this.props.store.dispatch({ type: FINISH_PAGE_TRANSITION })
-  }
-
   render() {
     return (
       <header id="header" data-open={this.props.header.open}>
@@ -92,10 +37,66 @@ class Header extends Component {
       </header> 
     )
   }
+
+  componentDidMount = () => {
+    this.shade = document.getElementById('shade')
+  }
+
+  drawLogo = () => {
+    if (this.props.header.open === false) {
+      new Vivus('logo', { duration: 30 })
+    }
+  } 
+
+  toggleMenu = () => {
+    this.props.dispatch({ type: TOGGLE_NAV })
+  }
+
+  navigate = (e) => {
+    e.preventDefault()
+
+    const route = e.currentTarget.getAttribute('href')
+    const shadeClass = e.currentTarget.dataset.target
+
+    if (this.props.store.router.location.pathname === route) {
+      this.toggleMenu()
+      return
+    }
+
+    if (this.props.header.transitionState === 'none') {
+      this.beginPageTransition(route, shadeClass)
+    }
+  }
+
+  beginPageTransition = (route, shadeClass) => {
+    const transitionEnd = () => {
+      this.props.dispatch( push(route) )
+      this.finishPageTransition()
+      this.shade.removeEventListener('transitionend', transitionEnd)
+    }
+
+    this.shade.addEventListener('transitionend', transitionEnd)
+
+    this.toggleMenu()
+
+    this.props.dispatch({ type: BEGIN_PAGE_TRANSITION, payload: shadeClass })
+  }
+
+  finishPageTransition = () => {
+    const transitionEnd = () => {
+      this.props.dispatch({ type: RESET_PAGE_TRANSITION })
+      this.shade.removeEventListener('transitionend', transitionEnd)
+    }
+
+    this.shade.addEventListener('transitionend', transitionEnd)
+
+    this.props.dispatch({ type: FINISH_PAGE_TRANSITION })
+  }
 }
 
 const mapStateToProps = store => {
   return {
+    store: store,
     header: store.header
   }
 }

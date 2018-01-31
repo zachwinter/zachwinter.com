@@ -3,16 +3,7 @@
 .cardinal-shack {
   background: url('/img/cardinal-shack.jpg') no-repeat;
   background-size: cover;
-  background-position: 35%;
-
-  &:before {
-    @include transition(background-color 1s cubic-bezier(.81,.14,.22,.86));
-    @include position(absolute, 0 0 0 0);
-    @include size(100%);
-    content: '';
-    background-color: rgba($black, .4);
-    z-index: 1;
-  }
+  background-position: center;
 
   .text {
     color: $white;

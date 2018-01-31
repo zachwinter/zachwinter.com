@@ -8,13 +8,6 @@ html {
 *, *::after, *::before {
   box-sizing: inherit; }
 
-.container {
-  width: 100%;
-  max-width: 1340px;
-  margin: 0 auto;
-  position: relative;
-  padding: 0 30px; }
-
 @font-face {
   font-family: "Elevation";
   src: url("/fonts/Elevation.eot");
@@ -32,39 +25,39 @@ html {
 body {
   font-family: "Prata", serif; }
 
-.about header {
-  height: 600px;
-  -webkit-transition: opacity 2s ease-in-out;
-  -moz-transition: opacity 2s ease-in-out;
-  transition: opacity 2s ease-in-out;
+main .about {
   position: fixed;
   top: 0;
   right: 0;
+  bottom: 0;
   left: 0;
-  background-image: url(/img/about-hero.jpg);
-  background-position: center;
-  background-size: cover; }
-  @media screen and (max-width: 1280px) {
-    .about header {
-      height: 557.14286px; } }
-  @media screen and (max-width: 1024px) {
-    .about header {
-      height: 514.28571px; } }
-  @media screen and (max-width: 900px) {
-    .about header {
-      height: 471.42857px; } }
-  @media screen and (max-width: 768px) {
-    .about header {
-      height: 428.57143px; } }
-  @media screen and (max-width: 640px) {
-    .about header {
-      height: 385.71429px; } }
-  @media screen and (max-width: 480px) {
-    .about header {
-      height: 342.85714px; } }
-  @media screen and (max-width: 480px) {
-    .about header {
-      height: 342.85714px; } }
-  @media screen and (max-width: 320px) {
-    .about header {
-      height: 300px; } }
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+  main .about h1 {
+    font-size: 32px;
+    text-align: center; }
+    @media screen and (max-width: 1280px) {
+      main .about h1 {
+        font-size: 30.28571px; } }
+    @media screen and (max-width: 1024px) {
+      main .about h1 {
+        font-size: 28.57143px; } }
+    @media screen and (max-width: 900px) {
+      main .about h1 {
+        font-size: 26.85714px; } }
+    @media screen and (max-width: 768px) {
+      main .about h1 {
+        font-size: 25.14286px; } }
+    @media screen and (max-width: 640px) {
+      main .about h1 {
+        font-size: 23.42857px; } }
+    @media screen and (max-width: 480px) {
+      main .about h1 {
+        font-size: 21.71429px; } }
+    @media screen and (max-width: 480px) {
+      main .about h1 {
+        font-size: 21.71429px; } }
+    @media screen and (max-width: 320px) {
+      main .about h1 {
+        font-size: 20px; } }

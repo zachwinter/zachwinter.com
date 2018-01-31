@@ -5,7 +5,7 @@ const GitHub = () => (
   <div className="github">
     <div className="text">
       <h2>GitHub</h2>
-      <p>My current projects.</p>
+      <p>Miscellaneous hackings.</p>
       <a target="_blank" href="https://github.com/zachwinter">View Projects</a>
     </div>
   </div>

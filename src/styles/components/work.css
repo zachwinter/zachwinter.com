@@ -8,13 +8,6 @@ html {
 *, *::after, *::before {
   box-sizing: inherit; }
 
-.container {
-  width: 100%;
-  max-width: 1340px;
-  margin: 0 auto;
-  position: relative;
-  padding: 0 30px; }
-
 @font-face {
   font-family: "Elevation";
   src: url("/fonts/Elevation.eot");
@@ -44,21 +37,41 @@ body {
 .screen-navigation {
   position: fixed;
   right: 0;
-  bottom: 0;
+  bottom: 20px;
   left: 0;
+  bottom: 50px;
   padding-left: 30px;
   padding-right: 30px;
   width: 100%;
   clear: both;
   max-width: 1340px;
   margin: 0 auto;
-  -webkit-transform: translateY(-50%);
-  -moz-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  -o-transform: translateY(-50%);
-  transform: translateY(-50%);
   z-index: 10;
   overflow: visible; }
+  @media screen and (max-width: 1280px) {
+    .screen-navigation {
+      bottom: 45.71429px; } }
+  @media screen and (max-width: 1024px) {
+    .screen-navigation {
+      bottom: 41.42857px; } }
+  @media screen and (max-width: 900px) {
+    .screen-navigation {
+      bottom: 37.14286px; } }
+  @media screen and (max-width: 768px) {
+    .screen-navigation {
+      bottom: 32.85714px; } }
+  @media screen and (max-width: 640px) {
+    .screen-navigation {
+      bottom: 28.57143px; } }
+  @media screen and (max-width: 480px) {
+    .screen-navigation {
+      bottom: 24.28571px; } }
+  @media screen and (max-width: 480px) {
+    .screen-navigation {
+      bottom: 24.28571px; } }
+  @media screen and (max-width: 320px) {
+    .screen-navigation {
+      bottom: 20px; } }
   .screen-navigation::after {
     clear: both;
     content: "";
@@ -69,23 +82,43 @@ body {
     -webkit-transition: all 1s cubic-bezier(0.81, 0.14, 0.22, 0.86);
     -moz-transition: all 1s cubic-bezier(0.81, 0.14, 0.22, 0.86);
     transition: all 1s cubic-bezier(0.81, 0.14, 0.22, 0.86);
+    margin-bottom: 32px;
     height: 12px;
     width: 12px;
     margin: 0 auto;
     display: block;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     background: #ffffff;
     overflow: visible;
     position: relative;
-    opacity: .7; }
+    opacity: .3; }
+    @media screen and (max-width: 1280px) {
+      .screen-navigation li {
+        margin-bottom: 29.14286px; } }
+    @media screen and (max-width: 1024px) {
+      .screen-navigation li {
+        margin-bottom: 26.28571px; } }
+    @media screen and (max-width: 900px) {
+      .screen-navigation li {
+        margin-bottom: 23.42857px; } }
+    @media screen and (max-width: 768px) {
+      .screen-navigation li {
+        margin-bottom: 20.57143px; } }
+    @media screen and (max-width: 640px) {
+      .screen-navigation li {
+        margin-bottom: 17.71429px; } }
+    @media screen and (max-width: 480px) {
+      .screen-navigation li {
+        margin-bottom: 14.85714px; } }
+    @media screen and (max-width: 480px) {
+      .screen-navigation li {
+        margin-bottom: 14.85714px; } }
+    @media screen and (max-width: 320px) {
+      .screen-navigation li {
+        margin-bottom: 12px; } }
     .screen-navigation li:last-child {
       margin-bottom: 0; }
   .screen-navigation li.active {
-    -webkit-transform: scale(3);
-    -moz-transform: scale(3);
-    -ms-transform: scale(3);
-    -o-transform: scale(3);
-    transform: scale(3);
     opacity: 1; }
 
 .text {
@@ -110,9 +143,6 @@ body {
   @media screen and (max-width: 640px) {
     .text {
       text-align: center; } }
-  @media screen and (max-width: 320px) {
-    .text {
-      top: calc(50% - 90px); } }
   .text h1 {
     font-size: 22px;
     letter-spacing: .1em;
@@ -191,9 +221,9 @@ body {
     font-weight: normal;
     text-transform: uppercase;
     text-decoration: none;
-    -webkit-transition: all 0.15s ease-in-out;
-    -moz-transition: all 0.15s ease-in-out;
-    transition: all 0.15s ease-in-out;
+    -webkit-transition: all 0.05s ease-in-out;
+    -moz-transition: all 0.05s ease-in-out;
+    transition: all 0.05s ease-in-out;
     display: inline-block;
     border: 2px solid #ffffff;
     background: transparent;
@@ -234,3 +264,5 @@ body {
       color: #ffffff;
       border: 2px solid #ffffff;
       cursor: pointer; }
+    .text a:active, .text button:active {
+      color: transparent; }

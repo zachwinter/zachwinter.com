@@ -1,5 +1,6 @@
-import GetJSON from 'get-json';
-import Cookies from 'lib/js.cookie';
+import _ from 'lodash';
+import GetJSON from './get-json';
+//import Cookies from './lib/js.cookie';
 
 /**
  * Class representing an interface with the Spotify API which allows for processing all data for currently playing track.
@@ -14,7 +15,7 @@ class SpotifyAnalyzer {
   /** Create API interface. */
   constructor(demo) {
     this.demo = demo;
-    this.demoSongs = ['australia', 'electric_feel', 'lightness'];
+    this.demoSongs = [/*'australia', */'electric_feel'];
 
     if (this.demo === true) { this.activeDemo = _.sample(this.demoSongs); }
 
@@ -24,9 +25,9 @@ class SpotifyAnalyzer {
       trackFeatures : 'https://api.spotify.com/v1/audio-features'
     };
 
-    this.accessToken = Cookies.get('KALEIDOSYNC_ACCESS_TOKEN');
-    this.refreshToken = Cookies.get('KALEIDOSYNC_REFRESH_TOKEN');
-    this.refreshCode = Cookies.get('KALEIDOSYNC_REFRESH_CODE');
+    //this.accessToken = Cookies.get('KALEIDOSYNC_ACCESS_TOKEN');
+    //this.refreshToken = Cookies.get('KALEIDOSYNC_REFRESH_TOKEN');
+    //this.refreshCode = Cookies.get('KALEIDOSYNC_REFRESH_CODE');
 
     this.headers = {
       Authorization : 'Bearer ' + this.accessToken,

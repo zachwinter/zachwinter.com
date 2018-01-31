@@ -1,5 +1,59 @@
 @import '../import.scss';
 
-.home header {
-  @include hero-image('/img/home-hero.jpg');
+$easing: cubic-bezier(.81,.14,.22,.86);
+
+main .home  {
+  @include position(fixed, 0 0 0 0);
+  display: flex;
+  align-items: center;
+
+  @include keyframes(background) {
+    0% { background: rgba($home, .7); }
+    25% { background: rgba($work, .7); }
+    50% { background: rgba($about, .7); }
+    75% { background: rgba($contact, .7); }
+    100% { background: rgba($home, .7); }
+  }
+
+  &:before {
+    @include position(absolute, 0 0 0 0);
+    @include size(100%);
+    @include animation(background 60s linear infinite);
+    content: '';
+    z-index: 1;
+  }
+
+  .container {
+    @include container(true);
+    position: relative;
+    z-index: 2;
+  }
+
+  .video-container {
+    @include position(fixed, 0 0 0 0);
+    @include size(100%);
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  video {
+    @include position(absolute, 50% null null 50%);
+    @include transform( translate(-50%, -50%) );
+  }
+
+  h1 {
+    @include font-header;
+    @include scale(
+      font-size 120px 36px,
+      line-height 110px 40px,
+      height 220px 80px
+    );
+    color: $white;
+
+    @include bp(480) {
+      font-size: 36px;
+      line-height: 40px;
+      height: 80px;
+    }
+  }
 }

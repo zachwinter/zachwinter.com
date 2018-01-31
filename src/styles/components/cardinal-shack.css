@@ -8,13 +8,6 @@ html {
 *, *::after, *::before {
   box-sizing: inherit; }
 
-.container {
-  width: 100%;
-  max-width: 1340px;
-  margin: 0 auto;
-  position: relative;
-  padding: 0 30px; }
-
 @font-face {
   font-family: "Elevation";
   src: url("/fonts/Elevation.eot");
@@ -35,21 +28,7 @@ body {
 .cardinal-shack {
   background: url("/img/cardinal-shack.jpg") no-repeat;
   background-size: cover;
-  background-position: 35%; }
-  .cardinal-shack:before {
-    -webkit-transition: background-color 1s cubic-bezier(0.81, 0.14, 0.22, 0.86);
-    -moz-transition: background-color 1s cubic-bezier(0.81, 0.14, 0.22, 0.86);
-    transition: background-color 1s cubic-bezier(0.81, 0.14, 0.22, 0.86);
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    content: '';
-    background-color: rgba(3, 9, 31, 0.4);
-    z-index: 1; }
+  background-position: center; }
   .cardinal-shack .text {
     color: #ffffff;
     text-align: right; }

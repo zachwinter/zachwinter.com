@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { SectionsContainer, Section } from 'react-fullpage'
+import _ from 'lodash'
 import Kaleidosync from './Kaleidosync'
 import CardinalShack from './CardinalShack'
 import GitHub from './GitHub'
+import Kaleidoscope from '../visualizer/kaleidoscope'
+import { INIT_WORK, START_SCROLL, END_SCROLL, TOUCH_START, TOUCH_END } from '../constants'
 import '../styles/components/work.css'
 
 class Work extends Component {
@@ -11,115 +14,45 @@ class Work extends Component {
     super()
 
     this.state = {
-      screens: [],
-      index: 0,
-      touch: {},
-      scrolling: false
+      visualizerDemoButtonClicked: false,
+      visualizerPlaying: false
     }
   }
 
-  initSlider = () => {
-    let children = document.querySelectorAll('.screens > *'),
-        nodeListArray = [];
+  render() {
+    let state = this.props.store.work,
+        transform = state.index * window.innerHeight * -1
 
-    for (var i = 0; i < children.length; i++) {
-      nodeListArray.push(children[i])
+    return (
+      <div className="work">
+        <div className="screens" style={{transform: `translateY(${transform}px)`}}>
+          <Kaleidosync buttonClick={this.visualizerDemoButton} playing={this.state.visualizerPlaying} />
+          <CardinalShack />
+          <GitHub />
+        </div>
+        <ul className={state.index === 2 ? 'screen-navigation black' : 'screen-navigation'}>
+          { state.screens.map((screen, i) => <li key={i} className={i === state.index ? 'active' : ''} onClick={this.goTo.bind(this, i)}></li> ) }
+        </ul>
+      </div>
+    )
+  }
+
+  componentDidMount() {
+    let screens = document.querySelectorAll('.screens > *'),
+        screensArray = []
+
+    for (var i = 0; i < screens.length; i++) {
+      screens[i].style.height = window.innerHeight + 'px'
+      screensArray.push(screens[i])
     }
 
-    this.setState({
-      screens: nodeListArray,
-      index: 0,
-      container: document.querySelector('.screens')
-    })
-  }
-
-  slideTransition = () => {
-    let transform = this.state.index * (-100/this.state.screens.length);
-
-    this.state.container.style.transform = `translateY(${transform}%)`
-    this.state.container.addEventListener('transitionend', this.transitionEnd)
-    window.VISUALIZER.audio.pause()
-    window.VISUALIZER.stop()
-    window.VISUALIZER.canvas.stopPaint()
-    window.VISUALIZER.toast.hide()
-  }
-
-  transitionEnd = (e) => {
-    this.setState({
-      scrolling: false
-    })
-
-    this.state.container.removeEventListener('transitionend', this.transitionEnd)
-  }
-
-  touchStart = (e) => {
-    this.setState({
-      touch: {
-        start: e.changedTouches[0].pageY,
-        end: this.state.touch.end
+    this.props.dispatch({
+      type: INIT_WORK,
+      payload: {
+        container: document.querySelector('.screens'),
+        screens: screensArray
       }
     })
-  }
-
-  touchEnd = (e) => {
-    this.setState({
-      touch: {
-        start: this.state.touch.start,
-        end: e.changedTouches[0].pageY
-      }
-    })
-
-    let delta = this.state.touch.end - this.state.touch.start
-
-    if (delta < -50) {
-      this.scrollUp()
-    }
-
-    if (delta > 50) {
-      this.scrollDown()
-    }
-  }
-
-  scrollUp = () => {
-    if (this.state.scrolling === true || this.state.index === this.state.screens.length - 1) {
-      return
-    }
-
-    this.setState({
-      scrolling: true,
-      index: this.state.index + 1
-    }, this.slideTransition)
-  }
-
-  scrollDown = () => {    
-    if (this.state.scrolling === true || this.state.index === 0) {
-      return
-    }
-
-    this.setState({
-      scrolling: true,
-      index: this.state.index - 1
-    }, this.slideTransition)
-  }
-
-  goTo = (e) => {
-    console.log(e)
-  }
-
-  componentDidMount = () => {
-    this.initSlider()
-
-    let scroll = (e) => {
-      let delta = e.wheelDelta
-
-      if (delta < -100) {
-        this.scrollUp()
-      }
-
-      if (delta > 100) {
-        this.scrollDown()
-      }
-    }
 
     document.body.style.overflow = 'hidden'
     document.body.style.position = 'fixed'
@@ -127,34 +60,155 @@ class Work extends Component {
     document.body.style.right = 0
     document.body.style.left = 0
 
-    document.body.addEventListener('mousewheel', scroll)
+    document.body.addEventListener('mousewheel', this.mouseWheel)
     document.body.addEventListener('touchstart', this.touchStart)
     document.body.addEventListener('touchend', this.touchEnd)
+
+    window.addEventListener('resize', this.resize)
+
+    window.VISUALIZER = new Kaleidoscope(true, true)
   }
 
   componentWillUnmount() {
-    this.state.container.style.transform = `translateY(0%)`
+    document.body.style.overflow = 'auto'
+    document.body.style.position = 'static'
+    document.body.removeEventListener('mousewheel', this.mouseWheel)
+    document.body.removeEventListener('touchstart', this.touchStart)
+    document.body.removeEventListener('touchend', this.touchEnd)
+    window.removeEventListener('resize', this.resize)
+
+    this.destroyVisualizer()
+  }
+  
+  transitionEnd = (e) => {
+    this.props.dispatch({ type: END_SCROLL })
+
+    this.props.store.work.container.removeEventListener('transitionend', this.transitionEnd)
   }
 
-  render() {
-    return (
-      <div className="work">
-        <div className="screens">
-          <Kaleidosync />
-          <CardinalShack />
-          <GitHub />
-        </div>
-        <ul className={this.state.index === 2 ? 'screen-navigation black' : 'screen-navigation'}>
-          { this.state.screens.map((screen, i) => <li key={i} className={i === this.state.index ? 'active' : ''} onClick={this.goTo.bind(this)}></li> )}
-        </ul>
-      </div>
-    )
+  touchStart = (e) => {
+    this.props.dispatch({
+      type: TOUCH_START,
+      payload: e.changedTouches[0].pageY
+    })
+  }
+
+  touchEnd = (e) => {
+    this.props.dispatch({
+      type: TOUCH_END,
+      payload: e.changedTouches[0].pageY
+    })
+
+    if (this.props.store.work.touchDelta < -50) {
+      this.scrollUp()
+    }
+
+    if (this.props.store.work.touchDelta > 50) {
+      this.scrollDown()
+    }
+  }
+
+  resize = () => {
+    clearTimeout(this.resizeTimeout)
+
+    this.resizeTimeout = setTimeout(() => {
+      this.setScreenSize()
+      this.stopVisualizer()
+      window.VISUALIZER = new Kaleidoscope(true, true)
+      this.forceUpdate()
+    }, 300)
+  }
+
+  mouseWheel = (e) => {
+    let delta = e.wheelDelta
+
+    if (delta < -150) {
+      this.scrollUp()
+    }
+
+    if (delta > 150) {
+      this.scrollDown()
+    }
+  }
+
+  scrollUp = () => {
+    if (this.props.store.work.index !== this.props.store.work.screens.length - 1) {
+      this.goTo(this.props.store.work.index + 1)
+    } 
+  }
+
+  scrollDown = () => {    
+    if (this.props.store.work.index !== 0) {
+      this.goTo(this.props.store.work.index - 1)
+    }
+  }
+
+  goTo = (index) => {
+    if (this.props.store.work.scrolling === false) {
+      if (this.props.store.work.index === 0) {
+        this.stopVisualizer()
+      }
+
+      this.props.store.work.container.addEventListener('transitionend', this.transitionEnd)
+      
+      this.props.dispatch({
+        type: START_SCROLL,
+        payload: index
+      })
+    }
+  }
+
+  startVisualizer = () => {
+    window.VISUALIZER.activeDemo = _.sample(window.VISUALIZER.demoSongs);
+    window.VISUALIZER.interval = false;
+    window.VISUALIZER.setEventHooks()
+    window.VISUALIZER.init()
+    window.VISUALIZER.canvas.startPaint()
+    this.setState({
+      visualizerPlaying: true
+    })
+  }
+
+  stopVisualizer = () => {
+    window.VISUALIZER.audio.pause()
+    window.VISUALIZER.stop()
+    window.VISUALIZER.canvas.stopPaint()
+    window.VISUALIZER.toast.hide()
+    this.setState({
+      visualizerPlaying: false
+    })
+  }
+
+  destroyVisualizer = () => {
+    this.stopVisualizer()
+    delete window.VISUALIZER
+  }
+
+  visualizerDemoButton = () => {
+    if (this.state.visualizerDemoButtonClicked === false) {
+      window.VISUALIZER.audio.play()
+      this.setState({
+        visualizerDemoButtonClicked: true
+      })
+    }
+
+    if (this.state.visualizerPlaying === true) {
+      this.stopVisualizer()
+    } else {   
+      this.startVisualizer()
+    } 
+  }
+
+  setScreenSize = () => {
+    for (var i = 0; i < this.props.store.work.screens.length; i++) {
+      this.props.store.work.screens[i].style.height = window.innerHeight + 'px'
+    }
   }
 } 
 
-const mapStateToProps = store => {
+const mapStateToProps = (store) => {
   return {
-    
+    store
   }
 }
 

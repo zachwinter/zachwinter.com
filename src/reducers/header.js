@@ -1,4 +1,4 @@
-import { TOGGLE_MENU, BEGIN_PAGE_TRANSITION, FINISH_PAGE_TRANSITION, RESET_PAGE_TRANSITION } from '../constants'
+import { TOGGLE_NAV, BEGIN_PAGE_TRANSITION, FINISH_PAGE_TRANSITION, RESET_PAGE_TRANSITION } from '../constants'
 
 const initialState = {
   open: false,
@@ -8,7 +8,7 @@ const initialState = {
 
 export default function header(state = initialState, action) {
   switch (action.type) {
-    case TOGGLE_MENU:
+    case TOGGLE_NAV:
       return Object.assign({}, state, {
         open: !state.open
       });

@@ -1,6 +1,6 @@
 @mixin button($color, $hover) {
   @include font-block;
-  @include transition(all 0.15s ease-in-out);
+  @include transition(all 0.05s ease-in-out);
   display: inline-block;
   border: 2px solid $color;
   background: transparent;
@@ -12,11 +12,17 @@
   height: 50px;
   text-align: center;
 
-  &:active, &:focus { outline: 0; }
+  &:active, &:focus {
+    outline: 0
+  }
 
-  &:hover {
+  &:hover { 
     color: $hover;
     border: 2px solid $hover;
     cursor: pointer;
+  } 
+
+  &:active {
+    color: transparent;
   }
 }
