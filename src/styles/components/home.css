@@ -30,9 +30,7 @@ main .home {
   top: 0;
   right: 0;
   bottom: 0;
-  left: 0;
-  display: flex;
-  align-items: center; }
+  left: 0; }
 
 @-webkit-keyframes background {
   0% {
@@ -90,21 +88,17 @@ main .home {
     max-width: 1340px;
     margin: 0 auto;
     position: relative;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
     z-index: 2; }
     main .home .container::after {
       clear: both;
       content: "";
       display: table; }
-  main .home .video-container {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    z-index: 0;
-    overflow: hidden; }
   main .home video {
     position: absolute;
     top: 50%;
@@ -113,7 +107,8 @@ main .home {
     -moz-transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     -o-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%); }
+    transform: translate(-50%, -50%);
+    z-index: 0; }
   main .home h1 {
     font-size: 120px;
     font-family: 'Elevation';
@@ -191,4 +186,9 @@ main .home {
       main .home h1 {
         font-size: 36px;
         line-height: 40px;
-        height: 80px; } }
+        height: 80px;
+        position: relative;
+        top: -100px; } }
+    @media screen and (max-width: 320px) {
+      main .home h1 {
+        top: -80px; } }

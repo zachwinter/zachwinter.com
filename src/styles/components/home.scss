@@ -4,8 +4,6 @@ $easing: cubic-bezier(.81,.14,.22,.86);
 
 main .home  {
   @include position(fixed, 0 0 0 0);
-  display: flex;
-  align-items: center;
 
   @include keyframes(background) {
     0% { background: rgba($home, .7); }
@@ -25,20 +23,14 @@ main .home  {
 
   .container {
     @include container(true);
-    position: relative;
+    @include center-vertically;
     z-index: 2;
-  }
-
-  .video-container {
-    @include position(fixed, 0 0 0 0);
-    @include size(100%);
-    z-index: 0;
-    overflow: hidden;
   }
 
   video {
     @include position(absolute, 50% null null 50%);
     @include transform( translate(-50%, -50%) );
+    z-index: 0;
   }
 
   h1 {
@@ -54,6 +46,12 @@ main .home  {
       font-size: 36px;
       line-height: 40px;
       height: 80px;
+      position: relative;
+      top: -100px;
+    }
+
+    @include bp(320) {
+      top: -80px;
     }
   }
 }

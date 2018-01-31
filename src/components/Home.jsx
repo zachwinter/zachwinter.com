@@ -9,11 +9,9 @@ class Home extends Component {
         <div className="container">
           <h1 id="typed"></h1>
         </div> 
-        <div className="videoContainer">
-          <video id="video" muted playsInline autoPlay poster="/img/video-cover.jpg">
-            <source src="/static/video/homepage.mp4" type="video/mp4"></source>
-          </video>
-        </div>
+        <video id="video" muted playsInline autoPlay poster="/img/video-cover.jpg">
+          <source src="/static/video/homepage.mp4" type="video/mp4"></source>
+        </video>
       </div>
     )
   }
@@ -22,13 +20,13 @@ class Home extends Component {
     this.video = document.getElementById('video')
     this.sizeVideo()
 
-    window.addEventListener('resize', this.sizeVideo)
+    window.addEventListener('resize', this.resize)
 
     this.video.addEventListener('canplaythrough', this.initTyped)
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.sizeVideo)
+    window.removeEventListener('resize', this.resize)
     this.typed.destroy()
   }
 
@@ -36,13 +34,19 @@ class Home extends Component {
     this.video.removeEventListener('canplaythrough', this.initTyped)
 
     this.typed = new Typed('#typed', {
-      strings: [
-        `I turn pixels into<br>experiences.`
-      ],
+      strings: [`I turn pixels into<br>experiences.`],
       showCursor: false,
       startDelay: 2200,
       typeSpeed: 60
     })
+  }
+
+  resize = () => {
+    clearTimeout(this.resizeTimeout)
+
+    this.resizeTimeout = setTimeout(() => {
+      this.sizeVideo()
+    }, 100)
   }
 
   sizeVideo = () => {

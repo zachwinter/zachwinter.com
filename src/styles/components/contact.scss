@@ -2,11 +2,12 @@
 
 $mobile-breakpoint: 480;
 
-.contact header {
-  @include hero-image('/img/contact-hero.jpg');
+main .contact {
+  @include position(fixed, 0 0 0 0);
+  background: $white;
 }
 
-.form-container {
+main .contact .form-container {
   @include container;
   @include position(absolute, 0 0 0 0);
   display: flex;
@@ -14,7 +15,7 @@ $mobile-breakpoint: 480;
   justify-content: center;
 }
 
-.contact-form {
+main .contact .contact-form {
   @include scale(width 600px 280px);
 
   div {
@@ -57,7 +58,8 @@ $mobile-breakpoint: 480;
     border: 0;
     width: 100%;
     padding: 10px;
-    background: $white;
+    background: $black;
+    color: $white;
     border-radius: 0;
     margin-bottom: $base-margin;
     
