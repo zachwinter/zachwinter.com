@@ -1,9 +1,0 @@
-@import '../import';
-
-.github {
-  .text {
-    color: $black;
-    
-    a, button { @include button($black, $black); }
-  }
-}  

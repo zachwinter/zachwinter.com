@@ -1,0 +1,25 @@
+@import 'global';
+
+.Kaleidosync {
+  button { margin-right: 20px; }
+
+  &:before {
+    @include position(absolute, 0 0 0 0);
+    @include size(100%);
+    content: '';
+    background-color: rgba($work, .7);
+    z-index: 1;
+  }
+
+  &.playing:before { background: transparent; }
+
+  .text {
+    color: $white;
+  }
+}
+
+#kaleidoscope {
+  @include position(fixed, 0 0 null 0);
+  display: block;
+  margin: 0 auto; 
+}

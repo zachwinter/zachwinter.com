@@ -1,8 +1,0 @@
-@mixin hero-image($background-url, $color: #fff) {
-  @include transition(opacity 2s ease-in-out);
-  @include position(fixed, 0 0 0 0);
-  background-image: url(#{$background-url});
-  background-position: center;
-  background-size: cover;
-  background-color: $color;
-}

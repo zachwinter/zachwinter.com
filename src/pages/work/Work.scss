@@ -1,0 +1,83 @@
+@import 'global';
+
+main .Work {
+  .screens {
+    transition: transform 1s $base-easing;
+    padding: 0;
+  }
+  
+  .screens > * {
+    @include size(100%, 100vh);
+    position: relative;
+    overflow: hidden;
+    margin: 0;
+  }
+
+  .text {
+    @include container;
+    @include pad;
+    @include center-vertically(relative);
+    z-index: 10;
+    font-family: $serif;
+  
+    @include max-width(mobile) {
+      text-align: center;
+    }
+  
+    h1 {
+      @include font-block;
+    }
+  
+    h2 {
+      @include font-header;
+      margin: 15px 0;
+  
+      @include max-width(mobile-tiny) {
+        margin-bottom: 10px;
+      }
+    }
+  
+    p {
+      font-size: 20px;
+      font-weight: $light;
+      margin-bottom: 30px;
+  
+      @include max-width(mobile-tiny) { font-size: 16px; }
+    }
+  
+    a, button {
+      @include button($white, $white);
+    }
+  }
+
+  .screen-navigation {
+    @include scale(bottom 20px 50px);
+    @include container;
+    @include pad;
+    @include position(fixed, null 0 20px 0);
+    z-index: 10;
+    overflow: visible;
+  
+    &.black {
+      li { background: $black; }
+    }
+  
+    li {
+      @include scale(margin-bottom 12px 20px);
+      @include size(12px);
+      transition: all 1s $base-easing;
+      margin: 0 auto;
+      display: block;
+      background: $white;
+      overflow: visible;
+      position: relative;
+      opacity: .3;
+  
+      &:last-child { margin-bottom: 0; }
+    }
+  
+    li.active {
+      opacity: 1;
+    } 
+  }
+}

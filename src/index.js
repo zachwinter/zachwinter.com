@@ -1,34 +1,42 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { ConnectedRouter, routerReducer, routerMiddleware } from 'react-router-redux'
-import createHistory from 'history/createBrowserHistory'
-import { applyMiddleware, createStore, combineReducers } from 'redux'
+import { applyMiddleware, compose, createStore } from 'redux'
 import { Provider } from 'react-redux'
-import { reducer as formReducer } from 'redux-form'
-import HeaderReducer from './reducers/header'
-import WorkReducer from './reducers/work'
+import { ConnectedRouter, connectRouter, routerMiddleware } from 'connected-react-router'
+import thunk from 'redux-thunk'
+import { createBrowserHistory } from 'history'
 import logger from 'redux-logger'
-import App from './components/App'
+import HeaderReducer from './global/reducer'
+import WorkReducer from './pages/work/reducer'
+import { combineReducers } from 'redux'
+import App from './App'
 import registerServiceWorker from './registerServiceWorker'
+import './index.scss'
 
-const history = createHistory()
-const middleware = routerMiddleware(history)
+const reducer = combineReducers({
+  header: HeaderReducer,
+  work: WorkReducer
+})
+
+const history = createBrowserHistory()
+
 const store = createStore(
-  combineReducers({
-    router: routerReducer,
-    form: formReducer,
-    header: HeaderReducer,
-    work: WorkReducer,
-  }), applyMiddleware(middleware, logger)
+  connectRouter(history)(reducer),
+  compose(
+    applyMiddleware(
+      routerMiddleware(history),
+      thunk,
+      logger
+    )
+  )
 )
 
 ReactDOM.render(
   <Provider store={store}>
-    <ConnectedRouter history={history}>
+    <ConnectedRouter history={history}> 
       <App />
     </ConnectedRouter>
   </Provider>,
-
   document.getElementById('root')
 )
 

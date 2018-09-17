@@ -1,0 +1,14 @@
+@import 'global';
+
+.CardinalShack {
+  background: url('/img/cardinal-shack.jpg') no-repeat;
+  background-size: cover;
+  background-position: center;
+
+  .text {
+    color: $white;
+    text-align: right;
+
+    @include max-width(mobile) { text-align: center; }
+  }
+}
