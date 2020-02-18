@@ -8,7 +8,7 @@ const fallback = require('express-history-api-fallback')
 
 const app = express()
 const root = path.resolve(__dirname, '../dist')
-const port = process.env.SERVER_PORT || 8000
+const port = process.env.PORT || 8000
 
 app.use(bodyParser())
 app.use(cookieParser())
