@@ -1,0 +1,8 @@
+@mixin full-page ($z-index: 100) {
+  @include position(fixed, 0 0 0 0);
+  background: $white;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  z-index: $z-index;
+  padding: 20px;
+}

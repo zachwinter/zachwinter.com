@@ -1,0 +1,13 @@
+@mixin show-when($bp, $display: block) {
+	display: none;
+
+  $breakpoint: map-get($breakpoints, $bp);	
+
+	@if (type-of($breakpoint) != 'number') {
+    $breakpoint: $bp;
+  }
+  
+  @media all and (min-width: #{$breakpoint}px) {
+		display: $display;
+	}
+}
