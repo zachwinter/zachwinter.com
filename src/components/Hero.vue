@@ -3,7 +3,7 @@
   div
     h1 #[span(class="hello")] #[span(class="name") I'm Zach]
     p I'm a UI/UX Engineer, currently at #[a(href="https://phin.co" target="phin") pHin].
-    p Recently exploring audio-reactive animations, powered by #[a(href="http://the.echonest.com/" target="phin") the Echo Nest].
+    p Recently exploring #[a(href="https://covid-usa.herokuapp.com/" target="covid") data visualization] &amp; audio-reactive animations powered by the Echo Nest.
     p Check out some of my #[router-link(to="/work") work], my #[a(href="https://github.com/zachwinter" target="github") GitHub], or follow me on #[a(href="https://www.instagram.com/zachary.io" target="instagram") Instagram].
 </template>
 

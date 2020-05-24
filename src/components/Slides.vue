@@ -3,6 +3,7 @@
   .transform(:style="{ transform }" @transitionend="onTransitionEnd")
     Slide(
       v-for="({ src, song, artist }, i) in slides"
+      :key="i"
       :src="src"
       :song="song"
       :artist="artist"
