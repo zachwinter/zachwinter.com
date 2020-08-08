@@ -1,4 +1,4 @@
-# zachwinter.com-2020
+# zachwinter.com.2020
 
 ## Project setup
 ```

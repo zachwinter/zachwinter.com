@@ -1,51 +1,71 @@
 <template lang="pug">
 .app
+  Logo
   Header
   transition(name="page")
     router-view
+  Background
 </template>
 
 <script>
-import Header from '@/components/Header'
+import Logo from '@/components/global/Logo'
+import Background from '@/components/global/Background'
+import Header from '@/components/global/Header'
 
 export default {
-  components: { Header },
+  components: {
+    Logo,
+    Background,
+    Header
+  },
   mounted () {
-    window.addEventListener('resize', () => {
-      this.$store.dispatch('detectMobile')
-    })
+    this.$store.dispatch('init')
   }
 }
 </script>
 
 <style lang="scss">
-@import url('https://fonts.googleapis.com/css2?family=PT+Sans+Narrow:wght@400;700&display=swap');
+// Typography
 @import url('https://fonts.googleapis.com/css2?family=Dosis:wght@300;700&display=swap');
 
-*, *:before, *:after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+// Global Mixins
+@include reset;
 
-@include transitions;
-
-html, body, main, .app {
-  height: 100%;
-}
-
-main {
-  @include position(fixed, 0 0 0 0);
+// Global Styles
+html, body, .app {
+  @include size(100%);
+  overflow: hidden;
 }
 
 body {
-  background: rgba(0, 0, 0, .05);
   font-family: 'Dosis', sans-serif;
   font-weight: 300;
-
-  * { 
-    font-family: inherit;
-    font-weight: inherit;
-  }
+  background: rgba(0, 0, 0, .05);
 }
+
+strong {
+  font-weight: 700;
+}
+
+img {
+  width: 100%;
+  display: block;
+}
+
+// Transitions
+.intro-enter-active, .intro-leave-active { transition: transform $intro-duration $intro-easing, opacity $intro-duration $intro-easing; }
+.intro-enter, .intro-leave-to { opacity: 0; }
+.intro-enter { transform: translateX($intro-offset); }
+.intro-leave-to { transform: translateX(-$intro-offset); }
+
+.intro-down-enter-active, .intro-down-leave-active { transition: transform $intro-duration $intro-easing, opacity $intro-duration $intro-easing; }
+.intro-down-enter, .intro-down-leave-to { opacity: 0; }
+.intro-down-enter { transform: translateX($intro-offset); }
+.intro-down-leave-to { transform: translateY($intro-offset); }
+
+.fade-enter-active, .fade-leave-active { transition: opacity $base-transition $base-easing; }
+.fade-enter, .fade-leave-to { opacity: 0; }
+
+.page-enter-active, .page-leave-active { transition: all $page-transition-duration $base-easing; }
+.page-enter, .page-leave-to { opacity: 0; transform: scale(.75); }
 </style>

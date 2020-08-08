@@ -1,48 +1,59 @@
 <template lang="pug">
-main(ref="main" :style="{ 'background-image': `url(${backgroundUrl})`}")
-  Hero
-  //- Backdrop(:mouse="mouse")
+.home
+  .intro
+    transition(name="intro")
+      h1(v-if="index === 0") #[strong Hi!] I'm Zach.
+    transition(name="intro-down")
+      h2(v-if="index === 1") I'm a front-end web specialist.
 </template>
 
 <script>
-import Hero from '@/components/Hero'
-import Backdrop from '@/components/Backdrop'
-// import zach from '@/assets/zachary.jpg'
-import bwm from '@/assets/bwm.jpg'
-import { mapState } from 'vuex'
-import bw from '@/assets/bw.jpg'
+import { pause } from '@/util/timing'
 
 export default {
-  components: {
-    Hero,
-    Backdrop
-  },
   data: () => ({
-    mouse: {
-      x: window.innerWidth/2,
-      y: window.innerHeight/2
-    }
+    index: null
   }),
-  computed: {
-    ...mapState(['isMobile', 'isMobileLandscape']),
-    backgroundUrl () {
-      if (this.isMobileLandscape) {
-        return bw
-      }
-
-      if (this.isMobile) {
-        return bwm
-      }
-
-      return bw
+  mounted () {
+    this.init()
+  },
+  methods: {
+    async init () {
+      this.index = 0
+      await pause(2500)
+      this.index++
+      await pause(3500)
+      // this.index++
+      this.$store.dispatch('ui/showElements')
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-main {
+.home {
+  @include page;
+}
+
+.intro {
+  @include size(100%);
+  @include flex;
   position: relative;
-  background-size: cover;
+  text-align: center;
+}
+
+.intro > * {
+  @include size(100%, auto);
+  position: absolute;
+  // will-change: opacity;
+}
+
+h1 {
+  @include scale(font-size 3rem 5rem);
+}
+
+h2 {
+  @include scale(font-size 2rem 4rem);
+  padding: 0 $outer-padding;
 }
 </style>

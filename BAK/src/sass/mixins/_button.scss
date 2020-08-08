@@ -1,0 +1,31 @@
+@mixin button($background: $blue, $small: false) {
+	@include condensed;
+  transition: all 0.1s linear;
+  display: inline-block;
+  background: $background;
+	padding: 0 20px;
+	line-height: 40px;
+  color: $white;
+  border-radius: 10px;
+  min-width: 100px;
+  height: 40px;
+  text-align: center;
+	border: 0;
+	
+	@if $small {
+		height: 30px;
+		line-height: 30px;
+		font-size: 14px !important;
+		padding: 0 10px;
+		min-width: auto;
+	}
+
+  &:active, &:focus { outline: 0 }
+
+  &:hover { 
+    background: darken($background, 5%);
+    cursor: pointer;
+  } 
+
+  &:active { color: transparent; }
+}

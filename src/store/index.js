@@ -1,20 +1,28 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import mutations from './mutations'
-import actions from './actions'
-import { detectMobile, detectMobileLandscape } from '@/util/viewport'
-
+// import { persist } from './util'
+import ui, { MUTATIONS as uiMutations } from './modules/ui'
+import background, { MUTATIONS as backgroundMutations } from './modules/background'
+import work, { MUTATIONS  as workMutations } from './modules/work'
 Vue.use(Vuex)
 
+export const MUTATIONS = {
+  ui: uiMutations,
+  background: backgroundMutations,
+  work: workMutations
+}
+
 export default new Vuex.Store({
-  state: {
-    activeSlide: 0,
-    totalSlides: 0,
-    transitioning: false,
-    playing: false,
-    isMobile: detectMobile(),
-    isMobileLandscape: detectMobileLandscape()
+  // plugins: [persist],
+  modules: {
+    ui,
+    background,
+    work
   },
-  mutations,
-  actions
+  actions: {
+    init ({ dispatch }) {
+      dispatch('ui/detectMobile')
+      window.addEventListener('resize', () => dispatch('ui/detectMobile'))
+    }
+  }
 })

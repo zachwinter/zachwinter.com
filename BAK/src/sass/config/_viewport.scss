@@ -1,0 +1,18 @@
+$max-width: 1024px;
+$mobile-outer-padding: 20px;
+$desktop-outer-padding: 50px;
+
+$breakpoints: (
+  tiny: 320,
+  mobile-sm: 480,
+  mobile: 640,
+  tablet-sm: 768,
+  tablet: 1024,
+  laptop: 1280
+);
+
+@mixin mobile-landscape {
+  @media (min-width: 320px) and (max-width: 900px) and (orientation: landscape) {
+    @content;
+  }
+}

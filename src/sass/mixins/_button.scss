@@ -1,31 +1,25 @@
-@mixin button($background: $blue, $small: false) {
-	@include condensed;
-  transition: all 0.1s linear;
+@mixin button ($background: $black) {
   display: inline-block;
-  background: $background;
-	padding: 0 20px;
-	line-height: 40px;
-  color: $white;
-  border-radius: 10px;
-  min-width: 100px;
-  height: 40px;
-  text-align: center;
-	border: 0;
-	
-	@if $small {
-		height: 30px;
-		line-height: 30px;
-		font-size: 14px !important;
-		padding: 0 10px;
-		min-width: auto;
-	}
+  text-decoration: none;
+  height: 60px;
+  padding: 0 20px;
+  line-height: 60px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 18px;
+  background: transparent;
+  border: 2px solid $background;
+  color: $background;
+  font-family: inherit;
+  line-height: 60px - 4px;
+  transition: transform 100ms linear;
 
-  &:active, &:focus { outline: 0 }
+  &:hover {
+    transform: scale(1.05);
+    transition-duration: 100ms !important;
+  }
 
-  &:hover { 
-    background: darken($background, 5%);
-    cursor: pointer;
-  } 
-
-  &:active { color: transparent; }
+  &:active {
+    transform: scale(.9);
+  }
 }

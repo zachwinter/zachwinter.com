@@ -1,0 +1,19 @@
+$base-transition-duration: 500ms;
+$bounce-easing: cubic-bezier(1,0,.5,1);
+$slide-easing: cubic-bezier(.71,.21,.35,1);
+$base-easing: $slide-easing;
+$base-transition: $base-transition-duration $base-easing;
+
+$hover-transition-duration: 100ms;
+$hover-easing: linear;
+$hover-transition: $hover-transition-duration $hover-easing;
+
+$intro-offset: 100px;
+$intro-duration: 1000ms;
+$intro-easing: $base-easing;
+
+$page-transition-duration: 1500ms;
+
+$resume-transition: 500ms $base-easing;
+
+$work-item-transition: 500ms $base-easing;
