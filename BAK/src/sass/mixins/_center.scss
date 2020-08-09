@@ -1,4 +1,0 @@
-@mixin center($x: 0px, $y: 0px, $attr: null) {
-	@include position(absolute, 50% null null 50%);
-	transform: translateX( calc(-50% + #{$x}) ) translateY( calc(-50% + #{$y}) ) $attr;
-}

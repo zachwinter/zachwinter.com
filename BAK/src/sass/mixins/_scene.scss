@@ -1,6 +1,0 @@
-@mixin scene ($background: transparent) {
-	@include flex;
-	@include size(100%);
-	width: 100%;
-	background: $background;
-}

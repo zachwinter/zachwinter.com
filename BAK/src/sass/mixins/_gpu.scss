@@ -1,4 +1,0 @@
-@mixin gpu($prop: transform) {
-	transform: translateZ(0);
-	will-change: $prop;
-}

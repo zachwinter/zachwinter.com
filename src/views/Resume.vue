@@ -21,7 +21,7 @@ export default {
       company: 'Freelance',
       period: [new Date('12/1/2009'), new Date()],
       current: true,
-      description: `This is a catch-all for all freelance work since 2009, from brochure websites to data-driven web and mobile applications.`
+      description: `This is a catch-all for all freelance work since 2009, from brochure websites to data-driven web and mobile applications. Recently affected by layoffs, I'm exploring new full-time opportunities.`
     }, {
       title: 'UI Engineer',
       company: 'pHin',
