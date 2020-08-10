@@ -128,3 +128,10 @@ svg {
   }
 }
 </style>
+
+<style lang="scss">
+.dark .logo {
+  background: $black;
+  * { stroke: $white; }
+}
+</style>

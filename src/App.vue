@@ -54,6 +54,10 @@ body {
   font-weight: 300;
   background: rgba(0, 0, 0, .05);
   * { text-shadow: 1px 1px 0px rgba($white, .3); }
+
+  &.dark {
+    * { color: $white; }
+  }
 }
 
 strong {

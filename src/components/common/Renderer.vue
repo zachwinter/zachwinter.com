@@ -27,6 +27,10 @@ export default {
       type: Number,
       required: true
     },
+    darkMode: {
+      type: Boolean,
+      default: false
+    },
     hidpi: {
       type: Boolean,
       default: true
@@ -50,6 +54,7 @@ export default {
       resolution: new Uniform(new Vector2(window.innerWidth, window.innerHeight)),
       time: new Uniform(0),
       yOffset: new Uniform(this.yOffset),
+      darkMode: new Uniform(this.darkMode),
       ...Object.keys(this.uniforms).reduce((acc, key) => {
         acc[key] = { value: this.uniforms[key] }
         return acc
@@ -110,7 +115,8 @@ export default {
     tick (now) {
       for (let key in this.uniforms) this._uniforms[key].value = this.uniforms[key]
       this._uniforms.yOffset.value = this.yOffset / 1.5
-      this._uniforms.time.value = now / 8
+      this._uniforms.darkMode.value = this.darkMode
+      this._uniforms.time.value = now / 20
       this.renderer.render(this.scene, this.camera)
     }
   }

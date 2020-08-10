@@ -1,5 +1,5 @@
 <template lang="pug">
-header(:class="{ visible: headerVisible }")
+header(:class="{ visible: headerVisible }" id="header")
   div: router-link(:to="{ name: 'Work' }" @click.native="click") Work
   div: router-link(:to="{ name: 'Contact' }" @click.native="click") Contact
   div: router-link(:to="{ name: 'Resume' }" @click.native="click") Resume
@@ -76,5 +76,10 @@ a {
     margin: spacer(1) 0;
   }
 }
+</style>
 
+<style lang="scss">
+.dark #header {
+  background: $black;
+}
 </style>

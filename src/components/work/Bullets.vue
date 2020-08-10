@@ -27,5 +27,9 @@ export default {
   margin: 0 3px;
 
   &.active { opacity: 1; }
+
+  .dark  & {
+    background: $white;
+  }
 }
 </style>

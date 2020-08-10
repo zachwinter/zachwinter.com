@@ -47,7 +47,12 @@ void main () {
   }
   gl_FragColor.xyz = glow * brightness * pow(gl_FragColor.xyz, vec3(contrast));
   gl_FragColor.w = 1.0;
-  gl_FragColor = 1. - gl_FragColor;
+  if (darkMode) {
+    gl_FragColor = gl_FragColor;
+  } else {
+    gl_FragColor = 1. - gl_FragColor;
+  }
+  gl_FragColor *= .5;
 }
 `
 

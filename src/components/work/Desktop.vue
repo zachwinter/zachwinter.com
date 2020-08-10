@@ -55,6 +55,8 @@ $border-radius: 10px;
   border-top-left-radius: $border-radius;
 
   > div { @include flex; }
+
+  .dark & { background: $black; }
 }
 
 .dot {

@@ -22,4 +22,9 @@
   &:active {
     transform: scale(.9);
   }
+
+  .dark & {
+    color: $white;
+    border-color: $white;
+  }
 }

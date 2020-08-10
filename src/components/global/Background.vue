@@ -1,5 +1,5 @@
 <template lang="pug">
-Renderer(:uniforms="uniforms" :shader="shader" :y-offset="yOffset" ref="renderer")
+Renderer(:uniforms="uniforms" :shader="shader" :y-offset="yOffset" :dark-mode="darkMode" ref="renderer")
 </template>
 
 <script>
@@ -11,7 +11,8 @@ export default {
   computed: bind([
     'background/uniforms', 
     'background/shader',
-    'background/yOffset'
+    'background/yOffset',
+    'ui/darkMode'
   ]),
   watch: {
     '$route' ({ name }) {

@@ -25,6 +25,7 @@ export default new Vuex.Store({
   actions: {
     init ({ dispatch }) {
       dispatch('ui/detectMobile')
+      dispatch('ui/detectDarkMode')
       window.addEventListener('resize', () => dispatch('ui/detectMobile'))
     }
   }
