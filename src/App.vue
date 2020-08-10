@@ -1,6 +1,7 @@
 <template lang="pug">
 .app
   Logo
+  PageTitle
   Header
   transition(name="page" @before-enter="onBeforeEnter" @after-enter="onAfterEnter")
     router-view
@@ -13,11 +14,13 @@ import Logo from '@/components/global/Logo'
 import Background from '@/components/global/Background'
 import Header from '@/components/global/Header'
 import Navigation from '@/components/global/Navigation'
+import PageTitle from '@/components/global/PageTitle'
 import { SET_TRANSITIONING } from '@/store/modules/nav'
 
 export default {
   components: {
     Logo,
+    PageTitle,
     Background,
     Header,
     Navigation
