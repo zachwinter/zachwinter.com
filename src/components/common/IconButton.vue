@@ -135,7 +135,8 @@ span {
   @include position(absolute, 50% null null 50%);
   transform: translateX(-50%) translateY(-50%);
   text-align: center;
-  font-size: 1.2rem;
+  font-size: .8rem;
+  font-weight: 700;
   text-transform: uppercase;
   display: block;
   opacity: 0;

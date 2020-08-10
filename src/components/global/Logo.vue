@@ -20,7 +20,7 @@
 <script>
 import { bind } from '@/store/util'
 import Vivus from 'vivus'
-import { pause } from '@/util/timing'
+// import { pause } from '@/util/timing'
 
 export default {
   data: () => ({
@@ -28,14 +28,14 @@ export default {
     animate: false
   }),
   computed: bind(['ui/logoVisible', 'ui/headerVisible']),
-  watch: {
-    async logoVisible (val) {
-      if (val) {
-        await pause(3000)
-        this.animate = true
-      }
-    }
-  },
+  // watch: {
+  //   async logoVisible (val) {
+  //     if (val) {
+  //       await pause(3000)
+  //       this.animate = true
+  //     }
+  //   }
+  // },
   methods: {
     onMouseMove () {
       if (this.active) return

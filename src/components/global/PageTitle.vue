@@ -6,21 +6,27 @@ h1(@transitionend="onTransitionEnd" :class="{ visible: textVisible }") {{ text }
 export default {
   data: () => ({
     text: '',
-    textVisible: true,
+    textVisible: false,
     nextText: null
   }),
   watch: {
     '$route' ({ name }) {
+      if (name === 'Home') return
       this.nextText = name
       this.textVisible = false
     }
   },
-  mounted () {
-    this.nextText = this.$route.name
-    this.textVisible = false
+  async mounted () {
+    if (this.$route.name === 'Home') {
+      this.textVisible = true
+      return
+    }
+    await this.$nextTick()
+    this.text = this.$route.name
+    this.textVisible = true
   },
   methods: {
-    onTransitionEnd () {
+    async onTransitionEnd () {
       if (this.nextText) {
         this.text = this.nextText
         this.textVisible = true
