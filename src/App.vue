@@ -57,7 +57,7 @@ body {
 
   &.dark {
     * {
-      text-shadow: 1px 1px 0px rgba($white, .3);
+      text-shadow: 1px 1px 0px rgba($black, .3);
       color: $white;
     }
   }
