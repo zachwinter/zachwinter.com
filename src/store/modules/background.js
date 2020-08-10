@@ -52,7 +52,6 @@ void main () {
   } else {
     gl_FragColor = 1. - gl_FragColor;
   }
-  gl_FragColor *= .5;
 }
 `
 
