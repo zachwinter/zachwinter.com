@@ -33,8 +33,9 @@ export default {
 <style lang="scss" scoped>
 h1 {
   @include position(fixed, $outer-padding null null #{$logo-size + ($outer-padding * 2)});
-  @include scale(font-size 1rem 2rem);
+  @include scale(font-size 1rem 1.5rem);
   text-transform: uppercase;
+  font-weight: 700;
   z-index: 50;
   line-height: $logo-size;
   opacity: 0;

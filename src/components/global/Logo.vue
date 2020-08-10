@@ -67,10 +67,11 @@ export default {
   @include flex;
   @include size($logo-size);
   @include position(fixed, $outer-padding null null $outer-padding);
-  box-shadow: $box-shadow;
+  // box-shadow: $box-shadow;
   opacity: 0;
-  background: white;
+  // background: white;
   padding: 20px;
+  background: transparent;
   // will-change: opacity, transform;
   z-index: 100;
   transition: box-shadow $base-transition;
