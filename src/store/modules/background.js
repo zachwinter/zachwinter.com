@@ -1,12 +1,7 @@
 
 import { buildMutations } from '@/store/util'
-import cloneDeep from 'lodash/cloneDeep'
 import interpolateNumber from 'd3-interpolate/src/number' 
 import { timer } from '@/util/timing'
-import home from './backgrounds/home'
-import work from './backgrounds/work'
-import contact from './backgrounds/contact'
-import resume from './backgrounds/resume'
 
 export const SET_UNIFORMS = 'SET_UNIFORMS'
 export const SET_SHADER = 'SET_SHADER'
@@ -56,10 +51,65 @@ void main () {
 }
 `
 
+const uniforms = {
+  home: {
+    zoom: 1,
+    xMultiplier: 28.01,
+    yMultiplier: 9.06,
+    ballSize: 20,
+    colorSpread: 0.7,
+    colorMultiplier: 847.62,
+    shapeMultiplier: 0.01,
+    glow: 7.39,
+    contrast: 4.17,
+    rotation: 0.256,
+    brightness: 311.67
+  },
+  work: {
+    zoom: 0.991,
+    xMultiplier: 200,
+    yMultiplier: 250,
+    ballSize: 11.26,
+    colorSpread: 0.2,
+    colorMultiplier: 739.41,
+    shapeMultiplier: 0,
+    glow: 10,
+    contrast: 2.72,
+    rotation: 0.256,
+    brightness: 56.94
+  },
+  contact: {
+    zoom: 0.091,
+    xMultiplier: 0,
+    yMultiplier: 250,
+    ballSize: 12.4,
+    colorSpread: 0.2,
+    colorMultiplier: 739.41,
+    shapeMultiplier: 0.93,
+    glow: 10,
+    contrast: 3.02,
+    rotation: 0.256,
+    brightness: 112.12
+  },
+  resume: {
+    zoom: 0.091,
+    xMultiplier: 200,
+    yMultiplier: 250,
+    ballSize: 20,
+    colorSpread: 0.2,
+    colorMultiplier: 739.41,
+    shapeMultiplier: 113.86,
+    glow: 1.45,
+    contrast: 4.17,
+    rotation: 0.256,
+    brightness: 311.67
+  }
+}
+
 export default {
   namespaced: true,
   state: {
-    uniforms: home,
+    uniforms: { ...uniforms.home },
     shader,
     yOffset: 0,
     tweeningOffset: false
@@ -68,28 +118,24 @@ export default {
   actions: {
     async tween ({ state, commit }, name) {
       const keys = Object.keys(state.uniforms)
-      const from = cloneDeep(state.uniforms)
-      let to = null
-      if (name === 'Work') to = {...work}
-      if (name === 'Home') to = {...home}
-      if (name === 'Contact') to = {...contact}
-      if (name === 'Resume') to = {...resume}
+      const from = state.uniforms
+      const to = uniforms[name.toLowerCase()]
       if (to === null) return
       const interpolators = keys.reduce((acc, key) => {
-        acc[key] = interpolateNumber(from[key].value, to[key].value)
+        acc[key] = interpolateNumber(from[key], to[key])
         return acc
       }, {})
       const yOffsetInterpolator = interpolateNumber(state.yOffset, 0)
       timer(1500, ({ progress }) => {
         const uniforms = keys.reduce((acc, key) => {
-          acc[key] = { ...from[key], value: interpolators[key](progress) }
+          acc[key] = interpolators[key](progress)
           return acc
         }, {})
         commit(SET_UNIFORMS, uniforms)
         commit(SET_Y_OFFSET, yOffsetInterpolator(progress))
       }, 'easeInOutCubic')
     },
-    async scrollUp ({ commit, state }) {
+    async previous ({ commit, state }) {
       if (state.tweeningOffset) return
       commit(SET_TWEENING_OFFSET, true)
       const interpolator = interpolateNumber(state.yOffset, state.yOffset + 1)
@@ -99,7 +145,7 @@ export default {
       }, 'easeInOutCubic')
       commit(SET_TWEENING_OFFSET, false)
     },
-    async scrollDown ({ commit, state }) {
+    async next ({ commit, state }) {
       if (state.tweeningOffset) return
       commit(SET_TWEENING_OFFSET, true)
       const interpolator = interpolateNumber(state.yOffset, state.yOffset - 1)

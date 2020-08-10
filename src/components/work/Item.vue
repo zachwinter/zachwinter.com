@@ -69,42 +69,25 @@ export default {
 
 <style lang="scss" scoped>
 .item {
-  @include position(absolute, 0 0 0 0);
-  @include size(100%);
-  @include flex(center, center);
-  padding: $outer-padding;
+  @include work-item;
   z-index: 0;
-
-  @include max-width(mobile) {
-    @include flex(center, center, column);
-    background-size: cover;
-    background-position: center center;
-  }
 }
 
 .content {
   @include size(40%, 100%);
   @include flex(flex-start, center, column);
   padding-right: $outer-padding;
-  // will-change: transform, opacity;
-
-  // * { will-change: transform, opacity; }
-
+  
   h2 {
-    @include scale(font-size 1rem 4rem);
-    font-weight: 700;
-    text-transform: uppercase;
-    transform: translateY(-50px);
-    opacity: 0;
-    transition: transform $work-item-transition, opacity $work-item-transition;
-    margin-bottom: $base-margin / 2;
+    @include work-heading;
   }
 
   p {
-    @include scale(font-size 1rem 2rem);
-    transform: translateX(-150px) scale(.6);
-    opacity: 0;
-    transition: transform $work-item-transition, opacity $work-item-transition;
+    @include work-text;
+  }
+
+  a {
+    @include button;
   }
   
   .ctas {

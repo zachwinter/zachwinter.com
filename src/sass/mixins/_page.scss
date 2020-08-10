@@ -1,5 +1,6 @@
 @mixin page {
-  @include position(absolute, 0 0 0 0);
+  @include position(fixed, 0 0 0 0);
   @include flex;
   overflow: hidden;
+  will-change: transform, opacity;
 }

@@ -24,7 +24,7 @@ export default {
       this.index++
       await pause(3500)
       // this.index++
-      this.$store.dispatch('ui/showElements')
+      this.$router.push('/work')
     }
   }
 }

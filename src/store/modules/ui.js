@@ -16,7 +16,7 @@ export default {
   namespaced: true,
   state: {
     mobile: detectMobile(),
-    logoVisible: true,
+    logoVisible: false,
     headerVisible: false
   },
   mutations: buildMutations(MUTATIONS),

@@ -1,8 +1,15 @@
 @mixin work-item {
-  // @include position(absolute, 0 0 0 0);
-  // @include flex;
+  @include position(absolute, 0 0 0 0);
+  @include size(100%);
+  @include flex(center, center);
+  padding: $outer-padding;
+  z-index: 0;
 
-  a {
-    @include button;
+  @include max-width(mobile) {
+    @include flex(center, center, column);
+    background-size: cover;
+    background-position: center center;
   }
+
+  &.active { z-index: 1; }
 }

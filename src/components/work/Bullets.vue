@@ -8,9 +8,6 @@ export default {
   props: {
     total: Number,
     active: Number
-  },
-  mounted () {
-
   }
 }
 </script>

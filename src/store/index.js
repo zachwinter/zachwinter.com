@@ -4,12 +4,14 @@ import Vuex from 'vuex'
 import ui, { MUTATIONS as uiMutations } from './modules/ui'
 import background, { MUTATIONS as backgroundMutations } from './modules/background'
 import work, { MUTATIONS  as workMutations } from './modules/work'
+import nav, { MUTATIONS as navMutations } from './modules/nav'
 Vue.use(Vuex)
 
 export const MUTATIONS = {
   ui: uiMutations,
   background: backgroundMutations,
-  work: workMutations
+  work: workMutations,
+  nav: navMutations
 }
 
 export default new Vuex.Store({
@@ -17,7 +19,8 @@ export default new Vuex.Store({
   modules: {
     ui,
     background,
-    work
+    work,
+    nav
   },
   actions: {
     init ({ dispatch }) {

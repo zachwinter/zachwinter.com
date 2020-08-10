@@ -1,9 +1,8 @@
 <template lang="pug">
 header(:class="{ visible: headerVisible }")
-  div: router-link(:to="{ name: 'Home' }" @click.native="click") Home
   div: router-link(:to="{ name: 'Work' }" @click.native="click") Work
-  div: router-link(:to="{ name: 'Resume' }" @click.native="click") Resume
   div: router-link(:to="{ name: 'Contact' }" @click.native="click") Contact
+  div: router-link(:to="{ name: 'Resume' }" @click.native="click") Resume
 </template>
 
 <script>
@@ -30,7 +29,7 @@ header {
   background: $white;
   box-shadow: $box-shadow;
   text-align: center;
-  will-change: transform, opacity;
+  // will-change: transform, opacity;
 
   &.visible {
     transform: translateY(0%);

@@ -2,24 +2,36 @@
 .app
   Logo
   Header
-  transition(name="page")
+  transition(name="page" @before-enter="onBeforeEnter" @after-enter="onAfterEnter")
     router-view
   Background
+  Navigation
 </template>
 
 <script>
 import Logo from '@/components/global/Logo'
 import Background from '@/components/global/Background'
 import Header from '@/components/global/Header'
+import Navigation from '@/components/global/Navigation'
+import { SET_TRANSITIONING } from '@/store/modules/nav'
 
 export default {
   components: {
     Logo,
     Background,
-    Header
+    Header,
+    Navigation
   },
   mounted () {
     this.$store.dispatch('init')
+  },
+  methods: {
+    onBeforeEnter () {
+      this.$store.commit(`nav/${SET_TRANSITIONING}`, true)
+    },
+    onAfterEnter () {
+      this.$store.commit(`nav/${SET_TRANSITIONING}`, false)
+    }
   }
 }
 </script>
@@ -41,6 +53,7 @@ body {
   font-family: 'Dosis', sans-serif;
   font-weight: 300;
   background: rgba(0, 0, 0, .05);
+  * { text-shadow: 1px 1px 0px rgba($white, .3); }
 }
 
 strong {

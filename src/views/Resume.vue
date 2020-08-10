@@ -1,20 +1,15 @@
 <template lang="pug">
-.resume(ref="container")
-  .positions
-    Position(v-for="(position, i) in positions" :key="i" :position="position" :total="positions.length" :index="i" :active="index === i" ref="position")
-  Navigation(:index="index" :last="positions.length - 1" @next="next" @previous="previous")
+.resume
+  Position(v-for="(position, i) in positions" :key="i" :position="position" :total="positions.length" :index="i" :active="index === i" ref="position" @transition-end="onTransitionEnd")
 </template>
 
 <script>
-import Navigation from '@/components/common/Navigation'
 import Position from '@/components/resume/Position'
-import { once } from '@/util/dom'
-import { pause } from '@/util/timing'
-import swipe from '@/mixins/swipe'
+import { bind } from '@/store/util'
+import { SET_TRANSITIONING } from '@/store/modules/nav'
 
 export default {
-  mixins: [swipe],
-  components: { Navigation, Position },
+  components: { Position },
   data: () => ({
     positions: [{
       title: 'Interactive Pixel Pusher',
@@ -62,32 +57,48 @@ export default {
     index: 0,
     transitioning: false
   }),
-  mounted () {
-    this.initSwipe(this.$refs.container)
+  computed: {
+    ...bind(['nav/previous', 'nav/next']),
+    nav () {
+      return {
+        previous: {
+          visible: true,
+          text: this.index === 0 ? 'Contact' : null
+        },
+        next: {
+          visible: this.index !== this.positions.length - 1,
+          text: null
+        }
+      }
+    }
   },
-  methods: {
-    next () {
-      if (this.transitioning || this.index === this.positions.length - 1) return
-      this.$store.dispatch('background/scrollDown')
-      this.transition()
-      this.index++
-    },
-
+  watch: {
     previous () {
-      if (this.transitioning || this.index === 0) return
-      this.$store.dispatch('background/scrollUp')
-      this.transition()
+      if (this.transitioning) return
+      if (this.index === 0) return this.$router.push({ name: 'Contact' })
+      this.$store.dispatch('background/previous')
+      this.$store.commit(`nav/${SET_TRANSITIONING}`, true)
       this.index--
     },
-
-    async transition () {
-      this.transitioning = true
-      const el = document.querySelector('.position.active')
-      await Promise.race([
-        once(el, 'transitionend'),
-        pause(500)
-      ])
-      this.transitioning = false
+    next () {
+      if (this.transitioning || this.index === this.positions.length - 1) return
+      this.$store.dispatch('background/next')
+      this.$store.commit(`nav/${SET_TRANSITIONING}`, true)
+      this.index++
+    },
+    nav: {
+      handler () {
+        this.$store.dispatch('nav/set', this.nav)
+      },
+      immediate: true
+    }
+  },
+  mounted () {
+    this.$store.dispatch('ui/showElements')
+  },
+  methods: {
+    onTransitionEnd () {
+      this.$store.commit(`nav/${SET_TRANSITIONING}`, false)
     }
   }
 }
@@ -96,11 +107,5 @@ export default {
 <style lang="scss" scoped>
 .resume {
   @include page;
-  overflow: hidden;
-}
-
-.positions {
-  @include size(100%);
-  overflow: hidden;
 }
 </style>

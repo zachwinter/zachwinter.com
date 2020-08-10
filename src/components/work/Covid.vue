@@ -1,5 +1,5 @@
 <template lang="pug">
-.covid(:class="{ active }")
+.covid(:class="{ active }" @transitionend="$emit('transition-end')")
   Item(:namespace="namespace" :total="total" :active="active" :landscape="true")
     h2 COVID-USA
     p An interactive timeseries built with D3, Vue and the HTML5 Canvas.  

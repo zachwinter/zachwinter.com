@@ -1,40 +1,64 @@
 <template lang="pug">
 .work(ref="container")
-  Kaleidosync(:active="index === 0" :index="0")
-  Covid(:active="index === 1" :index="1")
-  Navigation(:index="index" :last="last" @next="next" @previous="previous")
+  Kaleidosync(:active="index === 0" :index="0" @transition-end="onTransitionEnd")
+  Covid(:active="index === 1" :index="1" @transition-end="onTransitionEnd")
 </template>
 
 <script>
-import swipe from '@/mixins/swipe'
 import Kaleidosync from '@/components/work/Kaleidosync'
 import Covid from '@/components/work/Covid'
-import Navigation from '@/components/common/Navigation'
+import { bind } from '@/store/util'
+import { SET_TRANSITIONING } from '@/store/modules/nav'
 
 export default {
-  mixins: [swipe],
   components: {
     Kaleidosync,
-    Covid,
-    Navigation
+    Covid
   },
   data: () => ({
-    index: 0,
-    last: 1
+    index: 0
   }),
-  mounted () {
-    this.initSwipe(this.$refs.container)
+  computed: {
+    ...bind(['nav/previous', 'nav/next']),
+    nav () {
+      return {
+        previous: {
+          visible: this.index !== 0,
+          text: null
+        },
+        next: {
+          visible: true,
+          text: this.index === 1 ? 'Contact' : null
+        }
+      }
+    }
   },
-  methods: {
-    next () {
-      if (this.index === this.last) return
-      this.index++
-      this.$store.dispatch('background/scrollDown')
-    },
+  watch: {
     previous () {
       if (this.index === 0) return
       this.index--
-      this.$store.dispatch('background/scrollUp')
+      this.$store.dispatch('background/previous')
+      this.$store.commit(`nav/${SET_TRANSITIONING}`, true)
+    },
+    next () {
+      if (this.index === 1) return this.$router.push({ name: 'Contact' })
+      this.index++
+      this.$store.dispatch('background/next')
+      this.$store.commit(`nav/${SET_TRANSITIONING}`, true)
+    },
+    nav: {
+      handler () {
+        this.$store.dispatch('nav/set', this.nav)
+      },
+      immediate: true
+    }
+  },
+  mounted () {
+    this.$store.dispatch('ui/showElements')
+  },
+  methods: {
+    onTransitionEnd () {
+      this.$store.commit(`nav/${SET_TRANSITIONING}`, false)
     }
   }
 }

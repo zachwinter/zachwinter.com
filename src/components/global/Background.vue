@@ -4,7 +4,7 @@ Renderer(:uniforms="uniforms" :shader="shader" :y-offset="yOffset" ref="renderer
 
 <script>
 import { bind } from '@/store/util'
-import Renderer from '@/components/global/Renderer'
+import Renderer from '@/components/common/Renderer'
 
 export default {
   components: { Renderer },

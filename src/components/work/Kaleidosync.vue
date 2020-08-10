@@ -1,5 +1,5 @@
 <template lang="pug">
-.kaleidosync(:class="{ active }")
+.kaleidosync(:class="{ active }" @transitionend="$emit('transition-end')")
   Item(:namespace="namespace" :total="total" :active="active")
     h2 Kaleidosync
     p A Spotify web client &amp; customizable WebGL visualizer.

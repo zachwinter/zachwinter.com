@@ -1,20 +1,47 @@
 <template lang="pug">
-.contact
-  h1 Tell me your secrets
+.contact(ref="container")
+  h1 Let's chat!
+  p I'm actively exploring new opportunities.
   .links
-    a(href="mailto:contact@zachwinter.com").email: IconButton(icon="envelope")
     a(href="tel:18508428313").phone: IconButton(icon="mobile")
+    a(href="mailto:contact@zachwinter.com").email: IconButton(icon="envelope")
+    a(href="https://www.linkedin.com/in/zachwinter/" target="linkedin").linkedin: IconButton(icon="linkedin" set="fab")
     a(href="https://t.me/yozic" target="telegram").telegram: IconButton(icon="telegram-plane" set="fab")
     a(href="https://www.instagram.com/zachary.io" target="instagram").instagram: IconButton(icon="instagram" set="fab")
-    a(href="https://www.linkedin.com/in/zachwinter/" target="linkedin").linkedin: IconButton(icon="linkedin" set="fab")
     a(href="https://www.github.com/zachwinter" target="github").github: IconButton(icon="github" set="fab")
 </template>
 
 <script>
 import IconButton from '@/components/common/IconButton'
+import { SET_TRANSITIONING } from '@/store/modules/nav'
+import { bind } from '@/store/util'
 
 export default {
-  components: { IconButton }
+  components: { IconButton },
+  computed: bind(['nav/previous', 'nav/next']),
+  watch: {
+    previous () {
+      this.$store.commit(`nav/${SET_TRANSITIONING}`, true)
+      this.$router.push({ name: 'Work' })
+    },
+    next () {
+      this.$store.commit(`nav/${SET_TRANSITIONING}`, true)
+      this.$router.push({ name: 'Resume' })
+    }
+  },
+  mounted () {
+    this.$store.dispatch('ui/showElements')
+    this.$store.dispatch('nav/set', {
+      previous: {
+        visible: true,
+        text: 'Work'
+      },
+      next: {
+        visible: true,
+        text: 'Resume'
+      }
+    })
+  }
 }
 </script>
 
@@ -25,8 +52,12 @@ export default {
 }
 
 h1 {
-  @include scale(font-size 1rem 4rem);
+  @include scale(font-size 1.5rem 4rem);
   text-transform: uppercase;
+}
+
+p {
+  @include scale(font-size 1rem 2rem);
 }
 
 @keyframes slide-in {
@@ -50,6 +81,11 @@ h1 {
     animation: slide-in 800ms ease-out forwards;
     transition: opacity 100ms linear !important;
     opacity: 0;
+    padding: 0 10px;
+
+    @include max-width(mobile) {
+      padding: 0 5px;
+    }
   }
 
   &:hover {

@@ -1,5 +1,5 @@
 <template lang="pug">
-.position(v-if="position" :class="{ active }")
+.position(v-if="position" :class="{ active }" @transitionend="$emit('transition-end')")
   div
     .title {{ position.title }} @ #[strong {{ position.company }}]
     .period {{ from }} - {{ to }}
@@ -52,7 +52,7 @@ $offset: 30%;
   transform:scale(1.2) translateY(-20px);
   opacity: 0;
   position: relative;
-  will-change: transform, opacity;
+  // will-change: transform, opacity;
 }
 
 .period {
@@ -63,7 +63,7 @@ $offset: 30%;
   text-transform: uppercase;
   transform: scale(.3) translateY(20px);
   margin: spacer(1) 0 spacer(2) 0;
-  will-change: transform, opacity;
+  // will-change: transform, opacity;
 } 
 
 .description {
@@ -71,7 +71,7 @@ $offset: 30%;
   opacity: 0;
   transition: all $resume-transition;
   transform: translateY(-$offset) scale(.7);
-  will-change: transform, opacity;
+  // will-change: transform, opacity;
 }
 
 .active {
