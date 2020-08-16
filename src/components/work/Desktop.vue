@@ -29,11 +29,9 @@ $border-radius: 10px;
   position: absolute;
   width: 100%;
   background: $white;
-  box-shadow: $box-shadow;
   border-radius: $border-radius;
   opacity: 0;
   transition: all $work-item-transition;
-  // will-change: transform, opacity;
   transform: scale(.8);
   z-index: 0;
 
@@ -42,6 +40,8 @@ $border-radius: 10px;
     opacity: 1;
     z-index: 1;
   }
+
+  @include mobile-portrait { position: static; }
 }
 
 .chrome {
@@ -57,6 +57,8 @@ $border-radius: 10px;
   > div { @include flex; }
 
   .dark & { background: $black; }
+
+  @include mobile { display: none; }
 }
 
 .dot {

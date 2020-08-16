@@ -37,9 +37,15 @@ export default {
 <style lang="scss" scoped>
 $offset: 30%;
 
+span {
+  background: rgba($white, .5);
+
+  .dark & { background: rgba($black, .5); }
+}
 .position {
   @include flex;
   @include position(fixed, 0 0 0 0);
+  @include position(fixed, 0 notch(right) 0 notch(left));
   max-width: 1000px;
   margin: 0 auto;
   padding: 0 $outer-padding;
@@ -48,18 +54,17 @@ $offset: 30%;
 
 .title {
   @include scale(font-size 1.5rem 3rem);
-  transition: all $resume-transition;
-  transform:scale(1.2) translateY(-20px);
+  transition: opacity $resume-transition, transform $resume-transition;
+  transform: scale(1.2) translateY(-20px);
   opacity: 0;
   position: relative;
-  // will-change: transform, opacity;
 }
 
 .period {
   @include scale(font-size 1rem 1.5rem);
   line-height: 1;
   opacity: 0;
-  transition: all $resume-transition;
+  transition: opacity $resume-transition, transform $resume-transition;
   text-transform: uppercase;
   transform: scale(.3) translateY(20px);
   margin: spacer(1) 0 spacer(2) 0;
@@ -69,7 +74,7 @@ $offset: 30%;
 .description {
   @include scale(font-size 1rem 1.5rem);
   opacity: 0;
-  transition: all $resume-transition;
+  transition: opacity $resume-transition, transform $resume-transition;
   transform: translateY(-$offset) scale(.7);
   // will-change: transform, opacity;
 }

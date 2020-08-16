@@ -1,5 +1,5 @@
-$base-margin: 30px;
-$outer-padding: 30px;
+$base-margin: 20px;
+$outer-padding: 20px;
 $breakpoints: (
   tiny: 320,
   mobile-sm: 480,
@@ -9,3 +9,7 @@ $breakpoints: (
   desktop: 1440,
   large: 1680
 );
+
+@function get-breakpoint ($breakpoint) {
+  @return map-get($breakpoints, $breakpoint);
+}

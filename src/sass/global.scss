@@ -3,6 +3,7 @@
 @import 'config/variables';
 @import 'config/viewport'; 
 
+@import 'functions/notch';
 @import 'functions/spacer';
 
 @import 'mixins/clear';
@@ -17,7 +18,7 @@
 @import 'mixins/label';
 @import 'mixins/max-width';
 @import 'mixins/min-width';
-@import 'mixins/mobile-landscape';
+@import 'mixins/mobile';
 @import 'mixins/page';
 @import 'mixins/position';
 @import 'mixins/reset';
@@ -25,8 +26,8 @@
 @import 'mixins/scroll-bar';
 @import 'mixins/share';
 @import 'mixins/size';
+@import 'mixins/span-text';
 @import 'mixins/strip';
-@import 'mixins/work-item';
 @import 'mixins/work-heading';
 @import 'mixins/work-text';
 @import 'placeholders/form-control';

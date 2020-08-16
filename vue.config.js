@@ -15,6 +15,14 @@ module.exports = {
         DEVELOPMENT: JSON.stringify(process.env.NODE_ENV !== 'production'),
         GOOGLE_ANALYTICS: JSON.stringify(process.env.GOOGLE_ANALYTICS)
       })
-    ]
+    ],
+    module: {
+      rules: [
+        {
+          test: /\.worker\.js$/,
+          use: { loader: 'worker-loader' }
+        }
+      ]
+    }
   }
 }

@@ -6,7 +6,7 @@
 <script>
 import Position from '@/components/resume/Position'
 import { bind } from '@/store/util'
-import { SET_TRANSITIONING } from '@/store/modules/nav'
+import { pause } from '@/util/timing'
 
 export default {
   components: { Position },
@@ -77,13 +77,13 @@ export default {
       if (this.transitioning) return
       if (this.index === 0) return this.$router.push({ name: 'Contact' })
       this.$store.dispatch('background/previous')
-      this.$store.commit(`nav/${SET_TRANSITIONING}`, true)
+      this.$store.commit('nav/SET_TRANSITIONING', true)
       this.index--
     },
     next () {
       if (this.transitioning || this.index === this.positions.length - 1) return
       this.$store.dispatch('background/next')
-      this.$store.commit(`nav/${SET_TRANSITIONING}`, true)
+      this.$store.commit('nav/SET_TRANSITIONING', false)
       this.index++
     },
     nav: {
@@ -93,12 +93,10 @@ export default {
       immediate: true
     }
   },
-  mounted () {
-    this.$store.dispatch('ui/showElements')
-  },
   methods: {
-    onTransitionEnd () {
-      this.$store.commit(`nav/${SET_TRANSITIONING}`, false)
+    async onTransitionEnd () {
+      await pause(100)
+      this.$store.commit('nav/SET_TRANSITIONING', false)
     }
   }
 }

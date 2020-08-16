@@ -1,21 +1,35 @@
 <template lang="pug">
-.bullets
+.bullets(:class="{ static: static }")
   .dot(v-for="(a, i) in new Array(total)" :key="i" :class="{ active: i === active }" @click="$emit('select', i)")
 </template>
 
 <script>
 export default {
-  props: {
+  props: { 
     total: Number,
-    active: Number
+    active: Number,
+    static: {
+      type: Boolean,
+      default: false
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .bullets {
-  @include position(absolute, null 0 #{-$base-margin} 0);
+  @include position(absolute, null 0 #{-20px} 0);
   @include flex;
+
+  // &.static {
+  //   @include position(absolute, null 0 #{0} 0);
+  //   // position: static;
+  //   // margin-top: $base-margin;
+
+  //   @include mobile-landscape {
+  //     width: calc(90vh - #{2 * $outer-padding});
+  //   }
+  // }
 }
 
 .dot {

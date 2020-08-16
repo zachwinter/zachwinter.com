@@ -1,29 +1,39 @@
-export const MOBILE_BREAKPOINT = 640
+export function match (query) {
+  return window.matchMedia(query).matches
+}
 
 export function minWidth (width) {
-  return window.matchMedia(`(min-width: ${width}px)`).matches
+  return match(`(min-width: ${width}px)`)
 }
 
 export function maxWidth (width) {
-  return window.matchMedia(`(max-width: ${width}px)`).matches
+  return match(`(max-width: ${width}px)`)
 }
 
 export function minHeight (height) {
-  return window.matchMedia(`(min-height: ${height}px)`).matches
+  return match(`(min-height: ${height}px)`)
 }
 
 export function maxHeight (height) {
-  return window.matchMedia(`(max-height: ${height}px)`).matches
+  return match(`(max-height: ${height}px)`)
 }
 
 export function orientation (orientation) {
-  return window.matchMedia(`(orientation: ${orientation})`).matches
+  return match(`(orientation: ${orientation})`)
 }
 
-export function detectMobile () {
-  return maxWidth(MOBILE_BREAKPOINT) && orientation('portrait') || detectMobileLandscape()
+export function detectDarkMode () {
+  return match('(prefers-color-scheme: dark)')
+}
+
+export function detectMobilePortrait () {
+  return maxWidth(400) && orientation('portrait')
 }
 
 export function detectMobileLandscape () {
-  return minWidth(320) && maxWidth(900) && orientation('landscape')
+  return maxHeight(400) && orientation('landscape')
+}
+
+export function detectMobile () {
+  return detectMobileLandscape() || detectMobilePortrait()
 }

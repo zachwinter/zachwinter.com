@@ -1,18 +1,23 @@
-@mixin button ($background: $black) {
+$button-height: 60px;
+$button-height-mobile: 40px;
+$border-size: 0px;
+$button-color: $black;
+
+@mixin button ($color: $button-color) {
   display: inline-block;
   text-decoration: none;
-  height: 60px;
+  height: $button-height;
   padding: 0 20px;
-  line-height: 60px;
   font-weight: 700;
   text-transform: uppercase;
   font-size: 18px;
-  background: transparent;
-  border: 2px solid $background;
-  color: $background;
+  color: $color;
   font-family: inherit;
-  line-height: 60px - 4px;
+  background: rgba($white, .8);
+  line-height: $button-height - ($border-size * 2);
   transition: transform 100ms linear;
+  text-shadow: none;
+  border: $border-size solid rgba($color, .2);
 
   &:hover {
     transform: scale(1.05);
@@ -24,7 +29,14 @@
   }
 
   .dark & {
-    color: $white;
-    border-color: $white;
+    background: white;
+    color: $black;
+  }
+
+  @include mobile {
+    height: $button-height-mobile;
+    padding: 0 10px;
+    font-size: 14px;
+    line-height: $button-height-mobile - ($border-size * 2);
   }
 }

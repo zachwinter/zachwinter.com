@@ -23,9 +23,10 @@ export default new Vuex.Store({
     nav
   },
   actions: {
-    init ({ dispatch }) {
+    init ({ dispatch, commit  }, route) {
       dispatch('ui/detectMobile')
       dispatch('ui/detectDarkMode')
+      commit(`ui/SET_LOGO_VISIBLE`, route !== 'Home')
       window.addEventListener('resize', () => dispatch('ui/detectMobile'))
     }
   }

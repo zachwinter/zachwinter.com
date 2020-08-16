@@ -2,24 +2,28 @@
 .work(ref="container")
   Kaleidosync(:active="index === 0" :index="0" @transition-end="onTransitionEnd")
   Covid(:active="index === 1" :index="1" @transition-end="onTransitionEnd")
+  Sketches(:active="index === 2" :index="2" @transition-end="onTransitionEnd")
 </template>
 
 <script>
 import Kaleidosync from '@/components/work/Kaleidosync'
 import Covid from '@/components/work/Covid'
-import { bind } from '@/store/util'
-import { SET_TRANSITIONING } from '@/store/modules/nav'
+import Sketches from '@/components/work/Sketches'
+import { bind, dualBind } from '@/store/util'
+import { pause } from '@/util/timing'
 
 export default {
   components: {
     Kaleidosync,
-    Covid
+    Covid,
+    Sketches
   },
   data: () => ({
-    index: 0
+    last: 2
   }),
   computed: {
     ...bind(['nav/previous', 'nav/next']),
+    ...dualBind('work/index'),
     nav () {
       return {
         previous: {
@@ -28,7 +32,7 @@ export default {
         },
         next: {
           visible: true,
-          text: this.index === 1 ? 'Contact' : null
+          text: this.index === this.last ? 'Contact' : null
         }
       }
     }
@@ -38,13 +42,13 @@ export default {
       if (this.index === 0) return
       this.index--
       this.$store.dispatch('background/previous')
-      this.$store.commit(`nav/${SET_TRANSITIONING}`, true)
+      this.$store.commit(`nav/SET_TRANSITIONING`, true)
     },
     next () {
-      if (this.index === 1) return this.$router.push({ name: 'Contact' })
+      if (this.index === this.last) return this.$router.push({ name: 'Contact' })
       this.index++
       this.$store.dispatch('background/next')
-      this.$store.commit(`nav/${SET_TRANSITIONING}`, true)
+      this.$store.commit(`nav/SET_TRANSITIONING`, true)
     },
     nav: {
       handler () {
@@ -53,12 +57,10 @@ export default {
       immediate: true
     }
   },
-  mounted () {
-    this.$store.dispatch('ui/showElements')
-  },
   methods: {
-    onTransitionEnd () {
-      this.$store.commit(`nav/${SET_TRANSITIONING}`, false)
+    async onTransitionEnd () {
+      await pause(100)
+      this.$store.commit(`nav/SET_TRANSITIONING`, false)
     }
   }
 }

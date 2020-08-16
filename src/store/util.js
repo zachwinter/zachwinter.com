@@ -1,52 +1,34 @@
 import { MUTATIONS } from '@/store'
 
-export function buildMutations (mutations) {
-  const obj = {}
-  for (let key in mutations) {
-    obj[key] = function (state, val) {
-      state[mutations[key]] = val
+export function exposeMutations (state) {
+  return Object.keys(state).map(key => {
+    return { key, list: key.split(/(?=[A-Z])/) }
+  }).reduce((acc, { key, list }) => {
+    const mutation = list.reduce((acc, val, i) => {
+      acc += i === list.length - 1 ? val.toUpperCase() : val.toUpperCase() + '_'
+      return acc
+    }, 'SET_')
+    acc[mutation] = key
+    return acc
+  }, {})
+}
+
+export function composeMutations (state) {
+  const mutations = exposeMutations(state)
+  return Object.keys(mutations).reduce((acc, mutation) => {
+    acc[mutation] = function (state, val) {
+      state[mutations[mutation]] = val
     }
-  }
-  return obj
+    return acc
+  }, {})
 }
 
-export function persist ({ key = 'vuex.persist', modules }) {
-  let $store = localStorage.getItem(key) ? JSON.parse(localStorage.getItem(key)) : null
-  let initFlag = false
-
-  if (!$store) {
-    $store = modules.reduce((acc, val) => {
-      acc[val] = {}
-      return acc
-    }, {})
-    localStorage.setItem(key, JSON.stringify($store))
-    $store = JSON.parse(localStorage.getItem(key))
-    initFlag = true
-  } 
-
-  return function (store) {
-    const state = { ...store.state, ...$store }
-    if (!initFlag) store.replaceState(state)
-    store.subscribe(({ type }, state) => {
-      const [module] = type.split('/')
-      if (modules.indexOf(module) !== -1) {
-        const storeString = localStorage.getItem(key)
-        const store = JSON.parse(storeString)
-        store[module] = state[module]
-        localStorage.setItem(key, JSON.stringify(store))
-      }
-    })
-  }
-}
-
-export function dualBind (prop, localName = null) {
-  if (Array.isArray(prop)) {
-    return prop.reduce((acc, prop) => {
-      acc = { ...acc, ..._dualBind(prop) }
-      return acc
-    }, {})
-  } else {
-    return _dualBind(prop, localName)
+export function buildModule ({ state, actions }) {
+  return {
+    namespaced: true,
+    state,
+    mutations: composeMutations(state),
+    actions
   }
 }
 
@@ -58,6 +40,17 @@ export function bind (prop, localName = null) {
     }, {})
   } else {
     return _bind(prop, localName)
+  }
+}
+
+export function dualBind (prop, localName = null) {
+  if (Array.isArray(prop)) {
+    return prop.reduce((acc, prop) => {
+      acc = { ...acc, ..._dualBind(prop) }
+      return acc
+    }, {})
+  } else {
+    return _dualBind(prop, localName)
   }
 }
 
@@ -73,6 +66,7 @@ function _extract (prop) {
 
 function _dualBind (prop, localName) {
   const { mutation, module, key } = _extract(prop)
+  console.log({ mutation, module })
   
   return { 
     [localName || key]: {

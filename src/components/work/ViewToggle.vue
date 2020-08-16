@@ -6,7 +6,6 @@
 
 <script>
 import IconButton from '@/components/common/IconButton'
-import { SET_VIEW_MODE } from '@/store/modules/work'
 import { bind } from '@/store/util'
 
 export default {
@@ -17,10 +16,10 @@ export default {
   ]),
   methods: {
     selectDesktop () {
-      this.$store.commit(`work/${SET_VIEW_MODE}`, 'desktop')
+      this.$store.commit(`work/SET_VIEW_MODE`, 'desktop')
     },
     selectMobile () {
-      this.$store.commit(`work/${SET_VIEW_MODE}`, 'mobile')
+      this.$store.commit(`work/SET_VIEW_MODE`, 'mobile')
     }
   }
 }
@@ -29,7 +28,6 @@ export default {
 <style lang="scss" scoped>
 .view-toggle {
   @include flex;
-  margin-left: $base-margin;
 }
 
 .icon-button {

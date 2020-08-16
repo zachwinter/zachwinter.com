@@ -1,11 +1,9 @@
 <template lang="pug">
 .covid(:class="{ active }" @transitionend="$emit('transition-end')")
-  Item(:namespace="namespace" :total="total" :active="active" :landscape="true")
-    h2 COVID-USA
-    p An interactive timeseries built with D3, Vue and the HTML5 Canvas.  
-    .ctas
-      a(href="https://covid-usa.herokuapp.com/" target="covid") View Project
-      ViewToggle
+  WorkItem(:namespace="namespace" :total="total" :active="active" :landscape="true" :ctas="ctas")
+    template(v-slot:content)
+      h2: span COVID-USA
+      p: span An interactive timeseries built with D3, Vue and the HTML5 Canvas.  
 </template>
 
 <script>
@@ -15,18 +13,14 @@ export default {
   mixins: [workItem],
   data: () => ({
     namespace: 'covid',
-    total: 3
+    total: 3,
+    ctas: {
+      href: 'https://covid-usa.herokuapp.com/',
+      target: 'covid-usa',
+      text: 'View Project',
+      github: 'https://www.github.com/zachwinter/COVID-USA',
+      margin: false
+    }
   })
 }
 </script>
-
-<style lang="scss" scoped>
-.covid {
-  @include work-item;
-}
-
-.ctas {
-  @include flex;
-  margin-top: $base-margin;
-}
-</style>

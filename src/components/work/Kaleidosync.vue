@@ -1,11 +1,9 @@
 <template lang="pug">
 .kaleidosync(:class="{ active }" @transitionend="$emit('transition-end')")
-  Item(:namespace="namespace" :total="total" :active="active")
-    h2 Kaleidosync
-    p A Spotify web client &amp; customizable WebGL visualizer.
-    .ctas  
-      a(href="https://kaleidosync-beta.herokuapp.com/" target="kaleidosync") View Project
-      ViewToggle
+  WorkItem(:namespace="namespace" :total="total" :active="active" :ctas="ctas")
+    template(v-slot:content)
+      h2: span Kaleidosync
+      p: span A Spotify web client &amp; customizable WebGL visualizer.
 </template>
 
 <script>
@@ -15,18 +13,13 @@ export default {
   mixins: [workItem],
   data: () => ({
     namespace: 'kaleidosync',
-    total: 5
+    total: 5,
+    ctas: {
+      href: 'https://kaleidosync-beta.herokuapp.com',
+      target: 'kaleidosync',
+      text: 'View Project',
+      margin: false
+    }
   })
 }
 </script>
-
-<style lang="scss" scoped>
-.kaleidosync {
-  @include work-item;
-}
-
-.ctas {
-  @include flex;
-  margin-top: $base-margin;
-}
-</style>

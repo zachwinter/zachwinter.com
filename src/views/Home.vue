@@ -15,16 +15,29 @@ export default {
     index: null
   }),
   mounted () {
-    this.init()
+    this.setNav()
+    this.initText()
   },
   methods: {
-    async init () {
+    setNav () {
+      this.$store.dispatch('nav/set', {
+        previous: {
+          visible: false,
+          text: null
+        },
+        next: {
+          visible: false,
+          text: null
+        }
+      })
+    },
+    async initText () {
       this.index = 0
       await pause(2500)
       this.index++
       await pause(3500)
-      // this.index++
-      this.$router.push('/work')
+      this.$store.commit(`ui/SET_LOGO_VISIBLE`, true)
+      this.$router.push({ name: 'Work' })
     }
   }
 }

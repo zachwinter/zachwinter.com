@@ -20,6 +20,8 @@ export default {
     }
   },
   mounted () {
+    if (this.$route.name !== 'Home') this.$store.dispatch('background/tween', this.$route.name)
+    
     const tick = now => {
       window.requestAnimationFrame(tick)
       this.$refs.renderer.tick(now)

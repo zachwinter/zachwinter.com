@@ -1,7 +1,7 @@
 <template lang="pug">
 .contact(ref="container")
-  h1 Let's chat!
-  p I'm actively exploring new opportunities.
+  h1: span Let's chat!
+  p: span I'm actively exploring new opportunities.
   .links
     a(href="tel:18508428313").phone: IconButton(icon="mobile")
     a(href="mailto:contact@zachwinter.com").email: IconButton(icon="envelope")
@@ -13,7 +13,6 @@
 
 <script>
 import IconButton from '@/components/common/IconButton'
-import { SET_TRANSITIONING } from '@/store/modules/nav'
 import { bind } from '@/store/util'
 
 export default {
@@ -21,16 +20,15 @@ export default {
   computed: bind(['nav/previous', 'nav/next']),
   watch: {
     previous () {
-      this.$store.commit(`nav/${SET_TRANSITIONING}`, true)
+      this.$store.commit(`nav/SET_TRANSITIONING`, true)
       this.$router.push({ name: 'Work' })
     },
     next () {
-      this.$store.commit(`nav/${SET_TRANSITIONING}`, true)
+      this.$store.commit(`nav/SET_TRANSITIONING`, true)
       this.$router.push({ name: 'Resume' })
     }
   },
   mounted () {
-    this.$store.dispatch('ui/showElements')
     this.$store.dispatch('nav/set', {
       previous: {
         visible: true,
@@ -53,12 +51,17 @@ export default {
 
 h1 {
   @include scale(font-size 1.5rem 4rem);
+  margin-bottom: $base-margin;
   text-transform: uppercase;
 }
 
 p {
   @include scale(font-size 1rem 2rem);
 }
+
+// h1, p {
+//   @include span-text;
+// }
 
 @keyframes slide-in {
   0% {
@@ -78,7 +81,7 @@ p {
 
   a {
     @include cascade(6, 150ms);
-    animation: slide-in 800ms ease-out forwards;
+    animation: slide-in 500ms ease-out forwards;
     transition: opacity 100ms linear !important;
     opacity: 0;
     padding: 0 10px;

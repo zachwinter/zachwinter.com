@@ -12,7 +12,9 @@ import {
   faChevronRight,
   faEnvelope,
   faMobile,
-  faDesktopAlt
+  faDesktopAlt,
+  faPlay,
+  faPause
 } from '@fortawesome/pro-light-svg-icons'
 import { faGithub, faInstagram, faLinkedin, faTelegramPlane } from '@fortawesome/free-brands-svg-icons'
 
@@ -27,7 +29,9 @@ import { faGithub, faInstagram, faLinkedin, faTelegramPlane } from '@fortawesome
   faInstagram,
   faLinkedin,
   faTelegramPlane,
-  faDesktopAlt
+  faDesktopAlt,
+  faPlay,
+  faPause
 ].forEach(icon => library.add(icon))
 
 Vue.component('icon', FontAwesomeIcon)

@@ -8,7 +8,9 @@ nav(ref="container")
 import IconButton from '@/components/common/IconButton'
 import { bind } from '@/store/util'
 
-const DELTA = 50
+const Y_DELTA = 20
+const X_DELTA = 40
+const TIME_DELTA = 300
 
 export default {
   props: {
@@ -35,26 +37,34 @@ export default {
 
     onTouchStart ({ touches }) {
       const touch = touches[0]
-      this.touchStart = touch.clientY
+      this.touchStartY = touch.clientY
+      this.touchStartX = touch.clientX
+      this.touchStartTime = window.performance.now()
     },
 
     onTouchMove ({ touches }) {
       const touch = touches[0]
-      this.touchEnd = touch.clientY
+      this.touchEndY = touch.clientY
+      this.touchEndX = touch.clientX
     },
 
     onTouchEnd () {
-      if (this.touchEnd === null) return
-      const deltaY = this.touchEnd - this.touchStart
-      if (deltaY > DELTA) this.previous()
-      if (deltaY < -DELTA) this.next()
-      this.touchStart = null
-      this.touchEnd = null
+      if (this.touchEndY === null) return
+      const deltaY = this.touchEndY - this.touchStartY
+      const deltaX = this.touchEndX - this.touchStartX
+      if (deltaX > X_DELTA) return
+      const deltaTime = window.performance.now() - this.touchStartTime
+      if (deltaY > Y_DELTA && deltaTime < TIME_DELTA) this.previous()
+      if (deltaY < -Y_DELTA && deltaTime < TIME_DELTA) this.next()
+      this.touchStartY = null
+      this.touchEndY = null
+      this.touchStartX = null
+      this.touchEndX = null
     },
 
     onMouseWheel ({ deltaY }) {
-      if (deltaY < -DELTA) this.previous()
-      if (deltaY > DELTA) this.next()
+      if (deltaY < -Y_DELTA) this.previous()
+      if (deltaY > Y_DELTA) this.next()
     },
 
     previous () {
@@ -75,9 +85,9 @@ nav {
 }
 
 @keyframes bobble {
-  0% { transform: translateY(0px) translateX(-50%); }
-  50% { transform: translateY(10px) translateX(-50%); }
-  100% { transform: translateY(0px) translateX(-50%); }
+  0% { transform: translateY(-5px) translateX(-50%); }
+  50% { transform: translateY(5px) translateX(-50%); }
+  100% { transform: translateY(-5px) translateX(-50%); }
 }
 
 .icon-button {
@@ -85,6 +95,8 @@ nav {
   pointer-events: none;
   transition: opacity $base-transition;
   animation: bobble 2s $base-easing infinite;
+  transform: translateX(-50%);
+  z-index: 20;
 
   &.visible {
     opacity: 1;
@@ -94,13 +106,16 @@ nav {
 
 .icon-button:nth-child(1) {
   @include position(absolute, $outer-padding null null 50%);
-  transform: translateX(-50%);
-  z-index: 20;
+  @include max-width(tablet) {
+    @include position(absolute, $outer-padding/2 null null 50%);
+  }
 }
 
 .icon-button:nth-child(2) {
   @include position(absolute, null null $outer-padding 50%);
-  transform: translateX(-50%);
-  z-index: 20;
+
+  @include max-width(tablet) {
+    @include position(absolute, null null $outer-padding/2 50%);
+  }
 }
 </style>

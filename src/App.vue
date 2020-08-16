@@ -15,7 +15,8 @@ import Background from '@/components/global/Background'
 import Header from '@/components/global/Header'
 import Navigation from '@/components/global/Navigation'
 import PageTitle from '@/components/global/PageTitle'
-import { SET_TRANSITIONING } from '@/store/modules/nav'
+
+import { pause } from '@/util/timing'
 
 export default {
   components: {
@@ -26,14 +27,15 @@ export default {
     Navigation
   },
   mounted () {
-    this.$store.dispatch('init')
+    this.$store.dispatch('init', this.$route.name)
   },
   methods: {
     onBeforeEnter () {
-      this.$store.commit(`nav/${SET_TRANSITIONING}`, true)
+      this.$store.commit(`nav/SET_TRANSITIONING`, true)
     },
-    onAfterEnter () {
-      this.$store.commit(`nav/${SET_TRANSITIONING}`, false)
+    async onAfterEnter () {
+      await pause(100)
+      this.$store.commit(`nav/SET_TRANSITIONING`, false)
     }
   }
 }
@@ -56,6 +58,7 @@ body {
   font-family: 'Dosis', sans-serif;
   font-weight: 300;
   background: rgba(0, 0, 0, .05);
+
   * { text-shadow: 1px 1px 0px rgba($white, .3); }
 
   &.dark {
@@ -89,6 +92,6 @@ img {
 .fade-enter-active, .fade-leave-active { transition: opacity $base-transition $base-easing; }
 .fade-enter, .fade-leave-to { opacity: 0; }
 
-.page-enter-active, .page-leave-active { transition: all $page-transition-duration $base-easing; }
-.page-enter, .page-leave-to { opacity: 0; transform: scale(.75); }
+.page-enter-active, .page-leave-active { transition: transform $page-transition-duration $base-easing, opacity $page-transition-duration $base-easing; }
+.page-enter, .page-leave-to { opacity: 0; transform: scale(.5); }
 </style>

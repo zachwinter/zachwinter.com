@@ -12,6 +12,7 @@ import { PlaneGeometry } from 'three/src/geometries/PlaneGeometry'
 import { ShaderMaterial } from 'three/src/materials/ShaderMaterial'
 import { Mesh } from 'three/src/objects/Mesh'
 import { DoubleSide } from 'three/src/constants'
+// import BackgroundWorker from 'worker-loader!../../workers/background.worker'
 
 export default {
   props: {
@@ -42,17 +43,11 @@ export default {
     }
   },
   mounted () {
-    this.scene = new Scene()
-    this.renderer = new WebGLRenderer()
-    this.renderer.setClearColor( '#000000', 1 )
-    this.camera = new OrthographicCamera(-1, 1, 1, -1, -1, 1)
-    this.renderer.setSize(window.innerWidth, window.innerHeight)
-    this.renderer.setPixelRatio(this.dpi)
-    window.renderer = this.renderer
-    this.geometry = new PlaneGeometry(2, 2)
+    const el = document.createElement('canvas')
+    this.$refs.container.appendChild(el)
     this._uniforms = {
       resolution: new Uniform(new Vector2(window.innerWidth, window.innerHeight)),
-      time: new Uniform(0),
+      time: new Uniform(23452345),
       yOffset: new Uniform(this.yOffset),
       darkMode: new Uniform(this.darkMode),
       ...Object.keys(this.uniforms).reduce((acc, key) => {
@@ -60,6 +55,14 @@ export default {
         return acc
       }, {})
     }
+    this.scene = new Scene()
+    this.renderer = new WebGLRenderer({ canvas: el })
+    this.renderer.setClearColor( '#000000', 1 )
+    this.camera = new OrthographicCamera(-1, 1, 1, -1, -1, 1)
+    this.renderer.setSize(window.innerWidth, window.innerHeight)
+    this.renderer.setPixelRatio(this.dpi)
+    window.renderer = this.renderer
+    this.geometry = new PlaneGeometry(2, 2)
     this.material = new ShaderMaterial({
       uniforms: this._uniforms,
       side: DoubleSide,
@@ -78,7 +81,6 @@ export default {
     })
     this.mesh = new Mesh(this.geometry, this.material)
     this.scene.add(this.mesh)
-    this.$refs.container.appendChild(this.renderer.domElement)
     window.addEventListener('resize', this.onResize.bind(this))
     this.onResize()
   },
@@ -112,11 +114,11 @@ export default {
       this.renderer.setSize(window.innerWidth, window.innerHeight)
     },
 
-    tick (now) {
+    tick () {
       for (let key in this.uniforms) this._uniforms[key].value = this.uniforms[key]
-      this._uniforms.yOffset.value = this.yOffset / 1.5
+      this._uniforms.yOffset.value = this.yOffset / 3
       this._uniforms.darkMode.value = this.darkMode
-      this._uniforms.time.value = now / 20
+      this._uniforms.time.value++
       this.renderer.render(this.scene, this.camera)
     }
   }
@@ -128,5 +130,9 @@ export default {
   @include position(fixed, 0 null null 0);
   @include size(100vw, 100vh);
   z-index: -1;
+
+  canvas {
+    @include size(100%);
+  }
 }
 </style>

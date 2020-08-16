@@ -76,7 +76,8 @@ export default {
     onClick () {
       if (!this.disabled) this.$emit('click')
     },
-    onTransitionEnd () {
+    onTransitionEnd (e) {
+      if (e.target.classList.contains('active') && e.propertyName !== 'opacity') return
       if (!this.textVisible && typeof this.nextText === 'string') {
         this.displayedText = this.nextText
         this.nextText = null
@@ -92,7 +93,8 @@ export default {
   @include flex;
   transition: opacity $base-transition;
   text-align: center;
-
+  z-index: 10;
+  
   &.disabled {
     opacity: .4;
 
@@ -104,13 +106,13 @@ export default {
 
   &.bottom {
     span {
-      @include position(absolute, 110% null null 50%);
+      @include position(absolute, 100% null null 50%);
     }
   }
 
   &.top {
     span { 
-      @include position(absolute, null null -110% 50%);
+      @include position(absolute, null null -100% 50%);
     }
   }
 }

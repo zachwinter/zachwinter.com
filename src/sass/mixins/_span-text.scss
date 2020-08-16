@@ -1,0 +1,4 @@
+@mixin span-text {
+  span { background: rgba($white, 1); }
+  .dark & span { background: rgba($black, 1); }
+}

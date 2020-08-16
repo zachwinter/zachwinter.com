@@ -12,7 +12,7 @@
       fill="none" 
       stroke="#000" 
       stroke-miterlimit="10" 
-      stroke-width="19" 
+      stroke-width="10" 
       style="stroke-dasharray: 673, 675; stroke-dashoffset: 0;"
     )
 </template>
@@ -20,7 +20,7 @@
 <script>
 import { bind } from '@/store/util'
 import Vivus from 'vivus'
-// import { pause } from '@/util/timing'
+import { pause } from '@/util/timing'
 
 export default {
   data: () => ({
@@ -28,14 +28,17 @@ export default {
     animate: false
   }),
   computed: bind(['ui/logoVisible', 'ui/headerVisible']),
-  // watch: {
-  //   async logoVisible (val) {
-  //     if (val) {
-  //       await pause(3000)
-  //       this.animate = true
-  //     }
-  //   }
-  // },
+  watch: {
+    async logoVisible (val) {
+      if (val) {
+        await pause(3000)
+        this.animate = true
+      }
+    }
+  },
+  mounted () {
+    // new Vivus('logo', { duration: 30 })
+  },
   methods: {
     onMouseMove () {
       if (this.active) return
@@ -64,21 +67,24 @@ export default {
 }
 
 .logo {
-  @include flex;
+  @include flex(center, flex-start);
   @include size($logo-size);
-  @include position(fixed, $outer-padding null null $outer-padding);
+  @include position(fixed, $outer-padding null null calc(#{$outer-padding} + #{notch(left)}));
   // box-shadow: $box-shadow;
   opacity: 0;
   // background: white;
-  padding: 20px;
   background: transparent;
-  // will-change: opacity, transform;
+  will-change: opacity, transform;
   z-index: 100;
   transition: box-shadow $base-transition;
 
-  @include max-width(tablet) {
+  @include max-width(mobile) {
     @include size($mobile-logo-size);
     padding: 10px;
+  }
+
+  @include mobile-landscape {
+    @include size($mobile-logo-size);
   }
 
   &.visible { animation: fade-in $page-transition-duration forwards; }
@@ -95,7 +101,7 @@ export default {
 }
 
 svg {
-  @include size(100%);
+  @include size(auto, 90%);
   display: block;
   pointer-events: none;
 }
@@ -132,7 +138,7 @@ svg {
 
 <style lang="scss">
 .dark .logo {
-  background: $black;
+  // background: $black;
   * { stroke: $white; }
 }
 </style>

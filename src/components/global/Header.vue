@@ -25,11 +25,11 @@ header {
   z-index: 50;
   transform: translateY(-100%);
   transition: all $base-transition;
-  height: $logo-size + ($outer-padding * 2);
+  height: calc(#{$logo-size} + #{$outer-padding * 2});
   background: $white;
   box-shadow: $box-shadow;
   text-align: center;
-  // will-change: transform, opacity;
+  will-change: transform, opacity;
 
   &.visible {
     transform: translateY(0%);

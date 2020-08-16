@@ -1,5 +1,5 @@
 <template lang="pug">
-.mobile(:class="{ active, landscape }")
+.mobile(:class="{ active, landscape, portrait: !landscape }")
   slot
 </template>
 
@@ -23,7 +23,7 @@ $padding: 55px;
   // overflow: hidden;
   padding: $padding 5px;
   background: rgba($black, .8);
-  box-shadow: $box-shadow;
+  // box-shadow: $box-shadow;
   opacity: 0;
   transition: all $work-item-transition;
   // will-change: transform, opacity;
@@ -31,7 +31,7 @@ $padding: 55px;
   transform: scale(.7);
 
   &.active {
-    transform: scale(.8);
+    transform: scale(.9);
     opacity: 1;
     z-index: 1;
 
@@ -59,6 +59,7 @@ $padding: 55px;
   }
 
   &.landscape {
+    transform: scale(1);
     max-width: 812px + ($padding*2);
     padding: 5px $padding;
 
@@ -73,6 +74,39 @@ $padding: 55px;
       @include position(absolute, 50% ($padding / 2 - 20px) auto auto);
       transform: translateY(-50%);
       margin: 0;
+    }
+  }
+
+  @include mobile {
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+    // max-width: 100%;
+
+    &:before, &:after { display: none; }
+
+    &.landscape {
+      // max-width: 100%;
+      padding: 0;
+
+      &:before, &:after {
+        padding: 0;
+        display: none;
+      }
+    }
+  }
+
+  @include mobile-landscape {
+    @include size(auto, 100%);
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+
+    &.landscape {
+      @include size(auto);
+      max-width: 100%;
+      margin: 0;
+      padding: 0;
     }
   }
 }

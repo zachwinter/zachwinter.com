@@ -1,22 +1,9 @@
-
-import { buildMutations } from '@/store/util'
-import interpolateNumber from 'd3-interpolate/src/number' 
+import { buildModule, exposeMutations } from '@/store/util'
+import interpolateNumber from 'd3-interpolate/src/number'
 import { timer } from '@/util/timing'
 
-export const SET_UNIFORMS = 'SET_UNIFORMS'
-export const SET_SHADER = 'SET_SHADER'
-export const SET_Y_OFFSET = 'SET_Y_OFFSET'
-export const SET_TWEENING_OFFSET = 'SET_TWEENING_OFFSET'
-
-export const MUTATIONS = {
-  [SET_UNIFORMS]: 'uniforms',
-  [SET_SHADER]: 'shader',
-  [SET_Y_OFFSET]: 'yOffset',
-  [SET_TWEENING_OFFSET]: 'tweeningOffset'
-}
-
-const shader = `
-#define BALLS 4
+const SHADER = `
+#define BALLS 5
 #define PI 3.14159265358979323846264338327950
 
 mat2 rotate2d(float _angle){
@@ -43,7 +30,7 @@ void main () {
     vec2 p = vec2(sin(t), cos(t));
     p += cos(time/6000. + float(i) * PI);
     vec3 col = cos(vec3(0, 1, -1) * PI * 2. / 3. + PI * (time / 4400. + float(i) / 5.)) * 0.5 + 0.5;
-    gl_FragColor += vec4(ballSize  / length(uv + p * colorMultiplier) * col, 1.0);
+    gl_FragColor += vec4(ballSize  / length(uv - p * colorMultiplier) * col, 1.0);
   }
   gl_FragColor.xyz = glow * brightness * pow(gl_FragColor.xyz, vec3(contrast));
   gl_FragColor.w = 1.0;
@@ -55,7 +42,7 @@ void main () {
 }
 `
 
-const uniforms = {
+const UNIFORMS = {
   home: {
     zoom: 1,
     xMultiplier: 28.01,
@@ -110,54 +97,59 @@ const uniforms = {
   }
 }
 
-export default {
-  namespaced: true,
-  state: {
-    uniforms: { ...uniforms.home },
-    shader,
-    yOffset: 0,
-    tweeningOffset: false
-  },
-  mutations: buildMutations(MUTATIONS),
-  actions: {
-    async tween ({ state, commit }, name) {
-      const keys = Object.keys(state.uniforms)
-      const from = state.uniforms
-      const to = uniforms[name.toLowerCase()]
-      if (to === null) return
-      const interpolators = keys.reduce((acc, key) => {
-        acc[key] = interpolateNumber(from[key], to[key])
+const EASING = 'easeInOutCubic'
+const Y_OFFSET_DURATION = 500
+const TWEEN_DURATION = 1500
+
+const state = {
+  uniforms: { ...UNIFORMS.home },
+  shader: SHADER,
+  yOffset: 0,
+  tweeningOffset: false
+}
+
+export const MUTATIONS = exposeMutations(state)
+
+const actions = {
+  async tween ({ state, commit }, name) {
+    const keys = Object.keys(state.uniforms)
+    const from = state.uniforms
+    const to = UNIFORMS[name.toLowerCase()]
+    if (to === null) return
+    const interpolators = keys.reduce((acc, key) => {
+      acc[key] = interpolateNumber(from[key], to[key])
+      return acc
+    }, {})
+    const yOffsetInterpolator = interpolateNumber(state.yOffset, 0)
+    timer(TWEEN_DURATION, ({ progress }) => {
+      const uniforms = keys.reduce((acc, key) => {
+        acc[key] = interpolators[key](progress)
         return acc
       }, {})
-      const yOffsetInterpolator = interpolateNumber(state.yOffset, 0)
-      timer(1500, ({ progress }) => {
-        const uniforms = keys.reduce((acc, key) => {
-          acc[key] = interpolators[key](progress)
-          return acc
-        }, {})
-        commit(SET_UNIFORMS, uniforms)
-        commit(SET_Y_OFFSET, yOffsetInterpolator(progress))
-      }, 'easeInOutCubic')
-    },
-    async previous ({ commit, state }) {
-      if (state.tweeningOffset) return
-      commit(SET_TWEENING_OFFSET, true)
-      const interpolator = interpolateNumber(state.yOffset, state.yOffset + 1)
-      await timer(500, ({ progress }) => {
-        const val = interpolator(progress)
-        commit(SET_Y_OFFSET, val)
-      }, 'easeInOutCubic')
-      commit(SET_TWEENING_OFFSET, false)
-    },
-    async next ({ commit, state }) {
-      if (state.tweeningOffset) return
-      commit(SET_TWEENING_OFFSET, true)
-      const interpolator = interpolateNumber(state.yOffset, state.yOffset - 1)
-      await timer(500, ({ progress }) => {
-        const val = interpolator(progress)
-        commit(SET_Y_OFFSET, val)
-      }, 'easeInOutCubic')
-      commit(SET_TWEENING_OFFSET, false)
-    }
+      commit('SET_UNIFORMS', uniforms)
+      commit('SET_Y_OFFSET', yOffsetInterpolator(progress))
+    }, EASING)
+  },
+  async previous ({ commit, state }) {
+    if (state.tweeningOffset) return
+    commit('SET_TWEENING_OFFSET', true)
+    const interpolator = interpolateNumber(state.yOffset, state.yOffset + 1)
+    await timer(Y_OFFSET_DURATION, ({ progress }) => {
+      const val = interpolator(progress)
+      commit('SET_Y_OFFSET', val)
+    }, EASING)
+    commit('SET_TWEENING_OFFSET', false)
+  },
+  async next ({ commit, state }) {
+    if (state.tweeningOffset) return
+    commit('SET_TWEENING_OFFSET', true)
+    const interpolator = interpolateNumber(state.yOffset, state.yOffset - 1)
+    await timer(Y_OFFSET_DURATION, ({ progress }) => {
+      const val = interpolator(progress)
+      commit('SET_Y_OFFSET', val)
+    }, EASING)
+    commit('SET_TWEENING_OFFSET', false)
   }
 }
+
+export default buildModule({ state, actions })
