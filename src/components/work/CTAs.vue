@@ -52,6 +52,11 @@ export default {
   padding: 0;
   height: auto;
   background: transparent;
+
+  .dark & {
+    color: $white;
+    background: transparent;
+  }
 }
 </style>
 
