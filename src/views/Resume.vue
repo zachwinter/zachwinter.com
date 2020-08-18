@@ -54,11 +54,10 @@ export default {
       current: false,
       description: `I cut up UI designs into semantic XHTML, CSS and basic jQuery in addition to handling CMS integration (WordPress). In February 2011 I took on design responsibilities in addition to development.`
     }],
-    index: 0,
-    transitioning: false
+    index: 0
   }),
   computed: {
-    ...bind(['nav/previous', 'nav/next']),
+    ...bind(['nav/previous', 'nav/next', 'nav/transitioning']),
     nav () {
       return {
         previous: {
@@ -83,7 +82,7 @@ export default {
     next () {
       if (this.transitioning || this.index === this.positions.length - 1) return
       this.$store.dispatch('background/next')
-      this.$store.commit('nav/SET_TRANSITIONING', false)
+      this.$store.commit('nav/SET_TRANSITIONING', true)
       this.index++
     },
     nav: {
