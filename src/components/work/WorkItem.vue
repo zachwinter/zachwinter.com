@@ -107,7 +107,7 @@ export default {
   }
 
   .ctas {
-    transform: translateY(50px) scale(.5);
+    transform: translateY(50px);
     opacity: 0;
     transition: transform $work-item-transition, opacity $work-item-transition;
   }
@@ -159,7 +159,6 @@ export default {
     padding: 0 $outer-padding 0 0;
 
     h2 { font-size: 1.5rem; }
-    // p { font-size: 1.2rem; }
   }
 }
 
@@ -186,11 +185,5 @@ export default {
       bottom: 0;
     }
   }
-
-  // .work-item .showcase .mobile.landscape {
-  //   img {
-  //     @include size(100%, auto);
-  //   }
-  // }
 }
 </style>

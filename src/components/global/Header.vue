@@ -35,7 +35,7 @@ header {
     transform: translateY(0%);
   }
 
-  @include max-width(mobile) {
+  @include mobile-portrait {
     @include position(fixed, 0 0 0 0);
     @include flex(center, center, column);
     height: auto;
@@ -48,6 +48,10 @@ header {
       pointer-events: all;
       transform: translateY(0) scale(1);
     }
+  }
+
+  @include mobile-landscape {
+    height: calc(#{$mobile-logo-size} + #{$outer-padding * 2});
   }
 }
 

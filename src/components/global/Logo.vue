@@ -11,8 +11,7 @@
       transform="translate(-866.45 -390.97)" 
       fill="none" 
       stroke="#000" 
-      stroke-miterlimit="10" 
-      stroke-width="10" 
+      stroke-width="15" 
       style="stroke-dasharray: 673, 675; stroke-dashoffset: 0;"
     )
 </template>
@@ -78,13 +77,9 @@ export default {
   z-index: 100;
   transition: box-shadow $base-transition;
 
-  @include max-width(mobile) {
+  @include mobile {
     @include size($mobile-logo-size);
-    padding: 10px;
-  }
-
-  @include mobile-landscape {
-    @include size($mobile-logo-size);
+    padding: 0;
   }
 
   &.visible { animation: fade-in $page-transition-duration forwards; }

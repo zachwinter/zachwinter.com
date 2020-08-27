@@ -18,12 +18,21 @@ export default {
     last: Number
   },
   components: { IconButton },
+  data: () => ({
+    deltaY: 0
+  }),
   computed: bind([
     'nav/previousVisible',
     'nav/nextVisible',
     'nav/previousText',
-    'nav/nextText'
+    'nav/nextText',
+    'nav/transitioning'
   ]),
+  watch: {
+    transitioning () {
+      // console.log(val)
+    }
+  },
   mounted () {
     this.initSwipe(document.body)
   },
@@ -63,8 +72,22 @@ export default {
     },
 
     onMouseWheel ({ deltaY }) {
-      if (deltaY < -Y_DELTA) this.previous()
-      if (deltaY > Y_DELTA) this.next()
+      const velocity = Math.abs(this.deltaY - deltaY)
+
+      if (velocity < Y_DELTA) {
+        this.deltaY = deltaY
+        return
+      }
+
+      if (deltaY > 0) {
+        this.next()
+      }
+
+      if (deltaY < 0) {
+        this.previous()
+      }
+
+      this.deltaY = deltaY
     },
 
     previous () {

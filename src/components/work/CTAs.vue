@@ -51,11 +51,22 @@ export default {
   @include button;
   padding: 0;
   height: auto;
-  background: transparent;
+  background: $white;
+  line-height: 1;
 
   .dark & {
     color: $white;
-    background: transparent;
+    background: $black;
+  }
+
+  @include mobile {
+    padding: 0;
+    height: auto;
+    line-height: 1;
+  }
+
+  @include mobile-portrait {
+    margin-top: spacer(1);
   }
 }
 </style>

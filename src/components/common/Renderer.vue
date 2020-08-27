@@ -56,7 +56,9 @@ export default {
       }, {})
     }
     this.scene = new Scene()
-    this.renderer = new WebGLRenderer({ canvas: el })
+    const canvas = ('OffscreenCanvas' in window) ? el.transferControlToOffscreen() : el
+    canvas.style = { width: 0, height: 0 }
+    this.renderer = new WebGLRenderer({ canvas })
     this.renderer.setClearColor( '#000000', 1 )
     this.camera = new OrthographicCamera(-1, 1, 1, -1, -1, 1)
     this.renderer.setSize(window.innerWidth, window.innerHeight)
@@ -114,11 +116,11 @@ export default {
       this.renderer.setSize(window.innerWidth, window.innerHeight)
     },
 
-    tick () {
+    tick (now) {
       for (let key in this.uniforms) this._uniforms[key].value = this.uniforms[key]
       this._uniforms.yOffset.value = this.yOffset / 3
       this._uniforms.darkMode.value = this.darkMode
-      this._uniforms.time.value++
+      this._uniforms.time.value = now / 20
       this.renderer.render(this.scene, this.camera)
     }
   }

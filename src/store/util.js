@@ -66,8 +66,6 @@ function _extract (prop) {
 
 function _dualBind (prop, localName) {
   const { mutation, module, key } = _extract(prop)
-  console.log({ mutation, module })
-  
   return { 
     [localName || key]: {
       get () {
