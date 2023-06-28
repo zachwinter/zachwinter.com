@@ -45,7 +45,7 @@ watch(
 
 <style lang="scss" scoped>
 figure {
-  @include position(fixed, null null 0 0);
+  @include position(fixed, null null 0 notch(left));
   @include flex(center, flex-start, row);
   z-index: 1000;
   overflow: visible;
