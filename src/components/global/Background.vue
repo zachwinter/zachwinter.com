@@ -3,7 +3,7 @@
     v-if="viewport.refreshRate"
     ref="shader"
     position="fixed"
-    :animate="false"
+    :animate="true"
     :shader="background.shader"
     :uniforms="background.uniforms"
     :width="width"
@@ -15,8 +15,6 @@
 </template>
 
 <script setup lang="ts">
-import { Shader } from '@shaderpad/core'
-
 const viewport = useViewport()
 const background = useBackground()
 const width = ref(viewport.width)

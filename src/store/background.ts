@@ -3,7 +3,7 @@ import { interpolateNumber } from 'd3-interpolate'
 import { scaleLinear } from 'd3-scale'
 import { clone } from '@/util/clone'
 import { clamp } from '@/util/numbers'
-import Analyser from 'audio-reactive'
+import Analyser from '../classes/AudioAnalyser'
 import { easing } from '@/constants/animation'
 
 const rawShader = /* glsl */ `
