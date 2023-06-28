@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { timer } from '@shaderpad/core/src/util/time'
+import { timer } from '@/util/time'
 
 const ui = useUI()
 

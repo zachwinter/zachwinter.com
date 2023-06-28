@@ -29,7 +29,7 @@
 <script setup lang="ts">
 import FragmentShader from '@/components/work/items/FragmentShader.vue'
 import CovidUSA from '@/components/work/items/CovidUSA.vue'
-import { pause } from '@shaderpad/core/src/util/time'
+import { pause } from '@/util/time'
 
 const viewport = useViewport()
 const navigation = useNavigation()

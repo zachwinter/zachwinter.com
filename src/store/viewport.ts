@@ -1,7 +1,7 @@
 import type { Coords2D } from '@/interfaces/animations'
 import type { ComputedRef, Ref } from 'vue'
 import { acceptHMRUpdate, defineStore } from 'pinia'
-import { determineRefreshRate } from '@shaderpad/core/src/util/monitor'
+import { determineRefreshRate } from '@/util/monitor'
 
 export const MOBILE_BREAKPOINT: number = 320
 export const TABLET_BREAKPOINT: number = 768

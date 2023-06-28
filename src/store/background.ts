@@ -1,8 +1,8 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { interpolateNumber } from 'd3-interpolate'
 import { scaleLinear } from 'd3-scale'
-import { clone } from '@shaderpad/core/src/util/clone'
-import { clamp } from '@shaderpad/core/src/util/numbers'
+import { clone } from '@/util/clone'
+import { clamp } from '@/util/numbers'
 import Analyser from 'audio-reactive'
 import { easing } from '@/constants/animation'
 

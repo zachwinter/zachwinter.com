@@ -1,5 +1,5 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
-import { pause } from '@shaderpad/core/src/util/time'
+import { pause } from '@/util/time'
 
 const Y_DELTA = 20
 const X_DELTA = 40
