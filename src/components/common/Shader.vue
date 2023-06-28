@@ -7,14 +7,21 @@ import { Shader, type ShaderConfig } from 'fragment-shader';
 
 defineEmits(['click'])
 
-const props = withDefaults(defineProps<ShaderConfig>(), {
+interface Props extends ShaderConfig {
+  stream: number;
+  volume: number;
+}
+
+const props = withDefaults(defineProps<Props>(), {
   width: window.innerWidth,
   height: window.innerHeight,
   dpr: window.devicePixelRatio,
   shader: `void main () { gl_FragColor = vec4(.8, .2, .6, 1.); }`,
   animate: true,
   fillViewport: false,
-  variant: 0
+  variant: 0,
+  stream: 0,
+  volume: 1
 });
 
 const instance: Ref<Shader | null> = ref(null);
@@ -35,6 +42,15 @@ watch(
   (shader) => {
     if (!instance.value) return
     instance.value.rebuild({ shader, uniforms: props.uniforms })
+  }
+)
+
+watch(
+  () => [props.stream, props.volume],
+  ([stream, volume]) => {
+    if (!instance.value) return
+    instance.value.stream = stream
+    instance.value.volume = volume
   }
 )
 
