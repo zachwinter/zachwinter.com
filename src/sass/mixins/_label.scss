@@ -1,7 +1,0 @@
-@mixin label {
-  @include share;
-  display: flex;
-  margin-bottom: spacer(.25);
-  font-size: 1rem;
-  justify-content: space-between;
-}

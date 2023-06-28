@@ -1,0 +1,44 @@
+@use './strip.scss' as *;
+@use './position.scss' as *;
+@use './size.scss' as *;
+@use './mobile.scss' as *;
+@use '../functions/units.scss' as *;
+
+@mixin nav-button {
+  @include strip;
+  @include size(px(70));
+  animation: nav-bobble 3s ease-in-out infinite;
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duration) var(--easing);
+  cursor: pointer;
+  outline: none;
+
+  &.visible {
+    opacity: 0.5;
+    pointer-events: all;
+  }
+
+  :deep(*) {
+    fill: var(--purple);
+    stroke: var(--purple);
+  }
+
+  svg {
+    @include size(px(60));
+    will-change: transform, opacity;
+    display: block;
+    transition: transform var(--hover-duration) var(--easing);
+  }
+
+  &:hover {
+    * {
+      fill: var(--black);
+    }
+  }
+
+  &:active svg {
+    transform: scale(0.7);
+  }
+}

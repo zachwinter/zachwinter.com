@@ -1,9 +1,0 @@
-@mixin work-heading {
-  @include scale(font-size 1rem 4rem);
-  font-weight: 700;
-  text-transform: uppercase;
-  transform: translateY(-50px);
-  opacity: 0;
-  transition: transform $work-item-transition, opacity $work-item-transition;
-  margin-bottom: $base-margin / 2;
-}

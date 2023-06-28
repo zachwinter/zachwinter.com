@@ -1,97 +1,128 @@
-<template lang="pug">
-.app
-  Logo
-  PageTitle
-  Header
-  transition(name="page" @before-enter="onBeforeEnter" @after-enter="onAfterEnter")
-    router-view
-  Background
-  Navigation
+<template>
+  <transition name="fade">
+    <Spinner v-if="ui.loading" />
+  </transition>
+
+  <main class="app-wrapper" :class="{ visible: !ui.loading }">
+    <Toast />
+    <Logo />
+    <!-- <Navigation /> -->
+    <Background />
+    <NowPlaying src="/toe.jpg" artist="Toe" alt="Toe" track="メトロノーム" :controls="true" />
+
+    <Carousel class="content" :class="{ visible: !ui.loading }">
+      <Hero />
+      <WorkItem v-for="(item, i) in workItems" :key="i" :item="item" />
+    </Carousel>
+  </main>
 </template>
 
-<script>
-import Logo from '@/components/global/Logo'
-import Background from '@/components/global/Background'
-import Header from '@/components/global/Header'
-import Navigation from '@/components/global/Navigation'
-import PageTitle from '@/components/global/PageTitle'
+<script lang="ts" setup>
+import { timer } from '@shaderpad/core/src/util/time'
 
-import { pause } from '@/util/timing'
+const ui = useUI()
 
-export default {
-  components: {
-    Logo,
-    PageTitle,
-    Background,
-    Header,
-    Navigation
+const workItems = ref([
+  {
+    title: '5HT',
+    description:
+      'A WebGL music visualizer that integrates with Spotify, Audius, or your microphone.',
+    link: 'https://www.kaleidosync.com',
+    github: 'https://github.com/zachwinter/kaleidosync',
+    tags: [
+      'UI Design',
+      'Vue',
+      'TypeScript',
+      'Sass',
+      'WebGL',
+      'GLSL',
+      'Web Audio',
+      'Vite',
+      'Node',
+      'Express',
+      'MongoDB',
+      'CI / CD'
+    ],
+    images: [
+      '/screenshots/5ht.01.jpg',
+      '/screenshots/5ht.02.jpg',
+      '/screenshots/5ht.03.jpg',
+      '/screenshots/5ht.04.jpg'
+    ]
   },
-  mounted () {
-    this.$store.dispatch('init', this.$route.name)
+
+  {
+    title: 'COVID-USA',
+    description:
+      'An interactive timeseries visualizing the spread of COVID-19 through the United States.',
+    link: 'https://covid-usa.herokuapp.com',
+    github: 'https://github.com/zachwinter/COVID-USA',
+    tags: [
+      'UI Design',
+      'D3',
+      'Vue',
+      'TypeScript',
+      'Sass',
+      '2D Canvas',
+      'Vite',
+      'Node',
+      'Express',
+      'CI / CD'
+    ],
+    features: [
+      'Novel. Visualize derived county-level active cases (per capita) on any day between Jan. 22, 2020 and Mar. 9, 2023.',
+      'Fast. Thanks to instancing techniques and a hardware-accelerated ctx.drawImage(), rasterization of the map and datapoints only happens once – giving you a fluid, jank-free experience even when zooming or panning.',
+      'Compare. Click on any county to open a chart visualizing its data over time. Select multiple counties simultaneously and compare them within a shared, synchronized date range.',
+      'Mobile-friendly. Full touch gesture interactions for both map &amp; charts.',
+      'Share. Copy a URL to the clipboard linking directly to the visualization on a selected day.'
+    ],
+    images: ['/screenshots/covid.01.png', '/screenshots/covid.02.png', '/screenshots/covid.03.png']
   },
-  methods: {
-    onBeforeEnter () {
-      this.$store.commit(`nav/SET_TRANSITIONING`, true)
-    },
-    async onAfterEnter () {
-      await pause(100)
-      this.$store.commit(`nav/SET_TRANSITIONING`, false)
-    }
+
+  {
+    title: 'MSF',
+    description:
+      'Corporate website & application portal for a non-profit recovery housing program.',
+    link: 'https://www.mindfulservice.org',
+    tags: [
+      'UI Design',
+      'Vue',
+      'JavaScript',
+      'Sass',
+      'WebGL',
+      'GLSL',
+      'Webpack',
+      'Node',
+      'Express',
+      'MongoDB',
+      'CI / CD'
+    ],
+    images: [
+      '/screenshots/msf.01.jpg',
+      '/screenshots/msf.02.jpg',
+      '/screenshots/msf.03.jpg',
+      '/screenshots/msf.04.jpg'
+    ]
   }
-}
+])
+
+onMounted(async () => {
+  await Promise.all([document.fonts.ready, timer(750, () => {}).$finished])
+  ui.loading = false
+})
 </script>
 
 <style lang="scss">
-// Typography
-@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@300;700&display=swap');
+@import '@/styles/main.scss';
 
-// Global Mixins
-@include reset;
-
-// Global Styles
-html, body, .app {
+.app-wrapper {
   @include size(100%);
-  overflow: hidden;
-}
+  opacity: 0;
+  transition: var(--page-transition);
+  will-change: opacity;
 
-body {
-  font-family: 'Dosis', sans-serif;
-  font-weight: 300;
-  background: rgba(0, 0, 0, .05);
-
-  * { text-shadow: 1px 1px 0px rgba($white, .3); }
-
-  &.dark {
-    * {
-      text-shadow: 1px 1px 0px rgba($black, .3);
-      color: $white;
-    }
+  &.visible {
+    opacity: 1;
   }
 }
-
-strong {
-  font-weight: 700;
-}
-
-img {
-  width: 100%;
-  display: block;
-}
-
-// Transitions
-.intro-enter-active, .intro-leave-active { transition: transform $intro-duration $intro-easing, opacity $intro-duration $intro-easing; }
-.intro-enter, .intro-leave-to { opacity: 0; }
-.intro-enter { transform: translateX($intro-offset); }
-.intro-leave-to { transform: translateX(-$intro-offset); }
-
-.intro-down-enter-active, .intro-down-leave-active { transition: transform $intro-duration $intro-easing, opacity $intro-duration $intro-easing; }
-.intro-down-enter, .intro-down-leave-to { opacity: 0; }
-.intro-down-enter { transform: translateX($intro-offset); }
-.intro-down-leave-to { transform: translateY($intro-offset); }
-
-.fade-enter-active, .fade-leave-active { transition: opacity $base-transition $base-easing; }
-.fade-enter, .fade-leave-to { opacity: 0; }
-
-.page-enter-active, .page-leave-active { transition: transform $page-transition-duration $base-easing, opacity $page-transition-duration $base-easing; }
-.page-enter, .page-leave-to { opacity: 0; transform: scale(.5); }
 </style>

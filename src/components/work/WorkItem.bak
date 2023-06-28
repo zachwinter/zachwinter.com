@@ -1,0 +1,74 @@
+<template>
+  <div class="work-item" :class="{ hidden, selected, expanded }">
+    <h3>{{ title }}</h3>
+    <P>{{ description }}</P>
+    <a v-if="expanded" :href="link" :target="title">Visit Project</a>
+    <Button v-else @click="$emit('select')">View</Button>
+  </div>
+</template>
+
+<script setup lang="ts">
+defineProps<{
+  title: string
+  description: string
+  link: string
+  tags: string[]
+  hidden: boolean
+  selected: boolean
+  expanded: boolean
+}>()
+
+const $emit = defineEmits(['select'])
+</script>
+
+<style lang="scss" scoped>
+.work-item {
+  @include shadow;
+  @include flex(flex-start, center);
+  @include size(100%);
+  color: var(--gray);
+  background: var(--white);
+  padding: var(--outer-padding);
+  transform-origin: top left;
+  transition: var(--page-transition);
+  will-change: transform;
+
+  :deep(> *) {
+    transition: transform var(--page-duration) var(--easing),
+      opacity var(--page-duration) var(--easing);
+    will-change: transform, opacity;
+    transform-origin: top left;
+  }
+
+  &.selected *,
+  &.expanded *,
+  &.hidden {
+    opacity: 0;
+  }
+
+  @include mobile-portrait {
+    @include size(100%, auto);
+  }
+}
+
+h3 {
+  font-size: px(50);
+  line-height: px(50);
+  max-width: 80%;
+  font-family: 'Bungee';
+}
+
+p {
+  margin-bottom: var(--base-spacer);
+}
+
+button {
+  margin-top: auto;
+}
+
+.expanded {
+  h3 {
+    opacity: 1;
+  }
+}
+</style>

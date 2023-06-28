@@ -1,0 +1,186 @@
+// Web Fonts
+
+@import url('https://fonts.googleapis.com/css2?family=Alata&family=Bungee&family=Bungee+Hairline&family=Bungee+Outline&family=Inconsolata:wght@300;700&family=Kristi&family=Red+Hat+Mono:wght@300;700&display=swap');
+
+// Colors (Sass -> CSS Variables)
+
+:root {
+  @each $color in $colors {
+    --#{nth($color, 1)}: #{nth($color, 2)};
+  }
+
+  --background-color: var(--black);
+  --ui-background: rgba(0, 0, 0, 0.7);
+}
+
+// References to the viewport sizes leveraged in the designs for this UI.
+
+:root {
+  --mobile-viewport: 375;
+  --tablet-viewport: 768;
+  --laptop-viewport: 1280;
+  --desktop-viewport: 1650;
+  --viewport-reference: var(--desktop-viewport);
+  --viewport-ratio-constant: calc(var(--viewport-width) / var(--viewport-reference));
+}
+
+// Typography
+
+:root {
+  --font-family: 'Inconsolata', sans-serif;
+  --font-weight: 300;
+  --font-size: #{px(20)};
+  --text-rendering: optimizeLegibility;
+  --webkit-font-smoothing: antialiased;
+  --moz-osx-font-smoothing: grayscale;
+}
+
+// Elements / Layout
+
+:root {
+  --header-height: #{px(70)};
+  --element-height: #{px(70)};
+  --base-spacer: #{px(20)};
+  --outer-padding: calc(2 * var(--base-spacer));
+  --sidebar-width: #{px(600)};
+  --min-element-height: 30px;
+  --border: 1px solid rgba(255, 255, 255, 0.1);
+  --horizontal-offset: #{px(50)};
+  --border-radius: 0; 
+}
+
+// Animations
+
+:root {
+  --duration: 500ms;
+  --hover-duration: 300ms;
+  --page-duration: 800ms;
+  --intro-duration: 2000ms;
+  --easing: cubic-bezier(0.13, 0.58, 0.18, 1);
+  --base-transition: transform var(--duration) var(--easing), opacity var(--duration) var(--easing);
+  --hover-transition: transform var(--hover-duration) var(--easing),
+    opacity var(--hover-duration) var(--easing);
+  --page-transition: transform var(--page-duration) var(--easing),
+    opacity var(--page-duration) var(--easing);
+}
+
+// Form Elements
+
+:root {
+  --form-element-border: 1px solid var(--red);
+  --form-element-padding: calc(var(--base-spacer) / 2);
+}
+
+// Utility
+
+$display: (flex, inline-flex, inline, block);
+$position: (absolute, relative, fixed, sticky);
+$align: ((flex-start, start), (flex-end, end), (center, center));
+$justify: (
+  (flex-start, start),
+  (flex-end, end),
+  (center, center),
+  (space-between, between),
+  (space-evenly, evenly)
+);
+
+@each $prop in $display {
+  [d-#{$prop}] {
+    display: $prop;
+  }
+}
+
+@each $prop in $position {
+  [p-#{$prop}] {
+    position: $prop;
+  }
+}
+
+@each $prop in $align {
+  $value: nth($prop, 1);
+  $short: nth($prop, 2);
+  [align-#{$short}] {
+    align-items: $value;
+  }
+}
+
+@each $prop in $justify {
+  $value: nth($prop, 1);
+  $short: nth($prop, 2);
+  [justify-#{$short}] {
+    justify-content: $value;
+  }
+}
+
+[center] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+[transition] {
+  transition: var(--base-transition);
+}
+
+[hover-transition] {
+  transition: var(--hover-transition);
+}
+
+[fill-screen] {
+  @include size(100vw, 100%);
+}
+
+// Reset
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  font-weight: inherit;
+  font-size: inherit;
+  color: inherit;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+html,
+body,
+#app {
+  @include scroll-bar;
+  // @include size(100%, 100%);
+  // overflow: hidden;
+}
+
+body {
+  font-family: Inconsolata, sans-serif;
+  font-weight: 300;
+}
+
+@keyframes nav-bobble {
+  0% {
+    transform: translateX(-50%) translateY(-15%);
+  }
+
+  50% {
+    transform: translateX(-50%) translateY(15%);
+  }
+
+  100% {
+    transform: translateX(-50%) translateY(-15%);
+  }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all var(--page-duration) var(--easing);
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0 !important;
+}

@@ -1,0 +1,221 @@
+<template>
+  <View>
+    <div class="items">
+      <WorkItem
+        v-for="({ title, description, link, tags }, i) in items"
+        ref="workItems"
+        @select="select(i)"
+        :hidden="selected > -1 && selected !== i"
+        :selected="selected === i"
+        :expanded="expanded === i"
+        :key="i"
+        :title="title"
+        :description="description"
+        :link="link"
+        :tags="tags"
+      />
+    </div>
+
+    <ExpandedWorkItem
+      @close="close"
+      ref="expandedItem"
+      :item="items?.[selected] || null"
+      :visible="showExpanded"
+      :content="items?.[selected]?.component"
+    />
+  </View>
+</template>
+
+<script setup lang="ts">
+import FragmentShader from '@/components/work/items/FragmentShader.vue'
+import CovidUSA from '@/components/work/items/CovidUSA.vue'
+import { pause } from '@shaderpad/core/src/util/time'
+
+const viewport = useViewport()
+const navigation = useNavigation()
+const background = useBackground()
+const workItems = ref()
+const selected = ref(-1)
+const expanded = ref(null)
+const expandedItem = ref()
+const showExpanded = ref(false)
+const items = [
+  {
+    title: '5HT',
+    description:
+      'A WebGL music visualizer that integrates with Spotify, Audius, or your microphone.',
+    link: 'https://www.kaleidosync.com',
+    tags: [
+      'UI Design',
+      'Vue',
+      'TypeScript',
+      'Sass',
+      'WebGL',
+      'GLSL',
+      'Web Audio',
+      'Vite',
+      'Node',
+      'Express',
+      'MongoDB',
+      'CI / CD'
+    ],
+    images: [
+      '/screenshots/5ht.01.jpg',
+      '/screenshots/5ht.02.jpg',
+      '/screenshots/5ht.03.jpg',
+      '/screenshots/5ht.04.jpg'
+    ]
+  },
+
+  {
+    title: 'COVID-USA',
+    description:
+      'An interactive timeseries visualizing the spread of COVID-19 through the United States.',
+    link: 'https://covid-usa.herokuapp.com',
+    component: CovidUSA,
+    tags: [
+      'UI Design',
+      'D3',
+      'Vue',
+      'TypeScript',
+      'Sass',
+      '2D Canvas',
+      'Vite',
+      'Node',
+      'Express',
+      'CI / CD'
+    ],
+    features: [
+      'Novel. Visualize derived county-level active cases (per capita) on any day between Jan. 22, 2020 and Mar. 9, 2023.',
+      'Fast. Thanks to instancing techniques and a hardware-accelerated ctx.drawImage(), rasterization of the map and datapoints only happens once – giving you a fluid, jank-free experience even when zooming or panning.',
+      'Compare. Click on any county to open a chart visualizing its data over time. Select multiple counties simultaneously and compare them within a shared, synchronized date range.',
+      'Mobile-friendly. Full touch gesture interactions for both map &amp; charts.',
+      'Share. Copy a URL to the clipboard linking directly to the visualization on a selected day.'
+    ]
+  },
+
+  {
+    title: 'fragment-shader',
+    description: 'A lightweight, performant WebGL fragment shader renderer & code editor.',
+    link: 'https://github.com/zachwinter/fragment-shader',
+    tags: ['TypeScript', 'WebGL', 'Codemirror', 'Fragment Shaders'],
+    component: FragmentShader
+  },
+
+  {
+    title: 'MSF',
+    description:
+      'Corporate website & application portal for a non-profit recovery housing program.',
+    link: 'https://www.mindfulservice.org',
+    tags: [
+      'UI Design',
+      'Vue',
+      'JavaScript',
+      'Sass',
+      'WebGL',
+      'GLSL',
+      'Webpack',
+      'Node',
+      'Express',
+      'MongoDB',
+      'CI / CD'
+    ],
+    images: [
+      '/screenshots/msf.01.jpg',
+      '/screenshots/msf.02.jpg',
+      '/screenshots/msf.03.jpg',
+      '/screenshots/msf.04.jpg'
+    ]
+  }
+]
+
+let _transform: string = ''
+
+async function select(i: any) {
+  if (!(workItems.value?.[i] ?? null)) return
+
+  const el = workItems.value[i].$el
+  const children = el.querySelectorAll('*')
+  const { x, y, width, height } = el.getBoundingClientRect()
+  const sX = viewport.width / width
+  const sY = viewport.height / height
+
+  expandedItem.value.$el.style.transition = 'none'
+  expandedItem.value.$el.style.transform = `translateX(${x}px) translateY(${y}px) scaleX(${
+    1 / sX
+  }) scaleY(${1 / sY})`
+
+  _transform = expandedItem.value.$el.style.transform
+
+  function onTransitionEnd(e: TransitionEvent) {
+    if (e.srcElement !== el) return
+
+    background.paused = true
+
+    el.removeEventListener('transitionend', onTransitionEnd)
+  }
+
+  navigation.disabled = true
+  expanded.value = i
+
+  el.addEventListener('transitionend', onTransitionEnd)
+
+  el.style.transform = `translateX(${-x}px) translateY(${-y}px) scaleX(${sX}) scaleY(${sY})`
+  children.forEach((child: HTMLElement) => {
+    child.style.transform = `scaleX(${1 / sX}) scaleY(${1 / sY})`
+  })
+  selected.value = i
+
+  await pause(5)
+
+  expandedItem.value.$el.style.removeProperty('transition')
+  expandedItem.value.$el.style.transform = `translateX(0px) translateY(0px) scaleX(1) scaleY(1)`
+  showExpanded.value = true
+}
+
+async function close() {
+  if (!(workItems.value?.[selected.value] ?? null)) return
+
+  const el = workItems.value[selected.value].$el
+  const children = el.querySelectorAll('*')
+
+  function onTransitionEnd(e: TransitionEvent) {
+    if (e.srcElement !== el) return
+    expandedItem.value.$el.style.removeProperty('transform')
+    el.removeEventListener('transitionend', onTransitionEnd)
+  }
+
+  el.addEventListener('transitionend', onTransitionEnd)
+
+  showExpanded.value = false
+  expanded.value = null
+  selected.value = -1
+  background.paused = false
+  navigation.disabled = false
+  await pause(5)
+
+  expandedItem.value.$el.style.transform = _transform
+  ;[el, ...children].forEach((el: HTMLElement) => {
+    el.style.removeProperty('transform')
+  })
+}
+</script>
+
+<style lang="scss" scoped>
+.view {
+  @include flex;
+  padding: var(--outer-padding);
+}
+
+.items {
+  @include flex(center, flex-start, row);
+  position: relative;
+  gap: calc(var(--outer-padding));
+  width: 100%;
+
+  @include mobile-portrait {
+    // flex-direction: column;
+    flex-wrap: wrap;
+  }
+}
+</style>

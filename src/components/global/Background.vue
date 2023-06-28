@@ -1,33 +1,37 @@
-<template lang="pug">
-Renderer(:uniforms="uniforms" :shader="shader" :y-offset="yOffset" :dark-mode="darkMode" ref="renderer")
+<template>
+  <Shader
+    v-if="viewport.refreshRate"
+    ref="shader"
+    position="fixed"
+    :animate="false"
+    :shader="background.shader"
+    :uniforms="background.uniforms"
+    :width="width"
+    :height="height"
+    :dpr="viewport.dpr"
+    :stream="background.stream"
+    :volume="background.volume"
+  />
 </template>
 
-<script>
-import { bind } from '@/store/util'
-import Renderer from '@/components/common/Renderer'
+<script setup lang="ts">
+import { Shader } from '@shaderpad/core'
 
-export default {
-  components: { Renderer },
-  computed: bind([
-    'background/uniforms', 
-    'background/shader',
-    'background/yOffset',
-    'ui/darkMode'
-  ]),
-  watch: {
-    '$route' ({ name }) {
-      this.$store.dispatch('background/tween', name)
-    }
-  },
-  mounted () {
-    if (this.$route.name !== 'Home') this.$store.dispatch('background/tween', this.$route.name)
-    
-    const tick = now => {
-      window.requestAnimationFrame(tick)
-      this.$refs.renderer.tick(now)
-    }
+const viewport = useViewport()
+const background = useBackground()
+const width = ref(viewport.width)
+const height = ref(viewport.height + 100)
 
-    window.requestAnimationFrame(tick)
+watch(
+  () => viewport.refreshRate,
+  () => requestAnimationFrame(background.tick)
+)
+
+watch(
+  () => viewport.orientation,
+  () => {
+    width.value = viewport.width
+    height.value = viewport.height + 100
   }
-}
+)
 </script>
