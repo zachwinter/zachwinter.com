@@ -45,7 +45,7 @@ watch(
 
 <style lang="scss" scoped>
 figure {
-  @include position(fixed, null null 0 notch(left));
+  @include position(fixed, null null 0 calc(var(--outer-padding) + notch(left)));
   @include flex(center, flex-start, row);
   z-index: 1000;
   overflow: visible;

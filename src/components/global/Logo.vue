@@ -10,7 +10,7 @@ import Logo from '@/assets/svg/logo.svg?component'
 
 <style lang="scss" scoped>
 .logo {
-  @include position(fixed, 0 null null calc(#{notch(left)}));
+  @include position(fixed, 0 null null calc(var(--outer-padding) + #{notch(left)}));
   @include size(px(120));
   @include shadow;
   @include flex;
