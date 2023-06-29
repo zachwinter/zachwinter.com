@@ -3,6 +3,7 @@
     <Spinner v-if="ui.loading" />
   </transition>
 
+  <div class="app-wrapper" :class="{ visible: !ui.loading }">
   <Logo />
   <NowPlaying src="/toe.jpg" artist="Toe" alt="Toe" track="メトロノーム" />
   <router-view v-slot="{ Component }">
@@ -11,6 +12,7 @@
     </transition>
   </router-view>
   <Background />
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -30,8 +32,7 @@ onMounted(async () => {
 .app-wrapper {
   @include size(100vw, 100vh);
   @include scroll-bar;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  overflow: hidden;
   opacity: 0;
   transition: var(--page-transition);
   will-change: opacity;
