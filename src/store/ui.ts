@@ -2,9 +2,11 @@ import { acceptHMRUpdate, defineStore } from 'pinia'
 
 export const useUI = defineStore('ui', () => {
   const loading = ref(true)
+  const menuOpen = ref(false)
 
   return {
-    loading
+    loading,
+    menuOpen
   }
 })
 

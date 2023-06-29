@@ -1,50 +1,66 @@
 <template>
-  <div ref="container" class="logo" :class="{ open }" @click="toggle">
+  <div ref="container" class="logo" :class="{ open: ui.menuOpen, visible }" @click="toggle">
     <Logo />
-    <div ref="shade" class="shade" :style="{ 'background-color': open ? color : 'var(--white)' }"/>
   </div>
 
-  <nav :class="{ visible: open }" @click="toggle">
-    <H1><RouterLink to="/" @mouseover="select('home')" @click="background.tweenToVariant(0)">Home</RouterLink></H1>
-    <H1><RouterLink to="/work" @mouseover="select('work')" @click="background.tweenToVariant(1)">Work</RouterLink></H1>
-    <H1><RouterLink to="/contact" @mouseover="select('contact')" @click="background.tweenToVariant(3)">Contact</RouterLink></H1>
+  <nav :class="{ visible: ui.menuOpen }" @click="toggle">
+    <H1
+      ><RouterLink to="/" @mouseover="select('home')" @click="background.tweenToVariant(0)"
+        >Home</RouterLink
+      ></H1
+    >
+    <H1
+      ><RouterLink to="/work" @mouseover="select('work')" @click="background.tweenToVariant(1)"
+        >Work</RouterLink
+      ></H1
+    >
+    <H1
+      ><RouterLink
+        to="/contact"
+        @mouseover="select('contact')"
+        @click="background.tweenToVariant(3)"
+        >Contact</RouterLink
+      ></H1
+    >
   </nav>
 </template>
 
 <script setup lang="ts">
 import Logo from '@/assets/svg/logo.svg?component'
 
+defineProps<{ visible: boolean }>()
+
 const viewport = useViewport()
 const background = useBackground()
-const open = ref(false)
+const ui = useUI()
 const container = ref()
 const shade = ref()
 const color = ref('')
 
 function toggle() {
-  const { width, height, x: tX } = container.value.getBoundingClientRect()
-  const sX = viewport.width / width
-  const sY = viewport.height / height
-  shade.value.style.transform = open.value
-    ? 'none'
-    : `translateX(-${tX}px) scaleX(${sX}) scaleY(${sY})`
-  open.value = !open.value
+  // const { width, height, x: tX } = container.value.getBoundingClientRect()
+  // const sX = viewport.width / width
+  // const sY = viewport.height / height
+  // shade.value.style.transform = ui.menuOpen
+  //   ? 'none'
+  //   : `translateX(-${tX}px) scaleX(${sX}) scaleY(${sY})`
+  ui.menuOpen = !ui.menuOpen
 }
 
 function select(page: string) {
-  switch (page) {
-    case 'home':
-      color.value = 'var(--pink)'
-      break
-    case 'work':
-      color.value = 'var(--purple)'
-      break
-    case 'contact':
-      color.value = 'var(--blue)'
-      break
-    default:
-      return
-  }
+  // switch (page) {
+  //   case 'home':
+  //     color.value = 'var(--pink)'
+  //     break
+  //   case 'work':
+  //     color.value = 'var(--purple)'
+  //     break
+  //   case 'contact':
+  //     color.value = 'var(--blue)'
+  //     break
+  //   default:
+  //     return
+  // }
 }
 </script>
 
@@ -59,6 +75,11 @@ function select(page: string) {
   background: var(--white);
   z-index: 100;
   will-change: transform, opacity;
+  opacity: 0;
+
+  &.visible {
+    opacity: 1;
+  }
 
   .shade {
     @include position(absolute, 0 0 0 0);
@@ -66,10 +87,6 @@ function select(page: string) {
     z-index: 1;
     transform-origin: top left;
     transition: var(--base-transition);
-  }
-
-  &.open .shade {
-    background: var(--gray);
   }
 
   @include mobile-landscape {
@@ -100,40 +117,40 @@ function select(page: string) {
   }
 
   &.open :deep(svg *) {
-    stroke: var(--white);
+    stroke: var(--pink);
   }
 }
 
 nav {
-  @include position(
-    fixed,
-    calc(var(--outer-padding) + #{px(120)}) var(--outer-padding)
-      calc(var(--outer-padding) + #{px(120)}) var(--outer-padding)
-  );
+  @include position(fixed, 0 null 0 0);
   @include flex(flex-start, center, column);
-  padding-left: notch(left);
+  width:var(--page-shift);
+  padding-left: calc(var(--outer-padding) + #{notch(left)});
+  transform: translateX(-50%);
   gap: var(--outer-padding);
   z-index: 100;
   pointer-events: none;
-  transition: all var(--duration) var(--easing);
+  transition: var(--base-transition);
   opacity: 0;
 
   &.visible {
     pointer-events: all;
+    transform: translateX(0%);
     opacity: 1;
   }
 
   a {
     transition: var(--hover-transition);
-  };
+  }
 
   :deep(a) {
     text-decoration: none;
-    color: var(--white);
+    color: var(--pink);
+    text-transform: none;
   }
 
   &:hover a {
-    opacity: .5;
+    opacity: 0.5;
 
     &:hover {
       opacity: 1;
@@ -146,7 +163,7 @@ h1 {
   transition: var(--hover-transition);
 
   &:active {
-    transform: scale(.9);
+    transform: scale(0.9);
   }
 
   @include mobile-portrait {

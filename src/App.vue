@@ -3,16 +3,18 @@
     <Spinner v-if="ui.loading" />
   </transition>
 
-  <div class="app-wrapper" :class="{ visible: !ui.loading }">
-    <Logo />
+  <Logo :visible="!ui.loading" />
+
+  <div class="app-wrapper" :class="{ visible: !ui.loading, shifted: ui.menuOpen }">
     <NowPlaying src="/toe.jpg" artist="Toe" alt="Toe" track="メトロノーム" />
     <router-view v-slot="{ Component }">
       <transition name="page">
         <component :is="Component" />
       </transition>
     </router-view>
-    <Background />
   </div>
+
+  <Background />
 </template>
 
 <script lang="ts" setup>
@@ -30,15 +32,20 @@ onMounted(async () => {
 @import '@/styles/main.scss';
 
 .app-wrapper {
-  @include size(100vw, 100vh);
+  @include size(100%);
   @include scroll-bar;
   overflow: hidden;
   opacity: 0;
-  transition: var(--page-transition);
+  transition: var(--base-transition);
   will-change: opacity;
 
   &.visible {
     opacity: 1;
+  }
+
+  &.shifted {
+    opacity: 0.2;
+    transform: translateX(var(--page-shift));
   }
 }
 </style>
