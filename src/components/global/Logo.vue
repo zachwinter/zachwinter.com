@@ -145,7 +145,7 @@ nav {
 
   :deep(a) {
     text-decoration: none;
-    color: var(--pink);
+    color: var(--gray);
     text-transform: none;
   }
 

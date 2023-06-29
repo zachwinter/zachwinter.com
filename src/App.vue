@@ -6,7 +6,6 @@
   <Logo :visible="!ui.loading" />
 
   <div class="app-wrapper" :class="{ visible: !ui.loading, shifted: ui.menuOpen }">
-    <NowPlaying src="/toe.jpg" artist="Toe" alt="Toe" track="メトロノーム" />
     <router-view v-slot="{ Component }">
       <transition name="page">
         <component :is="Component" />
@@ -14,6 +13,10 @@
     </router-view>
   </div>
 
+  <transition name="fade">
+    <NowPlaying v-if="!ui.loading" src="/toe.jpg" artist="Toe" alt="Toe" track="メトロノーム" />
+  </transition>
+  
   <Background />
 </template>
 
@@ -37,15 +40,18 @@ onMounted(async () => {
   overflow: hidden;
   opacity: 0;
   transition: var(--base-transition);
-  will-change: opacity;
+  will-change: transform, opacity;
+  pointer-events: none;
 
   &.visible {
     opacity: 1;
+    pointer-events: all;
   }
 
   &.shifted {
-    opacity: 0.2;
+    opacity: 0;
     transform: translateX(var(--page-shift));
+    pointer-events: none;
   }
 }
 </style>

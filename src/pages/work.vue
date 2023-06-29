@@ -1,5 +1,5 @@
 <template>
-  <View>
+  <View class="view">
     <WorkItem v-for="(item, i) in workItems" :key="i" :item="item" />
   </View>
 </template>
@@ -89,3 +89,11 @@ const workItems = ref([
   }
 ])
 </script>
+
+<style lang="scss" scoped>
+.view {
+  @include mobile-portrait {
+    padding-bottom: px(150);
+  }
+}
+</style>
