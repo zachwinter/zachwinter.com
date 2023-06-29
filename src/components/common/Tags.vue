@@ -22,14 +22,18 @@ ul {
     background: var(--white);
     color: rgba(0, 0, 0, 0.5);
     display: inline-flex;
-    padding:0 px(15);
-    // border-radius: px(50);
-    margin-right: calc(var(--base-spacer)/2);
-    margin-bottom: calc(var(--base-spacer)/2);
+    padding: 0 px(15);
+    margin-right: calc(var(--base-spacer) / 2);
+    margin-bottom: calc(var(--base-spacer) / 2);
 
     @include mobile-portrait {
       @include type(32, 40, 400);
       padding: px(10) px(30);
+    }
+
+    @include dark-mode {
+      background: var(--gray);
+      color: var(--white);
     }
   }
 }

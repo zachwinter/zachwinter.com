@@ -71,7 +71,6 @@ figure {
   .image-container {
     @include size(px(120));
     @include shadow;
-    padding: px(2);
     position: relative;
     display: block;
 
@@ -84,6 +83,10 @@ figure {
       );
       content: '';
       z-index: 10;
+
+      @include dark-mode {
+        background: none;
+      }
     }
   }
 

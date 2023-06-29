@@ -12,7 +12,6 @@ h2 {
   font-weight: 700;
   font-size: px($size);
   line-height: px($size);
-  color: var(--gray);
 
   @include mobile-landscape {
     font-size: px(100);

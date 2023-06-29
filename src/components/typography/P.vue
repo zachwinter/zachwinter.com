@@ -6,7 +6,6 @@
 p {
   font-size: px(32);
   line-height: px(40);
-  color: var(--gray);
 
   @include mobile-portrait {
     font-size: px(42);

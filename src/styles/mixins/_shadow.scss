@@ -1,4 +1,5 @@
 @use '../functions/units.scss' as *;
+@use './dark-mode.scss' as *;
 @import '../colors.scss';
 
 @mixin shadow {

@@ -4,24 +4,16 @@
   </div>
 
   <nav :class="{ visible: ui.menuOpen }" @click="toggle">
-    <H1
-      ><RouterLink to="/" @mouseover="select('home')" @click="background.tweenToVariant(0)"
-        >Home</RouterLink
-      ></H1
-    >
-    <H1
-      ><RouterLink to="/work" @mouseover="select('work')" @click="background.tweenToVariant(1)"
-        >Work</RouterLink
-      ></H1
-    >
-    <H1
-      ><RouterLink
-        to="/contact"
-        @mouseover="select('contact')"
-        @click="background.tweenToVariant(3)"
-        >Contact</RouterLink
-      ></H1
-    >
+    <RouterLink to="/" @mouseover="select('home')" @click="background.tweenToVariant(0)">
+      <H2>Home</H2>
+    </RouterLink>
+    <RouterLink to="/work" @mouseover="select('work')" @click="background.tweenToVariant(1)">
+      <H2>Work</H2>
+    </RouterLink>
+
+    <RouterLink to="/contact" @mouseover="select('contact')" @click="background.tweenToVariant(3)">
+      <H2>Contact</H2>
+    </RouterLink>
   </nav>
 </template>
 
@@ -77,6 +69,10 @@ function select(page: string) {
   will-change: transform, opacity;
   opacity: 0;
 
+  @include dark-mode {
+    background: var(--black);
+  }
+
   &.visible {
     opacity: 1;
   }
@@ -106,25 +102,25 @@ function select(page: string) {
 
   :deep(*) {
     stroke: var(--gray);
+
+    @include dark-mode {
+      stroke: var(--white);
+    }
   }
 
-  &:hover :deep(svg *) {
-    stroke: var(--pink);
+  &:hover {
+    background: lighten(map-get($colors, 'black'), 5%);
   }
 
   &:active svg {
     transform: scale(0.8);
-  }
-
-  &.open :deep(svg *) {
-    stroke: var(--pink);
   }
 }
 
 nav {
   @include position(fixed, 0 null 0 0);
   @include flex(flex-start, center, column);
-  width:var(--page-shift);
+  width: var(--page-shift);
   padding-left: calc(var(--outer-padding) + #{notch(left)});
   transform: translateX(-50%);
   gap: var(--outer-padding);
@@ -145,15 +141,19 @@ nav {
 
   :deep(a) {
     text-decoration: none;
-    color: var(--gray);
+    color: var(--pink);
     text-transform: none;
+
+    @include dark-mode {
+      color: var(--white);
+    }
   }
 
-  &:hover a {
-    opacity: 0.5;
+   a:hover {
+    color: var(--black);
 
-    &:hover {
-      opacity: 1;
+    @include dark-mode {
+      color: var(--pink);
     }
   }
 }

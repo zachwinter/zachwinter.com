@@ -6,7 +6,7 @@ import { clamp } from '@/util/numbers'
 import Analyser from '../classes/AudioAnalyser'
 import { easing } from '@/constants/animation'
 
-const rawShader = /* glsl */ `
+const lightModeShader = /* glsl */ `
 
 void main() { 
   vec2 uv = -1. + 2. * gl_FragCoord.xy / resolution.xy;
@@ -30,6 +30,34 @@ void main() {
 } 
 
 `
+
+const darkModeShader = /* glsl */ `
+
+void main() { 
+  vec2 uv = -1. + 2. * gl_FragCoord.xy / resolution.xy;
+  uv.x *= resolution.x/resolution.y;
+  uv *= zoom;
+  uv.y += -20. * scroll;
+  gl_FragColor = vec4(0., 0., 0., 1.);
+  float stream = stream / 1.6;
+  float dist = length(uv + sin(uv)); 
+  float rot = rotation * abs(dist / -.2);
+  uv *= k_rotate2d(rotation + rot + stream / 9.); 
+  float t = PI * (5. + 1.);
+  float a = cos(uv.y - stream/1.5);
+  float b = cos(uv.x * sin(uv.y / 1. + stream/.2)); 
+  float c = radius * sin(t) * 20. * b;
+  vec2 p = vec2(xOuter * a * uv.x + c, 0.);
+  vec3 col = k_rainbow(1., 0., 0.);
+  gl_FragColor += k_orb(uv, pow(volume, 1.) * ballSize, p, col, contrast);
+  gl_FragColor.xyz = pow(abs((gl_FragColor.xyz)), vec3(contrast));
+  gl_FragColor = k_hue(gl_FragColor, uv.x/8. + 4.);
+  gl_FragColor /= 2.2;
+} 
+
+`
+
+
 
 const rawUniforms: any = [
   [
@@ -140,6 +168,7 @@ let TIMERS: any = []
 export const useBackground = defineStore('background', () => {
   const viewport = useViewport()
   const navigation = useNavigation()
+  const ui = useUI()
   const scroll = ref(0)
   const variant = ref(0)
   const analyser: Ref<Analyser | undefined> = ref()
@@ -150,7 +179,6 @@ export const useBackground = defineStore('background', () => {
   const variantInterval = ref()
   const shuffle = ref(true)
   const divisor = ref(75)
-  const shader = ref(rawShader)
   const duration = ref(0)
   const position = ref(0)
   const audio: HTMLAudioElement = createAudioElement()
@@ -163,6 +191,10 @@ export const useBackground = defineStore('background', () => {
       return uniform
     })
   )
+
+  const shader = computed(() => {
+    return ui.darkMode ? darkModeShader :  lightModeShader
+  })
 
   const progress = computed(() => {
     return position.value / duration.value
@@ -229,21 +261,6 @@ export const useBackground = defineStore('background', () => {
         divisor.value = iD(progress)
       }
     ])
-  }
-
-  function shuffleVariants() {
-    let i = 0
-    const len = rawUniforms[0][2].length - 1
-
-    variantInterval.value = setInterval(() => {
-      if (i === len) {
-        i = 0
-      } else {
-        i++
-      }
-
-      tweenToVariant(i)
-    }, 5000)
   }
 
   function tweenToVariant(variantIndex: number) {

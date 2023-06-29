@@ -28,7 +28,6 @@ h2 {
   width: 100%;
   padding: var(--outer-padding);
   font-weight: 700;
-  color: var(--pink);
 }
 
 a {
@@ -50,6 +49,10 @@ a {
 
   &:active {
     transform: scale(.9);
+  }
+
+  @include dark-mode {
+    color: rgba(255, 255, 255, .5);
   }
 }
 </style>
