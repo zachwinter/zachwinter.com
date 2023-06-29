@@ -3,25 +3,20 @@
     <Spinner v-if="ui.loading" />
   </transition>
 
-  <main class="app-wrapper" :class="{ visible: !ui.loading }" @scroll="onScroll">
-    <Logo />
-    <!-- <Navigation /> -->
-    <NowPlaying src="/toe.jpg" artist="Toe" alt="Toe" track="メトロノーム" :controls="true" />
-    <RouterView />
-    <Background />
-  </main>
+  <Logo />
+  <NowPlaying src="/toe.jpg" artist="Toe" alt="Toe" track="メトロノーム" />
+  <router-view v-slot="{ Component }">
+    <transition name="page">
+      <component :is="Component" />
+    </transition>
+  </router-view>
+  <Background />
 </template>
 
 <script lang="ts" setup>
-import { timer } from '@/util/time'
+import { timer } from './util/time'
 
 const ui = useUI()
-const background = useBackground()
-
-
-function onScroll (e) {
-  background.setScroll(e.target.scrollTop)
-}
 
 onMounted(async () => {
   await Promise.all([document.fonts.ready, timer(750, () => {}).$finished])

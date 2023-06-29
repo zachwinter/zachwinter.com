@@ -258,7 +258,7 @@ export const useBackground = defineStore('background', () => {
 
     TIMERS.push([
       window.performance.now(),
-      4000,
+      1500,
       (progress: number) => {
         interpolators.forEach((interpolator: any, i) => {
           uniforms.value[i][2] = interpolator(progress)
@@ -291,8 +291,6 @@ export const useBackground = defineStore('background', () => {
   function setScroll(value:number) {
     scroll.value = value / viewport.height / 5
   }
-
-  shuffleVariants()
 
   return {
     shader,

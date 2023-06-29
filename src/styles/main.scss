@@ -54,7 +54,7 @@
 :root {
   --duration: 500ms;
   --hover-duration: 300ms;
-  --page-duration: 800ms;
+  --page-duration: 1500ms;
   --intro-duration: 2000ms;
   --easing: cubic-bezier(0.13, 0.58, 0.18, 1);
   --base-transition: all var(--duration) var(--easing);//, opacity var(--duration) var(--easing);
@@ -183,4 +183,15 @@ body {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0 !important;
+}
+
+.page-enter-active,
+.page-leave-active {
+  transition: all var(--page-duration) var(--easing);
+}
+
+.page-enter-from,
+.page-leave-to {
+  opacity: 0 !important;
+  transform: scale(.5);
 }

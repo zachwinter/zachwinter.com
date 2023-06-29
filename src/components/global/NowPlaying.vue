@@ -28,7 +28,7 @@ const props = defineProps<{
   alt: string
   track: string
   artist: string
-  controls: boolean
+  controls?: boolean
 }>()
 const displayedTrack = ref()
 const displayedArtist = ref()

@@ -1,3 +1,5 @@
 <template>
-  <Hero />
+  <View>
+    <Hero />
+  </View>
 </template>

@@ -5,9 +5,9 @@
   </div>
 
   <nav :class="{ visible: open }" @click="toggle">
-    <H1><RouterLink to="/" @mouseover="select('home')">Home</RouterLink></H1>
-    <H1><RouterLink to="/work" @mouseover="select('work')">Work</RouterLink></H1>
-    <H1><RouterLink to="/contact" @mouseover="select('contact')">Contact</RouterLink></H1>
+    <H1><RouterLink to="/" @mouseover="select('home')" @click="background.tweenToVariant(0)">Home</RouterLink></H1>
+    <H1><RouterLink to="/work" @mouseover="select('work')" @click="background.tweenToVariant(1)">Work</RouterLink></H1>
+    <H1><RouterLink to="/contact" @mouseover="select('contact')" @click="background.tweenToVariant(3)">Contact</RouterLink></H1>
   </nav>
 </template>
 
@@ -15,6 +15,7 @@
 import Logo from '@/assets/svg/logo.svg?component'
 
 const viewport = useViewport()
+const background = useBackground()
 const open = ref(false)
 const container = ref()
 const shade = ref()

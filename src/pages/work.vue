@@ -1,5 +1,7 @@
 <template>
-  <WorkItem v-for="(item, i) in workItems" :key="i" :item="item" /> 
+  <View>
+    <WorkItem v-for="(item, i) in workItems" :key="i" :item="item" />
+  </View>
 </template>
 
 <script setup lang="ts">
