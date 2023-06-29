@@ -109,7 +109,16 @@ function select(page: string) {
   }
 
   &:hover {
-    background: lighten(map-get($colors, 'black'), 5%);
+    svg :deep(*) {
+      stroke: var(--pink);
+    }
+
+    @include dark-mode {
+      svg :deep(*) {
+        stroke: var(--white);
+      }
+      background: lighten(map-get($colors, 'black'), 5%);
+    }
   }
 
   &:active svg {
@@ -149,7 +158,7 @@ nav {
     }
   }
 
-   a:hover {
+  a:hover {
     color: var(--black);
 
     @include dark-mode {
