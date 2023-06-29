@@ -4,14 +4,14 @@
   </transition>
 
   <div class="app-wrapper" :class="{ visible: !ui.loading }">
-  <Logo />
-  <NowPlaying src="/toe.jpg" artist="Toe" alt="Toe" track="メトロノーム" />
-  <router-view v-slot="{ Component }">
-    <transition name="page">
-      <component :is="Component" />
-    </transition>
-  </router-view>
-  <Background />
+    <Logo />
+    <NowPlaying src="/toe.jpg" artist="Toe" alt="Toe" track="メトロノーム" />
+    <router-view v-slot="{ Component }">
+      <transition name="page">
+        <component :is="Component" />
+      </transition>
+    </router-view>
+    <Background />
   </div>
 </template>
 
