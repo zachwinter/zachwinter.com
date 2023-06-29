@@ -4,15 +4,12 @@ import Vue from '@vitejs/plugin-vue'
 import GLSL from 'vite-plugin-glsl'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
-import Pages from 'vite-plugin-pages'
+import VueRouter from 'unplugin-vue-router/vite'
 import SVG from 'vite-svg-loader'
 
 export default defineConfig({
   plugins: [
-    Vue(),
-
     GLSL(),
-
     SVG(),
 
     AutoImport({
@@ -36,7 +33,8 @@ export default defineConfig({
       dts: 'src/components.d.ts'
     }),
 
-    Pages()
+    VueRouter(),
+    Vue()
   ],
 
   resolve: {
@@ -55,6 +53,12 @@ export default defineConfig({
           @import './src/styles/functions/spacer.scss';
         `
       }
+    }
+  },
+
+  server: {
+    fs: {
+      allow: ['..']
     }
   }
 })

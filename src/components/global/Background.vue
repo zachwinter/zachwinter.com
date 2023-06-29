@@ -11,6 +11,7 @@
     :dpr="viewport.dpr"
     :stream="background.stream"
     :volume="background.volume"
+    :scroll="background.scroll"
   />
 </template>
 

@@ -24,13 +24,13 @@ button {
   cursor: pointer;
   // color: var(--gray);
 
-  &:hover {
-    background: var(--black);
-  }
+  // &:hover {
+  //   background: var(--black);
+  // }
 
-  &:active {
-    transform: scale(0.8);
-  }
+  // &:active {
+  //   transform: scale(0.8);
+  // }
 
   :deep(*) {
     text-decoration: none;

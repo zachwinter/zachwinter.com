@@ -19,5 +19,9 @@ a {
   :deep(*) {
     font-family: inherit;
   }
+
+  &:hover, &:hover :deep(*) {
+    color: var(--blue) !important;
+  }
 }
 </style>

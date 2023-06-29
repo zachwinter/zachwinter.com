@@ -1,5 +1,5 @@
 <template>
-  <View center>
+  <Section center>
     <div class="content">
       <H2>{{ item.title }}</H2>
       <div class="links">
@@ -14,7 +14,7 @@
     </div>
 
     <Images v-if="!mobile" :images="item.images" />
-  </View>
+  </Section>
 </template>
 
 <script setup lang="ts">
@@ -32,7 +32,6 @@ const mobile = computed(() => viewport.mobile && viewport.orientation === 'PORTR
 <style lang="scss" scoped>
 .content {
   @include flex(flex-start, center, column);
-  @include size(100%);
   padding: 0 var(--outer-padding) 0 calc(#{notch(left)} + var(--outer-padding));
 ;
 
@@ -43,7 +42,7 @@ const mobile = computed(() => viewport.mobile && viewport.orientation === 'PORTR
   }
 }
 
-.view {
+section {
   @include mobile-portrait {
     @include flex(center, center, column);
   }

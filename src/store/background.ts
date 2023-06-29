@@ -12,6 +12,7 @@ void main() {
   vec2 uv = -1. + 2. * gl_FragCoord.xy / resolution.xy;
   uv.x *= resolution.x/resolution.y;
   uv *= zoom;
+  uv.y += -20. * scroll;
   float stream = stream / 1.6;
   float dist = length(uv + sin(uv)); 
   float rot = rotation * abs(dist / -.2);
@@ -139,7 +140,7 @@ let TIMERS: any = []
 export const useBackground = defineStore('background', () => {
   const viewport = useViewport()
   const navigation = useNavigation()
-  const toast = useToast()
+  const scroll = ref(0)
   const variant = ref(0)
   const analyser: Ref<Analyser | undefined> = ref()
   const volume = ref(1)
@@ -287,6 +288,10 @@ export const useBackground = defineStore('background', () => {
     })
   }
 
+  function setScroll(value:number) {
+    scroll.value = value / viewport.height / 5
+  }
+
   shuffleVariants()
 
   return {
@@ -306,7 +311,9 @@ export const useBackground = defineStore('background', () => {
     position,
     duration,
     progress,
-    paused
+    paused,
+    setScroll,
+    scroll
   }
 })
 

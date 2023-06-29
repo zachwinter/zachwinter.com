@@ -12,5 +12,6 @@ const view = ref<HTMLElement | null>(null)
 main {
   @include size(100vw, 100vh);
   @include scroll-bar;
+  position: relative;
 }
 </style>

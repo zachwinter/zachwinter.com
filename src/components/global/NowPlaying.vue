@@ -46,8 +46,7 @@ watch(
 <style lang="scss" scoped>
 figure {
   @include position(fixed, null null 0 calc(var(--outer-padding) + notch(left)));
-  @include flex(center, flex-start, row);
-  z-index: 1000;
+  z-index: 101;
   overflow: visible;
   white-space: nowrap;
   will-change: transform, opacity;
@@ -72,6 +71,7 @@ figure {
   .image-container {
     @include size(px(120));
     @include shadow;
+    padding: px(2);
     position: relative;
     display: block;
 
@@ -179,6 +179,10 @@ button {
   &.visible {
     opacity: 1;
     pointer-events: all;
+  }
+
+  &:active svg {
+    transform: scale(.9);
   }
 }
 

@@ -57,10 +57,9 @@
   --page-duration: 800ms;
   --intro-duration: 2000ms;
   --easing: cubic-bezier(0.13, 0.58, 0.18, 1);
-  --base-transition: transform var(--duration) var(--easing), opacity var(--duration) var(--easing);
-  --hover-transition: transform var(--hover-duration) var(--easing),
-    opacity var(--hover-duration) var(--easing);
-  --page-transition: transform var(--page-duration) var(--easing),
+  --base-transition: all var(--duration) var(--easing);//, opacity var(--duration) var(--easing);
+  --hover-transition: all var(--hover-duration) var(--easing);
+  --page-transition: all var(--page-duration) var(--easing),
     opacity var(--page-duration) var(--easing);
 }
 
@@ -152,7 +151,8 @@ html,
 body,
 #app {
   @include scroll-bar;
-  // @include size(100%, 100%);
+  @include size(100%, 100vh);
+  overflow-x: hidden;
   // overflow: hidden;
 }
 

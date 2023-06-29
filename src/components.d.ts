@@ -31,6 +31,7 @@ declare module '@vue/runtime-core' {
     PlayButton: typeof import('./components/hero/PlayButton.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Section: typeof import('./components/layout/Section.vue')['default']
     Shader: typeof import('./components/common/Shader.vue')['default']
     Spinner: typeof import('./components/common/Spinner.vue')['default']
     Tags: typeof import('./components/common/Tags.vue')['default']

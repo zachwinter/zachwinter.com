@@ -1,15 +1,13 @@
 <template>
-  <View>
+  <Section>
     <div class="hero">
       <Heading />
     </div>
-  </View>
+  </Section>
 </template>
 
 <style lang="scss" scoped>
-.hero {
-  top: 50%;
-  transform: translateY(-50%);
+section {
   padding-left: calc(#{notch(left)} + var(--outer-padding));
 }
 </style>

@@ -101,7 +101,7 @@ export const useViewport = defineStore('viewport', () => {
       return setScale(0.7)
     }
 
-    if (desktop.value) return setScale(0.6)
+    if (desktop.value) return setScale(0.7)
 
     return setScale(0.7)
   }

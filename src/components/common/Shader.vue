@@ -10,6 +10,7 @@ defineEmits(['click'])
 interface Props extends ShaderConfig {
   stream: number;
   volume: number;
+  scroll: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -21,7 +22,8 @@ const props = withDefaults(defineProps<Props>(), {
   fillViewport: false,
   variant: 0,
   stream: 0,
-  volume: 1
+  volume: 1,
+  scroll: 0
 });
 
 const instance: Ref<Shader | null> = ref(null);
@@ -42,6 +44,14 @@ watch(
   (shader) => {
     if (!instance.value) return
     instance.value.rebuild({ shader, uniforms: props.uniforms })
+  }
+)
+
+watch(
+  () => props.scroll,
+  val => {
+    if (!instance.value) return
+    instance.value.scroll = val
   }
 )
 
@@ -71,5 +81,6 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
 .shader {
   @include position(fixed, 0 null null 0);
+  z-index: -1;
 }
 </style>
