@@ -46,7 +46,7 @@ a {
   background-color: var(--white);;
   padding: px(10) px(20);
   font-size: px(22);
-  color: var(--black) !important;
+  color: rgba(0, 0, 0, 0.5);
   transition: var(--hover-transition);
 
   &:hover {
@@ -55,10 +55,6 @@ a {
 
   &:active {
     transform: scale(0.9);
-  }
-
-  @include dark-mode {
-    color: rgba(255, 255, 255, 0.5);
   }
 }
 </style>

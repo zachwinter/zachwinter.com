@@ -18,25 +18,17 @@ main {
   @include size(100%);
   @include flex;
   @include position(fixed, 0 null null 0);
-  background: var(--white);
+  background: var(--black);
 
-  @include dark-mode {
-    background: var(--black);
-  }
 }
 
 .spinner {
   @include size(40px);
   @include center;
   display: block;
-  border: 4px solid var(--gray);
-  border-bottom-color: transparent;
   border-radius: 50%;
   animation: spin 1s linear infinite;
-
-  @include dark-mode {
-    border: 4px solid var(--white);
-    border-bottom-color: transparent;
-  }
+  border: 4px solid var(--white);
+  border-bottom-color: transparent;
 }
 </style>

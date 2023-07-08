@@ -32,25 +32,26 @@ function toggle() {
 
 <style lang="scss" scoped>
 .container {
-  @include position(fixed, var(--outer-padding) null null calc(var(--outer-padding) + #{notch(left)}));
+  @include position(
+    fixed,
+    var(--outer-padding) null null calc(var(--outer-padding) + #{notch(left)})
+  );
   @include size(px(120));
   @include shadow;
   @include flex;
   border-radius: var(--border-radius);
   padding: px(10);
-  background: var(--white);
+  background: var(--black);
   z-index: 100;
   will-change: transform, opacity;
   opacity: 0;
 
-  @include dark-mode {
-    background: var(--black);
-  }
-
   &.visible {
     opacity: 1 !important;
 
-    :deep(*) { opacity: 1 !important; }
+    :deep(*) {
+      opacity: 1 !important;
+    }
   }
 
   // .shade {
@@ -78,11 +79,7 @@ function toggle() {
   }
 
   :deep(*) {
-    stroke: var(--gray);
-
-    @include dark-mode {
-      stroke: var(--white);
-    }
+    stroke: var(--white);
   }
 
   &:hover {
@@ -90,12 +87,11 @@ function toggle() {
       stroke: var(--pink);
     }
 
-    @include dark-mode {
-      svg :deep(*) {
-        stroke: var(--white);
-      }
-      background: lighten(map-get($colors, 'black'), 5%);
+    svg :deep(*) {
+      stroke: var(--white);
     }
+
+    background: lighten(map-get($colors, 'black'), 5%);
   }
 
   &:active svg {
@@ -127,20 +123,12 @@ nav {
 
   :deep(a) {
     text-decoration: none;
-    color: var(--pink);
+    color: var(--white);
     text-transform: none;
-
-    @include dark-mode {
-      color: var(--white);
-    }
   }
 
   a:hover {
-    color: var(--black);
-
-    @include dark-mode {
-      color: var(--pink);
-    }
+    color: var(--pink);
   }
 }
 

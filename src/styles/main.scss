@@ -160,11 +160,7 @@ body,
 body {
   font-family: Inconsolata, sans-serif;
   font-weight: 300;
-  color: var(--gray);
-
-  @include dark-mode {
-    color: var(--white);
-  }
+  color: var(--white);
 }
 
 @keyframes nav-bobble {

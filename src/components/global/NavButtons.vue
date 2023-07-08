@@ -25,17 +25,13 @@ function toggle() {
   @include size(px(120));
   @include shadow;
   @include flex;
-  flex-basis: top right;;
+  flex-basis: top right;
   border-radius: var(--border-radius);
   padding: px(10);
-  background: var(--white);
+  background: var(--black);
   z-index: 100;
   will-change: transform, opacity;
   opacity: 0;
-
-  @include dark-mode {
-    background: var(--black);
-  }
 
   @include mobile {
     @include position(fixed, 0 0 null 0);
@@ -69,7 +65,7 @@ function toggle() {
   }
 
   :deep(*) {
-    stroke: var(--gray);
+    stroke: var(--white);
 
     @include dark-mode {
       stroke: var(--white);
@@ -81,12 +77,11 @@ function toggle() {
       stroke: var(--pink);
     }
 
-    @include dark-mode {
-      svg :deep(*) {
-        stroke: var(--white);
-      }
-      background: lighten(map-get($colors, 'black'), 5%);
+    svg :deep(*) {
+      stroke: var(--white);
     }
+    
+    background: lighten(map-get($colors, 'black'), 5%);
   }
 
   &:active svg {

@@ -81,10 +81,6 @@ figure {
       );
       content: '';
       z-index: 10;
-
-      @include dark-mode {
-        background: none;
-      }
     }
   }
 
