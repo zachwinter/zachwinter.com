@@ -45,7 +45,10 @@ watch(
 
 <style lang="scss" scoped>
 figure {
-  @include position(fixed, null null var(--outer-padding) calc(var(--outer-padding) + #{notch(left)}));
+  @include position(
+    fixed,
+    null null var(--outer-padding) calc(var(--outer-padding) + #{notch(left)})
+  );
   z-index: 101;
   white-space: nowrap;
   will-change: transform, opacity;
@@ -55,13 +58,12 @@ figure {
     color: inherit;
   }
 
-  // @include mobile-portrait {
-  //   @include position(fixed, null 0 0 0);
-
-  //   * {
-  //     color: var(--gray);
-  //   }
-  // }
+  @include mobile-portrait {
+    @include position(
+      fixed,
+      var(--outer-padding) calc(var(--outer-padding) + #{notch(right)}) null auto
+    );
+  }
 
   &.visible {
     opacity: 1;
@@ -69,15 +71,17 @@ figure {
 
   .image-container {
     @include size(px(120));
+    @include shadow;
     position: relative;
     display: block;
-
+    border-radius: var(--border-radius);
+    overflow: hidden;
     &:before {
       @include position(absolute, 0 0 0 0);
       background: linear-gradient(
         to top right,
-        rgba(map-get($colors, 'pink'), 0.3),
-        rgba(map-get($colors, 'purple'), 0.3)
+        rgba(map-get($colors, 'blue'), 0.2),
+        rgba(map-get($colors, 'pink'), 0.6)
       );
       content: '';
       z-index: 10;
@@ -93,13 +97,9 @@ figure {
   }
 
   img {
-    @include shadow;
     @include size(100%);
     transition: var(--base-transition);
     will-change: transform, opacity;
-    border-radius: var(--border-radius);
-      overflow: hidden;
-
   }
 
   span {
@@ -175,13 +175,21 @@ button {
   cursor: pointer;
   z-index: 10;
 
+  svg {
+    transition: var(--base-transition);
+  }
+
   &.visible {
     opacity: 1;
     pointer-events: all;
   }
 
   &:active svg {
-    transform: scale(.9);
+    transform: scale(0.7);
+  }
+
+  &:hover svg {
+    transform: scale(1.2);
   }
 }
 

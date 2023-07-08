@@ -42,7 +42,7 @@ function toggle() {
   border-radius: var(--border-radius);
   padding: px(10);
   background: var(--black);
-  z-index: 100;
+  z-index: 200;
   will-change: transform, opacity;
   opacity: 0;
 
@@ -53,15 +53,6 @@ function toggle() {
       opacity: 1 !important;
     }
   }
-
-  // .shade {
-  //   @include position(absolute, 0 0 0 0);
-  //   @include size(100vw, 100vh);
-  //   background: var(--white);
-  //   z-index: 1;
-  //   transform-origin: top left;
-  //   transition: var(--base-transition);
-  // }
 
   @include mobile-landscape {
     @include size(px(150));
@@ -82,7 +73,7 @@ function toggle() {
     stroke: var(--white);
   }
 
-  &:hover {
+  &:hover, &.open {
     svg :deep(*) {
       stroke: var(--pink);
     }
@@ -110,11 +101,25 @@ nav {
   pointer-events: none;
   transition: var(--base-transition);
   opacity: 0;
+  background: linear-gradient(to right, rgba(map-get($colors, 'black'), 1), rgba(map-get($colors, 'black'), 0));
 
   &.visible {
     pointer-events: all;
     transform: translateX(0%);
     opacity: 1;
+  }
+
+  &.visible:before {
+    @include position(fixed, calc(-1 * var(--outer-padding)) 0 0 calc(-1 * var(--outer-padding)));
+    width: calc(100vw + 2 * var(--outer-padding));
+    height: calc(100vh + 2 * var(--outer-padding));
+    content: '';
+    background: var(--white);
+    z-index: 1;
+    transform-origin: top left;
+    transition: var(--base-transition);
+    opacity: 0;
+    pointer-events: none;
   }
 
   a {

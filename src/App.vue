@@ -9,7 +9,6 @@
   </transition>
 
   <Logo :visible="!ui.loading" />
-  <NavButtons />
 
   <div class="app-wrapper" :class="{ visible: !ui.loading, shifted: ui.menuOpen }">
     <router-view v-slot="{ Component }">
