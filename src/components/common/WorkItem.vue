@@ -1,7 +1,10 @@
 <template>
   <Section center>
     <div class="content">
-      <H2>{{ item.title }}</H2>
+      <H2>
+        <span class="title">{{ item.title }}</span>
+        <span v-if="item.subtitle"> | previously <strong >{{ item.subtitle }}</strong></span>
+      </H2>
       <div class="links">
         <Link :href="item.link" target="_blank">{{  item.link }}</Link>
         <Link class="github" :href="item.github" target="_blank" v-if="item.github">
@@ -48,6 +51,19 @@ section {
   }
 }
 
+h2 span {
+  font-weight: 300;
+  font-size: 1.2rem;
+
+  strong {
+    font-weight: 700;
+  }
+}
+
+.title {
+  font-size: 3rem;
+}
+
 .github {
   @include size(var(--element-height));
   @include flex;
@@ -76,7 +92,7 @@ svg {
 }
 
 .links {
-  @include flex(center, flex-start, row);
+  @include flex(center, space-between, row);
   width: 100%;
   padding: 0;
   font-size: px(28);

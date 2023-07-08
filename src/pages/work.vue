@@ -8,6 +8,7 @@
 const workItems = ref([
   {
     title: '5HT',
+    subtitle: 'Kaleidosync',
     description:
       'A WebGL music visualizer that integrates with Spotify, Audius, or your microphone.',
     link: 'https://www.kaleidosync.com',
@@ -92,7 +93,15 @@ const workItems = ref([
 
 <style lang="scss" scoped>
 .view {
-  @include mobile-portrait {
+  scroll-snap-type: y mandatory;
+
+  :deep(> *) {
+    scroll-snap-align: start;
+  }
+}
+
+@include mobile-portrait {
+  .view {
     padding-bottom: px(150);
   }
 }

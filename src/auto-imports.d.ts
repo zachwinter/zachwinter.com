@@ -5,6 +5,7 @@
 export {}
 declare global {
   const Coords2D: typeof import('./interfaces/animations')['Coords2D']
+  const DEFAULT_SKETCH: typeof import('./store/background')['DEFAULT_SKETCH']
   const DESKTOP_BREAKPOINT: typeof import('./store/viewport')['DESKTOP_BREAKPOINT']
   const EffectScope: typeof import('vue')['EffectScope']
   const LAPTOP_BREAKPOINT: typeof import('./store/viewport')['LAPTOP_BREAKPOINT']
@@ -51,6 +52,7 @@ declare global {
   const onUnmounted: typeof import('vue')['onUnmounted']
   const onUpdated: typeof import('vue')['onUpdated']
   const provide: typeof import('vue')['provide']
+  const rawUniforms: typeof import('./store/background')['rawUniforms']
   const reactive: typeof import('vue')['reactive']
   const readonly: typeof import('vue')['readonly']
   const ref: typeof import('vue')['ref']
@@ -94,6 +96,7 @@ import { UnwrapRef } from 'vue'
 declare module 'vue' {
   interface ComponentCustomProperties {
     readonly Coords2D: UnwrapRef<typeof import('./interfaces/animations')['Coords2D']>
+    readonly DEFAULT_SKETCH: UnwrapRef<typeof import('./store/background')['DEFAULT_SKETCH']>
     readonly DESKTOP_BREAKPOINT: UnwrapRef<typeof import('./store/viewport')['DESKTOP_BREAKPOINT']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly LAPTOP_BREAKPOINT: UnwrapRef<typeof import('./store/viewport')['LAPTOP_BREAKPOINT']>
@@ -140,6 +143,7 @@ declare module 'vue' {
     readonly onUnmounted: UnwrapRef<typeof import('vue')['onUnmounted']>
     readonly onUpdated: UnwrapRef<typeof import('vue')['onUpdated']>
     readonly provide: UnwrapRef<typeof import('vue')['provide']>
+    readonly rawUniforms: UnwrapRef<typeof import('./store/background')['rawUniforms']>
     readonly reactive: UnwrapRef<typeof import('vue')['reactive']>
     readonly readonly: UnwrapRef<typeof import('vue')['readonly']>
     readonly ref: UnwrapRef<typeof import('vue')['ref']>
@@ -177,6 +181,7 @@ declare module 'vue' {
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     readonly Coords2D: UnwrapRef<typeof import('./interfaces/animations')['Coords2D']>
+    readonly DEFAULT_SKETCH: UnwrapRef<typeof import('./store/background')['DEFAULT_SKETCH']>
     readonly DESKTOP_BREAKPOINT: UnwrapRef<typeof import('./store/viewport')['DESKTOP_BREAKPOINT']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly LAPTOP_BREAKPOINT: UnwrapRef<typeof import('./store/viewport')['LAPTOP_BREAKPOINT']>
@@ -223,6 +228,7 @@ declare module '@vue/runtime-core' {
     readonly onUnmounted: UnwrapRef<typeof import('vue')['onUnmounted']>
     readonly onUpdated: UnwrapRef<typeof import('vue')['onUpdated']>
     readonly provide: UnwrapRef<typeof import('vue')['provide']>
+    readonly rawUniforms: UnwrapRef<typeof import('./store/background')['rawUniforms']>
     readonly reactive: UnwrapRef<typeof import('vue')['reactive']>
     readonly readonly: UnwrapRef<typeof import('vue')['readonly']>
     readonly ref: UnwrapRef<typeof import('vue')['ref']>

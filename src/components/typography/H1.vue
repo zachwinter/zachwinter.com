@@ -4,6 +4,7 @@
 
 <style lang="scss" scoped>
 $size: 220;
+$line: 160;
 $offset: 0.25;
 
 h1 {
@@ -11,7 +12,7 @@ h1 {
   white-space: nowrap;
   font-weight: 400;
   font-size: px($size);
-  line-height: px($size);
+  line-height: px($line);
 
   @include mobile-landscape {
     font-size: px(#{$size * .85});

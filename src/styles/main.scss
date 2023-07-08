@@ -47,7 +47,7 @@
   --page-shift: #{px(500)};
   --border: 1px solid rgba(255, 255, 255, 0.1);
   --horizontal-offset: #{px(50)};
-  --border-radius: 0; 
+  --border-radius: #{px(20)};
 }
 
 // Animations
@@ -55,7 +55,7 @@
 :root {
   --duration: 500ms;
   --hover-duration: 300ms;
-  --page-duration: 1500ms;
+  --page-duration: 2000ms;
   --intro-duration: 2000ms;
   --easing: cubic-bezier(0.13, 0.58, 0.18, 1);
   --base-transition: all var(--duration) var(--easing);//, opacity var(--duration) var(--easing);
@@ -199,5 +199,5 @@ body {
 .page-enter-from,
 .page-leave-to {
   opacity: 0 !important;
-  transform: scale(.5);
+  transform: scale(1.5);
 }

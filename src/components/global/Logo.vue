@@ -1,17 +1,17 @@
 <template>
-  <div ref="container" class="logo" :class="{ open: ui.menuOpen, visible }" @click="toggle">
-    <Logo />
+  <div class="container" ref="container" :class="{ open: ui.menuOpen, visible }" @click="toggle">
+    <Logo class="logo" />
   </div>
 
   <nav :class="{ visible: ui.menuOpen }" @click="toggle">
-    <RouterLink to="/" @mouseover="select('home')" @click="background.tweenToVariant(0)">
+    <RouterLink to="/" @mouseover="select('home')">
       <H2>Home</H2>
     </RouterLink>
-    <RouterLink to="/work" @mouseover="select('work')" @click="background.tweenToVariant(1)">
+    <RouterLink to="/work" @mouseover="select('work')">
       <H2>Work</H2>
     </RouterLink>
 
-    <RouterLink to="/contact" @mouseover="select('contact')" @click="background.tweenToVariant(3)">
+    <RouterLink to="/contact" @mouseover="select('contact')">
       <H2>Contact</H2>
     </RouterLink>
   </nav>
@@ -22,43 +22,17 @@ import Logo from '@/assets/svg/logo.svg?component'
 
 defineProps<{ visible: boolean }>()
 
-const viewport = useViewport()
-const background = useBackground()
 const ui = useUI()
 const container = ref()
-const shade = ref()
-const color = ref('')
 
 function toggle() {
-  // const { width, height, x: tX } = container.value.getBoundingClientRect()
-  // const sX = viewport.width / width
-  // const sY = viewport.height / height
-  // shade.value.style.transform = ui.menuOpen
-  //   ? 'none'
-  //   : `translateX(-${tX}px) scaleX(${sX}) scaleY(${sY})`
   ui.menuOpen = !ui.menuOpen
-}
-
-function select(page: string) {
-  // switch (page) {
-  //   case 'home':
-  //     color.value = 'var(--pink)'
-  //     break
-  //   case 'work':
-  //     color.value = 'var(--purple)'
-  //     break
-  //   case 'contact':
-  //     color.value = 'var(--blue)'
-  //     break
-  //   default:
-  //     return
-  // }
 }
 </script>
 
 <style lang="scss" scoped>
-.logo {
-  @include position(fixed, 0 null null calc(var(--outer-padding) + #{notch(left)}));
+.container {
+  @include position(fixed, var(--outer-padding) null null var(--outer-padding));
   @include size(px(120));
   @include shadow;
   @include flex;
@@ -74,16 +48,19 @@ function select(page: string) {
   }
 
   &.visible {
-    opacity: 1;
+    opacity: 1 !important;
+
+    :deep(*) { opacity: 1 !important; }
   }
 
-  .shade {
-    @include position(absolute, 0 0 0 0);
-    background: var(--white);
-    z-index: 1;
-    transform-origin: top left;
-    transition: var(--base-transition);
-  }
+  // .shade {
+  //   @include position(absolute, 0 0 0 0);
+  //   @include size(100vw, 100vh);
+  //   background: var(--white);
+  //   z-index: 1;
+  //   transform-origin: top left;
+  //   transition: var(--base-transition);
+  // }
 
   @include mobile-landscape {
     @include size(px(150));

@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node ./server/index.js",
     "dev": "vite --host",
+    "dev:api": "node ./serveri/index.js",
     "build": "vite build",
     "preview": "vite preview",
     "build-only": "vite build",

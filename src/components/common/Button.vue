@@ -9,11 +9,14 @@ const $emit = defineEmits(['click'])
 <style lang="scss" scoped>
 button {
   @include strip;
+  width: px(120);
+  height: var(--element-height);
   // @include shadow;
   font-family: Bungee;
   border-radius: px(100);
   // border: 1px solid rgba(#bba2f3, 0.5);
-  font-weight: 400;
+  font-weight: 700;
+  text-transform: uppercase;
   font-size: px(28);
   line-height: 100%;
   // padding: 0 px(30);

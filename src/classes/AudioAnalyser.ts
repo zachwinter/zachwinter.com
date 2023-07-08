@@ -8,6 +8,7 @@ interface AnalyserConfig {
   referenceSize: number
   sampleSize: number
   refreshRate: number
+  pow?: number
 }
 
 interface AnalyserConfigOptions {
@@ -17,21 +18,23 @@ interface AnalyserConfigOptions {
   referenceSize?: number
   sampleSize?: number
   refreshRate?: number
+  pow?: number
 }
 
 type AnalyserMode = 'AUDIO' | 'MICROPHONE'
 
 interface AudioConfig {
-  bitDepth: number
-  smoothingTimeConstant: number
+  bitDepth: number;
+  smoothingTimeConstant: number;
+  pow: number;
 }
 
 const DEFAULT_CONFIG: AnalyserConfig = {
   microphone: false,
   audio: false,
   streamConstant: 0.01,
-  referenceSize: 3,
-  sampleSize: 0.06,
+  referenceSize: 2,
+  sampleSize: 0.09,
   refreshRate: 60
 }
 
@@ -204,7 +207,7 @@ export default class Analyser {
     const sample: number = mean(this.sampleBuffer) || 1
 
     this.volume = scaleLinear(this.referenceBufferDomain, [0, 1])(sample) || 1
-    this.stream += this.volume / 10 + this.config.streamConstant
+    this.stream += Math.pow(this.volume / 10 + this.config.streamConstant, this.config.pow)
 
     return [this.volume, this.stream]
   }

@@ -6,6 +6,8 @@ import { clamp } from '@/util/numbers'
 import Analyser from '../classes/AudioAnalyser'
 import { easing } from '@/constants/animation'
 
+
+const DEFAULT_SONG = '/books.mp3'
 const lightModeShader = /* glsl */ `
 
 void main() { 
@@ -33,111 +35,151 @@ void main() {
 
 const darkModeShader = /* glsl */ `
 
-void main() { 
+void main () {
+  float stream = stream / 4.;
   vec2 uv = -1. + 2. * gl_FragCoord.xy / resolution.xy;
   uv.x *= resolution.x/resolution.y;
   uv *= zoom;
-  uv.y += -20. * scroll;
-  gl_FragColor = vec4(0., 0., 0., 1.);
-  float stream = stream / 1.6;
-  float dist = length(uv + sin(uv)); 
-  float rot = rotation * abs(dist / -.2);
-  uv *= k_rotate2d(rotation + rot + stream / 9.); 
-  float t = PI * (5. + 1.);
-  float a = cos(uv.y - stream/1.5);
-  float b = cos(uv.x * sin(uv.y / 1. + stream/.2)); 
-  float c = radius * sin(t) * 20. * b;
-  vec2 p = vec2(xOuter * a * uv.x + c, 0.);
-  vec3 col = k_rainbow(1., 0., 0.);
-  gl_FragColor += k_orb(uv, pow(volume, 1.) * ballSize, p, col, contrast);
-  gl_FragColor.xyz = pow(abs((gl_FragColor.xyz)), vec3(contrast));
-  gl_FragColor = k_hue(gl_FragColor, uv.x/8. + 4.);
-  gl_FragColor /= 2.2;
-} 
+  uv *= k_rotate2d(stream / -6.);
+  for (float i = 5.; i < 30.; i++) {
+    uv = uv * iterator;
+    vec3 col = k_rainbow(i / iterations, colorShift, colorOffset);
+    float a = radius * cos(uv.x / div + stream / 3.);
+    float b = radius * sin(uv.y / div + stream / -2.);
+    float c = wave * sin(split * uv.x / div - stream / 2.);
+    float d = wave * cos(split * uv.y / div - stream / .5);
+    float x = a * b - c + d;
+    gl_FragColor += k_orb(uv, pow(volume, 1.6) * orbSize, vec2(x, x),  col, contrast);
+  }
+}
 
 `
 
+// export const DEFAULT_SHADER = /*glsl*/ `
+// void main () {
+//   vec2 uv = -1. + 2. * gl_FragCoord.xy / resolution.xy;
+//   uv.x *= resolution.x/resolution.y;
+//   uv *= zoom;
+//   uv *= k_rotate2d(stream / -6.);
+//   for (float i = 5.; i < 30.; i++) {
+//     uv = uv * iterator;
+//     vec3 col = k_rainbow(i / iterations, colorShift, colorOffset);
+//     float a = radius * cos(uv.x / div + stream / 3.);
+//     float b = radius * sin(uv.y / div + stream / -2.);
+//     float c = wave * sin(split * uv.x / div - stream / 2.);
+//     float d = wave * cos(split * uv.y / div - stream / 1.5);
+//     float x = a * b - c + d;
+//     gl_FragColor += k_orb(uv, pow(volume, 1.) * orbSize, vec2(x, x),  col, contrast);
+//   }
+// }`
 
-
-const rawUniforms: any = [
+export const rawUniforms: any[] = [
   [
     'zoom',
     0,
     [
-      [8.304, 0, 21.456, 0.001],
-      [1.5, 0, 21.456, 0.001],
-      [4.969, 0, 21.456, 0.001],
-      [19.275, 0, 21.456, 0.001]
-    ],
-    false
+      [3.418, 1, 13, 0.001],
+      [12.26, 1, 13, 0.001],
+      [4.452, 1, 13, 0.001]
+    ]
   ],
   [
-    'ballSize',
+    'iterator',
     0,
     [
-      [2.304, 0, 5.808, 0.001],
-      [0.861, 0, 5.808, 0.001],
-      [1.511, 0, 5.808, 0.001],
-      [1.489, 0, 1, 0.001]
-    ],
-    false
+      [1.017, 0.7, 1.5, 0.001],
+      [1.079, 0.7, 1.5, 0.001],
+      [0.978, 0.7, 1.5, 0.001]
+    ]
+  ],
+  [
+    'iterations',
+    0,
+    [
+      [15, 0, 33, 1],
+      [15, 0, 33, 1],
+      [13, 0, 33, 1]
+    ]
+  ],
+  [
+    'colorShift',
+    0,
+    [
+      [0.266, 0, 1, 0.001],
+      [0.271, 0, 1, 0.001],
+      [0.352, 0, 1, 0.001]
+    ]
+  ],
+  [
+    'colorOffset',
+    0,
+    [
+      [14.265, 15, 30, 0.001],
+      [18.968, 15, 30, 0.001],
+      [17.673, 15, 30, 0.001]
+    ]
   ],
   [
     'contrast',
     0,
     [
-      [1.113, 0, 2.5600000000000014, 0.001],
-      [0.999, 0, 2.5600000000000014, 0.001],
-      [0.961, 0, 2.5600000000000014, 0.001],
-      [1.133, 0, 2.5600000000000014, 0.001]
-    ],
-    false
+      [1.031, 0, 3, 0.001],
+      [0.942, 0, 3, 0.001],
+      [1.146, 0, 3, 0.001]
+    ]
+  ],
+  [
+    'orbSize',
+    0,
+    [
+      [10.426, 0, 37, 0.001],
+      [5.174, 0, 37, 0.001],
+      [26.704, 0, 37, 0.001]
+    ]
+  ],
+  [
+    'div',
+    0,
+    [
+      [4.782, 0.01, 15, 0.001],
+      [4.782, 0.01, 15, 0.001],
+      [3.174, 0.01, 15, 0.001]
+    ]
   ],
   [
     'radius',
     0,
     [
-      [0.234, 0, 1, 0.001],
-      [0.789, 0, 1, 0.001],
-      [0.789, 0, 1, 0.001],
-      [0.789, 0, 1, 0.001]
-    ],
-    false
+      [73.725, 0, 212, 0.001],
+      [32.407, 0, 212, 0.001],
+      [79.158, 0, 212, 0.001]
+    ]
   ],
   [
-    'yOuter',
+    'wave',
     0,
     [
-      [0.216, 0, 2.32, 0.001],
-      [2.32, 0, 2.32, 0.001],
-      [0.258, 0, 11, 0.001],
-      [0.32, 0, 2.32, 0.001]
-    ],
-    false
+      [1222, 0, 1222, 0.001],
+      [0, 0, 1333, 0.001],
+      [865.131, 0, 2000, 0.001]
+    ]
   ],
   [
-    'xOuter',
+    'split',
     0,
     [
-      [12.54, 0, 20.4, 0.001],
-      [20.4, 0, 20.4, 0.001],
-      [60.148, 0, 120.4, 0.001],
-      [20.4, 0, 20.4, 0.001]
-    ],
-    false
-  ],
-  [
-    'rotation',
-    0,
-    [
-      [0.02, 0, 0.1, 0.001],
-      [-0.01, 0, 0.1, 0.001],
-      [0.07, 0.1, 0.1, 0.001],
-      [0, 0, 0.1, 0.001]
-    ],
-    false
+      [3.288, 0, 40, 0.001],
+      [0, 0, 40, 0.001],
+      [20.958, 0, 500, 0.001]
+    ]
   ]
 ]
+
+export const DEFAULT_SKETCH: Sketch = {
+  shader: lightModeShader,
+  uniforms: rawUniforms,
+  _id: '001'
+}
 
 function buildInterpolators(from: any, to: any) {
   const iN = interpolateNumber
@@ -176,9 +218,8 @@ export const useBackground = defineStore('background', () => {
   const stream = ref(1)
   const initialized = ref(false)
   const paused = ref(false)
-  const variantInterval = ref()
   const shuffle = ref(true)
-  const divisor = ref(75)
+  const divisor = ref(150)
   const duration = ref(0)
   const position = ref(0)
   const audio: HTMLAudioElement = createAudioElement()
@@ -193,7 +234,7 @@ export const useBackground = defineStore('background', () => {
   )
 
   const shader = computed(() => {
-    return ui.darkMode ? darkModeShader :  lightModeShader
+    return ui.darkMode ? darkModeShader : lightModeShader
   })
 
   const progress = computed(() => {
@@ -209,7 +250,7 @@ export const useBackground = defineStore('background', () => {
 
   function createAudioElement(): HTMLAudioElement {
     const audio = document.createElement('audio')
-    audio.setAttribute('src', '/toe.mp3')
+    audio.setAttribute('src', DEFAULT_SONG)
     audio.setAttribute('crossorigin', 'true')
 
     function loaded() {
@@ -224,7 +265,7 @@ export const useBackground = defineStore('background', () => {
 
   function init() {
     if (initialized.value) return play()
-    analyser.value = new Analyser({ audio, refreshRate: viewport.refreshRate })
+    analyser.value = new Analyser({ audio, refreshRate: viewport.refreshRate, pow: 1.5 })
     play()
     cancelAnimationFrame(raf.value)
     raf.value = requestAnimationFrame(tick)
@@ -264,6 +305,8 @@ export const useBackground = defineStore('background', () => {
   }
 
   function tweenToVariant(variantIndex: number) {
+    if (variantIndex >= rawUniforms?.[0]?.[2].length) return
+
     const from = uniforms.value.map((u) => [u[0], u[1], u[2]])
     const to = rawUniforms.map((u: any) => [u[0], u[1], u[2][variantIndex]])
     const interpolators = buildInterpolators(from, to)
@@ -305,7 +348,7 @@ export const useBackground = defineStore('background', () => {
     })
   }
 
-  function setScroll(value:number) {
+  function setScroll(value: number) {
     scroll.value = value / viewport.height / 5
   }
 

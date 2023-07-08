@@ -1,33 +1,29 @@
 @use './size.scss' as *;
 @use './type.scss' as *;
 @use './flex.scss' as *;
-@use '../functions/units.scss' as *;
 
 @mixin button {
-  @include size(auto, px(50));
-  @include type(20, 20, 400);
+  @include size(100px, 50px);
   @include flex;
+  font-size: px(20);
+  line-height: var(--element-height);
   gap: calc(var(--base-spacer) / 4);
-  padding: 0 px(25);
-  border-radius: px(15);
-  font-family: 'Bungee', sans-serif;
+  padding: 0 .5rem;
+  border-radius: 0;
   background: transparent;
-  font-weight: 400;
-  // border: #{px(2)} solid white;
-  transition: var(--base-transition);
-  transition-duration: 150ms;
   background: rgba(0, 0, 0, 0.6);
   color: var(--black);
-  // will-change: transform, opacity;
+  will-change: transform, opacity;
   white-space: nowrap;
   padding: px(10);
-  flex-direction: row;
-  margin: spacer(0.5);
-  // box-shadow: 0 px(4) 0 px(2) rgba(black, 0.5);
-  // border: px(2) solid var(--white);
+  font-weight: 700;
+  text-transform: uppercase;
   border: 0;
   color: var(--white);
   outline: 0;
+  text-decoration: none;
+  width: 100px;
+  border: 0;
 
   *:disabled {
     opacity: 0.8;

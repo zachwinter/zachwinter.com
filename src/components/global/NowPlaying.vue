@@ -45,9 +45,8 @@ watch(
 
 <style lang="scss" scoped>
 figure {
-  @include position(fixed, null null 0 calc(var(--outer-padding) + notch(left)));
+  @include position(fixed, null null var(--outer-padding) var(--outer-padding));
   z-index: 101;
-  overflow: visible;
   white-space: nowrap;
   will-change: transform, opacity;
   opacity: 0;
@@ -70,7 +69,6 @@ figure {
 
   .image-container {
     @include size(px(120));
-    @include shadow;
     position: relative;
     display: block;
 
@@ -104,6 +102,8 @@ figure {
     transition: var(--base-transition);
     will-change: transform, opacity;
     border-radius: var(--border-radius);
+      overflow: hidden;
+
   }
 
   span {

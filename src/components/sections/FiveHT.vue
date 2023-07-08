@@ -1,5 +1,5 @@
 <template>
-  <View center>
+  <Section center>
     <div>
       <H2>{{ data.title }}</H2>
       <P>{{ data.description }}</P>
@@ -13,7 +13,7 @@
     </div>
 
     <Images :images="data.images" />
-  </View>
+  </Section>
 </template>
 
 <script setup lang="ts">
@@ -90,5 +90,12 @@ svg {
 .links {
   @include flex(flex-start, flex-start, row);
   padding: 0;
+}
+
+.view:before {
+  content: '';
+  @include position(absolute, 0 0 0 0);
+  background: linear-gradient(var(--pink), var(--purple));
+  opacity: 1;
 }
 </style>

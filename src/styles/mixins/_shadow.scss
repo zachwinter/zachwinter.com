@@ -3,7 +3,7 @@
 @import '../colors.scss';
 
 @mixin shadow {
-  box-shadow: 0 px(4) 0 px(1) rgba(map-get($colors, 'purple'), 0.4);
+  box-shadow: 0px 2px 0  0 rgba(map-get($colors, 'purple'), 0.8);
   transition: var(--base-transition);
   // border: px(2) solid var(--ui-color);
   // border-radius: px(20);

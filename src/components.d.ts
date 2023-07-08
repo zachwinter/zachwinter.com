@@ -25,6 +25,7 @@ declare module '@vue/runtime-core' {
     Images: typeof import('./components/common/Images.vue')['default']
     Link: typeof import('./components/common/Link.vue')['default']
     Logo: typeof import('./components/global/Logo.vue')['default']
+    NavButtons: typeof import('./components/global/NavButtons.vue')['default']
     Navigation: typeof import('./components/global/Navigation.vue')['default']
     NowPlaying: typeof import('./components/global/NowPlaying.vue')['default']
     P: typeof import('./components/typography/P.vue')['default']

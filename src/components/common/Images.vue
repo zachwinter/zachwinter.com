@@ -5,7 +5,7 @@
       <i />
       <i />
     </header>
-    <section>
+    <section class="image-container">
       <img v-for="(image, i) in images" :key="i" :src="image" />
     </section>
   </div>
@@ -32,7 +32,8 @@ $border: none; //px(5) solid rgba(0, 0, 0, .1);
   border: $border;
   border-right: 0;
   border-top-left-radius: var(--border-radius);
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.8);
+  overflow: hidden;
   will-change: transform;
 
   @include mobile-portrait {
@@ -102,6 +103,14 @@ i {
 
   &:nth-child(3) {
     background: var(--green);
+  }
+}
+
+.image-container {
+  scroll-snap-type: x mandatory;
+
+  :deep(> *) {
+    scroll-snap-align: start;
   }
 }
 </style>
