@@ -156,7 +156,7 @@ export const useViewport = defineStore('viewport', () => {
   const set = () => {
     const w = window.innerWidth
     const h = window.innerHeight
-    const d = window.devicePixelRatio
+    const d = Math.min(window.devicePixelRatio, 2)
     width.value = w
     height.value = h
     dpr.value = d

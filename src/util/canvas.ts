@@ -15,7 +15,7 @@ export interface CanvasOptions {
 const DEFAULT_CANVAS_OPTIONS = {
   width: window.innerWidth,
   height: window.innerHeight,
-  dpr: window.devicePixelRatio,
+  dpr: Math.min(window.devicePixelRatio, 2),
   target: null,
   alpha: true,
 };
@@ -47,7 +47,7 @@ export function sizeCtx({
   ctx,
   width = window.innerWidth,
   height = window.innerHeight,
-  dpr = window.devicePixelRatio,
+  dpr = Math.min(window.devicePixelRatio, 2),
 }: SizeOptions): void {
   ctx.canvas.width = width * dpr;
   ctx.canvas.height = height * dpr;
