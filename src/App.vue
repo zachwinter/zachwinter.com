@@ -38,6 +38,7 @@ import { timer } from './util/time'
 const route = useRoute()
 const ui = useUI()
 const background = useBackground()
+const raf = useRAF();
 
 watch(
   () => route.name,
@@ -61,7 +62,12 @@ watch(
 onMounted(async () => {
   await Promise.all([document.fonts.ready, timer(600, () => {}).$finished])
   ui.loading = false
+  raf.start();
 })
+
+onBeforeUnmount(() => {
+  raf.stop();
+});
 </script>
 
 <style lang="scss">

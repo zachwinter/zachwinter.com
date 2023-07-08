@@ -4,14 +4,14 @@
   </div>
 
   <nav :class="{ visible: ui.menuOpen }" @click="toggle">
-    <RouterLink to="/" @mouseover="select('home')">
+    <RouterLink to="/">
       <H2>Home</H2>
     </RouterLink>
-    <RouterLink to="/work" @mouseover="select('work')">
+    <RouterLink to="/work">
       <H2>Work</H2>
     </RouterLink>
 
-    <RouterLink to="/contact" @mouseover="select('contact')">
+    <RouterLink to="/contact">
       <H2>Contact</H2>
     </RouterLink>
   </nav>

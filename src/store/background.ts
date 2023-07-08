@@ -329,7 +329,6 @@ export const useBackground = defineStore('background', () => {
   }
 
   function tick(now: DOMHighResTimeStamp) {
-    raf.value = requestAnimationFrame(tick)
     position.value = audio.currentTime
 
     if (paused.value) return

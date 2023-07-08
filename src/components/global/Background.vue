@@ -3,11 +3,11 @@
     v-if="viewport.refreshRate"
     ref="shader"
     position="fixed"
-    :animate="true"
+    :animate="false"
     :shader="background.shader"
     :uniforms="background.uniforms"
-    :width="width"
-    :height="height"
+    :width="viewport.width"
+    :height="viewport.height"
     :dpr="viewport.dpr"
     :stream="background.stream"
     :volume="background.volume"
@@ -16,21 +16,22 @@
 </template>
 
 <script setup lang="ts">
+const shader = ref()
+const raf = useRAF()
 const viewport = useViewport()
 const background = useBackground()
-const width = ref(viewport.width)
-const height = ref(viewport.height + 100)
 
-watch(
-  () => viewport.refreshRate,
-  () => requestAnimationFrame(background.tick)
-)
-
-watch(
-  () => viewport.orientation,
-  () => {
-    width.value = viewport.width
-    height.value = viewport.height + 100
-  }
-)
+onMounted(() => {
+  raf.add(
+    {
+      tick({ now }: { now: DOMHighResTimeStamp }) {
+        background.tick(now)
+        shader.value.instance.stream = background.stream
+        shader.value.instance.volume = background.volume
+        shader.value.instance.tick(window.performance.now())
+      }
+    },
+    'background'
+  )
+})
 </script>
