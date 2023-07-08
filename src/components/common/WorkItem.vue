@@ -3,10 +3,9 @@
     <div class="content">
       <H2>
         <span class="title">{{ item.title }}</span>
-        <span v-if="item.subtitle"> | previously <strong >{{ item.subtitle }}</strong></span>
       </H2>
       <div class="links">
-        <Link :href="item.link" target="_blank">{{  item.link }}</Link>
+        <Link :href="item.link" target="_blank">Visit Project</Link>
         <Link class="github" :href="item.github" target="_blank" v-if="item.github">
           <GithubIcon />
         </Link>
@@ -36,8 +35,6 @@ const mobile = computed(() => viewport.mobile && viewport.orientation === 'PORTR
 .content {
   @include flex(flex-start, center, column);
   padding: 0 var(--outer-padding) 0 calc(#{notch(left)} + var(--outer-padding));
-;
-
   @include mobile-portrait {
     width: 100%;
     height: auto;
@@ -67,7 +64,7 @@ h2 span {
 .github {
   @include size(var(--element-height));
   @include flex;
-  margin: 0 0 0 var(--base-spacer);
+  margin: 0 0 0 calc(3 * var(--outer-padding));
   padding: 0;
 
   :deep(button) {
@@ -78,6 +75,14 @@ h2 span {
     box-shadow: none;
     outline: 0;
     margin: 0;
+  }
+
+  :deep(svg *) {
+    transition: var(--base-transition);
+  }
+
+  &:hover :deep(svg *) {
+    fill: var(--blue);
   }
 }
 
@@ -92,10 +97,12 @@ svg {
 }
 
 .links {
-  @include flex(center, space-between, row);
+  @include flex(flex-start, flex-start, row);
   width: 100%;
   padding: 0;
   font-size: px(28);
+  white-space: nowrap;
+  text-align: left;
 
   :deep(*) {
     font-size: inherit;
