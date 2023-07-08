@@ -21,8 +21,6 @@ const props = withDefaults(defineProps<Props>(), {
   animate: true,
   fillViewport: false,
   variant: 0,
-  stream: 0,
-  volume: 1,
   scroll: 0
 });
 
@@ -44,14 +42,6 @@ watch(
   (shader) => {
     if (!instance.value) return
     instance.value.rebuild({ shader, uniforms: props.uniforms })
-  }
-)
-
-watch(
-  () => props.scroll,
-  val => {
-    if (!instance.value) return
-    instance.value.scroll = val
   }
 )
 

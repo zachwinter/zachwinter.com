@@ -9,8 +9,6 @@
     :width="viewport.width"
     :height="viewport.height"
     :dpr="viewport.dpr"
-    :stream="background.stream"
-    :volume="background.volume"
     :scroll="background.scroll"
   />
 </template>

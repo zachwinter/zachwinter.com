@@ -14,7 +14,7 @@ const setScale = (val: number): void =>
 export const useViewport = defineStore('viewport', () => {
   const w = window.innerWidth
   const h = window.innerHeight
-  const d = window.devicePixelRatio
+  const d = Math.min(window.devicePixelRatio, 2)
 
   let initialMouseValue: any = [w / 2, h / 2]
 
