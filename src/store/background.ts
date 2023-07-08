@@ -73,7 +73,7 @@ void main () {
 //   }
 // }`
 
-export const rawUniforms: any[] = [
+export const rawUniforms: any[] = Object.freeze([
   [
     'zoom',
     0,
@@ -173,7 +173,7 @@ export const rawUniforms: any[] = [
       [20.958, 0, 500, 0.001]
     ]
   ]
-]
+])
 
 export const DEFAULT_SKETCH: Sketch = {
   shader: lightModeShader,
