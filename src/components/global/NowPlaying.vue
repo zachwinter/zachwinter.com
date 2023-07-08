@@ -45,7 +45,7 @@ watch(
 
 <style lang="scss" scoped>
 figure {
-  @include position(fixed, null null var(--outer-padding) var(--outer-padding));
+  @include position(fixed, null null var(--outer-padding) calc(var(--outer-padding) + #{notch(left)}));
   z-index: 101;
   white-space: nowrap;
   will-change: transform, opacity;

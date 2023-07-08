@@ -32,7 +32,7 @@ function toggle() {
 
 <style lang="scss" scoped>
 .container {
-  @include position(fixed, var(--outer-padding) null null var(--outer-padding));
+  @include position(fixed, var(--outer-padding) null null calc(var(--outer-padding) + #{notch(left)}));
   @include size(px(120));
   @include shadow;
   @include flex;
