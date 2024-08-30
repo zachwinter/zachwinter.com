@@ -12,7 +12,7 @@ const app = express();
 const root = path.resolve(__dirname, '../dist');
 
 
-// app.use(sslRedirect());
+app.use(sslRedirect());
 app.use(express.static(root));
 app.use(fallback('index.html', { root }));
 
