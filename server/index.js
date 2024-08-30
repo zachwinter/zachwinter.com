@@ -11,6 +11,7 @@ const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const app = express();
 const root = path.resolve(__dirname, '../dist');
 
+app.use(sslRedirect.default());
 app.use(express.static(root));
 app.use(fallback('index.html', { root }));
 
