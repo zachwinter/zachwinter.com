@@ -6,7 +6,6 @@ import { clamp } from '@/util/numbers'
 import Analyser from '../classes/AudioAnalyser'
 import { easing } from '@/constants/animation'
 
-
 const DEFAULT_SONG = '/books.mp3'
 const lightModeShader = /* glsl */ `
 
@@ -41,7 +40,7 @@ void main () {
   uv.x *= resolution.x/resolution.y;
   uv *= zoom;
   uv *= k_rotate2d(stream / -6.);
-  for (float i = 5.; i < 30.; i++) {
+  for (float i = 18.; i < 30.; i++) {
     uv = uv * iterator;
     vec3 col = k_rainbow(i / iterations, colorShift, colorOffset);
     float a = radius * cos(uv.x / div + stream / 3.);
@@ -87,9 +86,9 @@ export const rawUniforms: any[] = Object.freeze([
     'iterator',
     0,
     [
-      [1.017, 0.7, 1.5, 0.001],
-      [1.079, 0.7, 1.5, 0.001],
-      [0.978, 0.7, 1.5, 0.001]
+      [1.0517, 0.7, 1.5, 0.001],
+      [1.03579, 0.7, 1.5, 0.001],
+      [0.9078, 0.7, 1.5, 0.001]
     ]
   ],
   [
@@ -123,7 +122,7 @@ export const rawUniforms: any[] = Object.freeze([
     'contrast',
     0,
     [
-      [1.031, 0, 3, 0.001],
+      [0.831, 0, 3, 0.001],
       [0.942, 0, 3, 0.001],
       [1.146, 0, 3, 0.001]
     ]
@@ -150,7 +149,7 @@ export const rawUniforms: any[] = Object.freeze([
     'radius',
     0,
     [
-      [73.725, 0, 212, 0.001],
+      [66.725, 0, 212, 0.001],
       [32.407, 0, 212, 0.001],
       [79.158, 0, 212, 0.001]
     ]

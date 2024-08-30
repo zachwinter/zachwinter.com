@@ -24,9 +24,9 @@ interface AnalyserConfigOptions {
 type AnalyserMode = 'AUDIO' | 'MICROPHONE'
 
 interface AudioConfig {
-  bitDepth: number;
-  smoothingTimeConstant: number;
-  pow: number;
+  bitDepth: number
+  smoothingTimeConstant: number
+  pow: number
 }
 
 const DEFAULT_CONFIG: AnalyserConfig = {
@@ -34,7 +34,7 @@ const DEFAULT_CONFIG: AnalyserConfig = {
   audio: false,
   streamConstant: 0.01,
   referenceSize: 2,
-  sampleSize: 0.09,
+  sampleSize: 0.15,
   refreshRate: 60
 }
 

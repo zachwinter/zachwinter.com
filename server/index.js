@@ -3,6 +3,7 @@ import express from 'express';
 import path from 'path';
 import * as url from 'url';
 import fallback from 'express-history-api-fallback';
+import sslRedirect from 'heroku-ssl-redirect';
 
 config();
 
@@ -11,6 +12,7 @@ const app = express();
 const root = path.resolve(__dirname, '../dist');
 
 
+app.use(sslRedirect());
 app.use(express.static(root));
 app.use(fallback('index.html', { root }));
 
