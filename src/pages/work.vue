@@ -39,7 +39,7 @@ const workItems = ref([
     title: 'COVID-USA',
     description:
       'An interactive timeseries visualizing the spread of COVID-19 through the United States.',
-    link: 'https://covid-usa-f759677a4b7d.herokuapp.com',
+    link: 'https://covid-usa.app',
     github: 'https://github.com/zachwinter/COVID-USA',
     tags: [
       'UI Design',
