@@ -1,111 +1,162 @@
-import { Animation, GlobalAnimation } from '../types/animations'
-import { acceptHMRUpdate, defineStore } from 'pinia'
-import { ComputedRef, computed, ref, type Ref, watch } from 'vue'
-import * as ease from 'd3-ease'
+import { defineStore } from 'pinia'
+import { ref, shallowRef, type Ref } from 'vue'
 import { clamp } from '../util/numbers'
+import { ease } from '../util/easing'
 
-const DEFAULT_EASING = 'easeQuadOut'
+export type AnimationTick = (now: number, progress: number, elapsed: number) => void
+
+export type Animation = {
+  tick?: AnimationTick
+  duration?: number
+  id: string
+  start?: number
+  autoStart?: boolean
+  easing?: (v: number) => number
+  state?: Ref<boolean>
+}
 
 export const useRAF = defineStore('raf', () => {
-  const queue: Ref<Animation[]> = ref([])
-  const map: Ref<Record<string, GlobalAnimation>> = ref({})
-  const mapKeys: ComputedRef<string[]> = computed(() => Object.keys(map.value))
-  const raf: Ref<number> = ref(0)
-  const last: Ref<number> = ref(window.performance.now())
-  const frames: Ref<number[]> = ref([])
-  const totalFrames: ComputedRef<number> = computed(() => frames.value.length)
-  const frameRate: ComputedRef<number> = computed(() => {
-    const len = totalFrames.value
-    let sum = 0
-    for (let i = 0; i < len; i++) sum += frames.value[i]
-    return sum / len
-  })
+  const queue: any = shallowRef([])
+  const map: any = shallowRef({})
+  const raf: any = ref(0)
+  let last: any = null
+  const frameNumber = ref(0)
+  let frames: any[] = []
+  const time: Ref<number> = ref(window.performance.now())
+  const now = ref(Date.now())
+  const frameRate: any = ref(60)
+  const promises: any = {}
+  const preFrame: any = ref([])
+  const stream = ref(0)
 
-  watch(
-    () => raf.value,
-    () => {
-      const now = window.performance.now()
-      frames.value.push(1000 / (now - last.value))
-      last.value = now
-    }
-  )
+  function add(tick: AnimationTick, animation: Animation) {
+    remove(animation?.id)
 
-  watch(
-    () => totalFrames.value,
-    (val) => {
-      const boundary = 100
-      if (val < boundary) return
-      const diff = val - boundary
-      for (let i = 0; i < diff; i++) frames.value.shift()
-    }
-  )
+    animation.tick = tick
+    animation.easing = animation.easing || ease
+    animation.start = window.performance.now()
 
-  function add(animation: Animation | GlobalAnimation, id: string | null = null) {
-    const spread: Animation | GlobalAnimation = {
-      easing: DEFAULT_EASING,
-      start: window.performance.now(),
-      ...animation
+    if (raf.value === 0) {
+      start()
     }
 
-    if (typeof id === 'string') {
-      map.value[id] = spread
-      return
+    if (animation.duration) {
+      queue.value.push(animation)
+      // console.log("📋 Added to queue, queue length:", queue.value.length);
+      return new Promise((resolve) => {
+        promises[animation.id as string] = resolve
+      })
+    } else {
+      map.value[animation.id] = animation
     }
-
-    queue.value.push(spread)
   }
 
   function remove(id: string) {
     delete map.value[id]
+    delete promises[id]
+    const queueIndex = queue.value.findIndex((animation: Animation) => animation.id === id)
+    if (queueIndex !== -1) queue.value.splice(queueIndex, 1)
   }
 
   function start() {
+    stop()
     raf.value = window.requestAnimationFrame(tick)
   }
 
   function stop() {
-    cancelAnimationFrame(raf.value)
+    window.cancelAnimationFrame(raf.value)
   }
 
-  function tick(now: DOMHighResTimeStamp) {
-    raf.value = window.requestAnimationFrame(tick)
+  function frame(now: DOMHighResTimeStamp) {
+    if (last === null) {
+      last = now
+      return
+    }
+
+    const boundary = 180
+    frames.push(1000 / (now - last))
+    if (frames.length > boundary) frames.splice(0, frames.length - boundary)
+    let sum = 0
+    for (let i = 0; i < frames.length; i++) sum += frames[i]
+    frameRate.value = Math.floor(sum / frames.length)
+    last = now
+  }
+
+  function tick(_now: DOMHighResTimeStamp) {
+    frameNumber.value++
+    time.value = _now
+    now.value = _now
+
+    preFrame.value.forEach((fn: (now: DOMHighResTimeStamp) => void) => {
+      fn(_now)
+    })
 
     queue.value.forEach((animation: Animation, i: number) => {
-      const elapsed = now - (animation?.start || 0)
-      const progress = clamp(elapsed / (animation.duration || 1))
-      const eased = ease[(animation.easing || DEFAULT_EASING) as keyof typeof ease]?.(progress)
-      animation.tick?.({ now, progress: eased })
-      if (progress === 1) queue.value.splice(i, 1)
-    })
-
-    mapKeys.value.forEach((key: string) => {
-      const animation = map.value[key]
-
-      let progress = 0
-
-      if (animation.duration) {
-        const elapsed = now - (animation?.start || 0)
-        progress = clamp(elapsed / (animation.duration || 1))
+      const elapsed = now.value - (animation?.start || 0)
+      const duration = animation.duration || Infinity
+      const progress = animation.easing?.(elapsed / duration) as number
+      animation.tick?.(now.value, progress, elapsed)
+      if (progress === 1) {
+        queue.value.splice(i, 1)
+        promises?.[animation.id]?.()
+        delete promises[animation.id]
       }
-
-      const eased = ease[(animation.easing || DEFAULT_EASING) as keyof typeof ease]?.(progress)
-
-      animation.tick?.({ now, progress: eased })
-
-      if (progress === 1) delete map.value[key]
     })
+
+    const keys = Object.keys(map.value)
+
+    keys.forEach((id: string) => {
+      const animation = map.value[id]
+      const elapsed = now.value - (animation?.start || 0)
+      const duration = animation.duration || Infinity
+      const progress = clamp(animation.easing?.(elapsed / duration) as number)
+      animation.tick?.(now.value, progress, elapsed)
+
+      if (progress === 1) {
+        promises?.[animation.id]?.()
+        delete map.value[id]
+        delete promises[id]
+      }
+    })
+
+    frame(_now)
+
+    if (queue.value.length > 0 || keys.length > 0) {
+      raf.value = window.requestAnimationFrame(tick)
+    } else {
+      raf.value = 0
+    }
+
+    preFrame.value = []
+  }
+
+  function updateStream(delta: number) {
+    stream.value += delta
   }
 
   return {
-    queue,
-    map,
-    mapKeys,
     add,
     remove,
     start,
     stop,
-    frameRate
+    time,
+    now,
+    map,
+    queue,
+    frameRate,
+    preFrame,
+    frameNumber,
+    stream,
+    updateStream,
+    $reset() {
+      stop()
+      queue.value.length = 0
+      Object.keys(map.value).forEach((id) => delete map.value[id])
+      Object.keys(promises).forEach((id) => delete promises[id])
+      frames = []
+      last = null
+      raf.value = 0
+      stream.value = 0
+    }
   }
 })
-
-if (import.meta.hot) import.meta.hot.accept(acceptHMRUpdate(useRAF, import.meta.hot))

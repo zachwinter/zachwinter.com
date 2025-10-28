@@ -3,20 +3,21 @@
 </template>
 
 <script setup lang="ts">
-import { Shader, type ShaderConfig } from 'fragment-shader'
+import Shader from 'fragment-shader/classes/Shader'
+import { type ShaderConfig } from 'fragment-shader/types/shader'
 
 defineEmits(['click'])
 
 interface Props extends ShaderConfig {
-  stream: number
-  volume: number
-  scroll: number
+  stream?: number
+  volume?: number
+  scroll?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
   width: window.innerWidth,
   height: window.innerHeight,
-  dpr: 1, //Math.min(window.devicePixelRatio, 2),
+  dpr: Math.min(window.devicePixelRatio, 2),
   shader: `void main () { gl_FragColor = vec4(.8, .2, .6, 1.); }`,
   animate: true,
   fillViewport: false,
@@ -33,7 +34,7 @@ watch(
   () => [props.width, props.height, props.dpr],
   ([width, height, dpr]) => {
     if (!instance.value) return
-    instance.value.size = { width, height, dpr: 1 }
+    instance.value.size = { width, height, dpr }
   }
 )
 
@@ -49,8 +50,8 @@ watch(
   () => [props.stream, props.volume],
   ([stream, volume]) => {
     if (!instance.value) return
-    instance.value.stream = stream
-    instance.value.volume = volume
+    if (typeof stream === 'number') instance.value.stream = stream
+    if (typeof volume === 'number') instance.value.volume = volume
   }
 )
 
@@ -59,7 +60,6 @@ onMounted(() => {
 
   instance.value = new Shader({
     ...props,
-    dpr: 1,
     parent: container.value
   })
 })
@@ -71,7 +71,7 @@ onBeforeUnmount(() => {
 
 <style lang="scss" scoped>
 .shader {
-  @include position(fixed, 0 null null 0);
-  z-index: -1;
+  @include position(absolute, 0 null null 0);
+  z-index: 10;
 }
 </style>

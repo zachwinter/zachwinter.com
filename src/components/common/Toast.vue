@@ -1,5 +1,5 @@
 <template>
-  <header :class="{ visible: t.visible && t.text?.length, [t.type]: t.type }">
+  <header :class="{ visible: t.visible && t.text?.length, [t?.type]: t?.type }">
     <p class="message">{{ t.text }}</p>
   </header>
 </template>

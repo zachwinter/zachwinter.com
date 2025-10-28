@@ -54,9 +54,6 @@ div {
   padding: var(--outer-padding);
 }
 
-h1 {
-  // font-family: 'Bungee Outline';
-}
 .view {
   @include mobile-portrait {
     @include flex(center, center, column);

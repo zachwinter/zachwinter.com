@@ -1,21 +1,10 @@
 <template>
   <Section center>
     <div class="content">
-      <H2>
-        <span class="title">{{ item.title }}</span>
-      </H2>
-      <div class="links">
-        <Link :href="item.link" target="_blank">Visit Project</Link>
-        <Link class="github" :href="item.github" target="_blank" v-if="item.github">
-          <GithubIcon />
-        </Link>
-      </div>
-      <P>{{ item.description }}</P>
       <Images v-if="mobile" :images="item.images" />
-      <Tags :tags="item.tags" />
     </div>
 
-    <Images v-if="!mobile" :images="item.images" />
+    <Images v-if="!mobile" v-bind="item" />
   </Section>
 </template>
 
@@ -58,32 +47,8 @@ h2 span {
 }
 
 .title {
-  font-size: 3rem;
-}
-
-.github {
-  @include size(var(--element-height));
-  @include flex;
-  margin: 0 0 0 calc(3 * var(--outer-padding));
-  padding: 0;
-
-  :deep(button) {
-    @include size(var(--element-height));
-    @include flex;
-    background: transparent;
-    padding: 0;
-    box-shadow: none;
-    outline: 0;
-    margin: 0;
-  }
-
-  :deep(svg *) {
-    transition: var(--base-transition);
-  }
-
-  &:hover :deep(svg *) {
-    fill: var(--blue);
-  }
+  font-size: 4rem;
+  font-weight: 100;
 }
 
 svg {

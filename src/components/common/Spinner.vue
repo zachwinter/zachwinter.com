@@ -1,6 +1,8 @@
 <template>
   <main>
-    <span class="spinner" />
+    <div class="spin-con">
+      <i class="spinner" />
+    </div>
   </main>
 </template>
 
@@ -15,11 +17,12 @@
 }
 
 main {
-  @include size(100%);
+  @include size(100vw, 100vh);
   @include flex;
   @include position(fixed, 0 null null 0);
+  overflow: hidden;
   background: var(--black);
-
+  z-index: 2000;
 }
 
 .spinner {
@@ -28,7 +31,16 @@ main {
   display: block;
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  border: 4px solid var(--white);
+  border: 1px solid var(--white);
+  transition: opacity 1000ms var(--easing);
   border-bottom-color: transparent;
+}
+
+.spin-con {
+  transition: all 350ms var(--easing);
+}
+
+.loaded .spin-con {
+  transform: scale(0);
 }
 </style>

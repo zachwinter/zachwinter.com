@@ -1,40 +1,61 @@
 <template>
-  <div class="container">
-    <header>
-      <i />
-      <i />
-      <i />
-    </header>
-    <section class="image-container">
-      <img v-for="(image, i) in images" :key="i" :src="image" />
-    </section>
+  <div class="outer">
+    <div class="container">
+      <header>
+        <figure>
+          <i />
+          <i />
+          <i />
+        </figure>
+
+        <div>
+          <span class="title">{{ title }}</span>
+          <span class="link">{{ link }}</span>
+        </div>
+        <Link class="github" :href="github" target="_blank">
+          <GithubIcon v-if="github" />
+        </Link>
+      </header>
+      <section class="image-container">
+        <img v-for="(image, i) in images" :key="i" :src="image" />
+      </section>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import GithubIcon from '@/assets/svg/github.svg?component'
+
 defineProps<{
+  description?: any
+  title: any
+  github?: any
+  link?: string
   images: string[]
 }>()
 </script>
 
 <style lang="scss" scoped>
-$header-height: px(60);
+$header-height: 3rem;
 $border: none; //px(5) solid rgba(0, 0, 0, .1);
 
 .container {
-  @include size(65vw, calc((9 / 16 * 65vw) + #{$header-height}));
+  @include size(75vw, calc((9 / 16 * 75vw) + #{$header-height}));
   @include shadow;
   position: realtive;
+  margin: 0 auto;
   flex-shrink: 0;
   padding-top: $header-height;
-  border-bottom-left-radius: var(--border-radius);
+  border-radius: 1rem;
+
   overflow: hidden;
   border: $border;
   border-right: 0;
-  border-top-left-radius: var(--border-radius);
-  background: rgba(0, 0, 0, 0.8);
+
+  background: rgba(0, 0, 0, 0.5);
   overflow: hidden;
   will-change: transform;
+  color: white;
 
   @include mobile-portrait {
     @include size(100%, auto);
@@ -52,19 +73,10 @@ $border: none; //px(5) solid rgba(0, 0, 0, .1);
   }
 }
 
-header {
-  @include size(100%, $header-height);
-  @include position(absolute, 0 0 null 0);
-  @include flex(center, flex-start, row);
-  gap: calc(var(--base-spacer) / 2);
-  z-index: 10;
-  padding-left: var(--base-spacer);
-}
-
 section {
   @include flex(flex-start, flex-start, row);
   @include size(100%);
-  @include scroll-bar;
+
   overflow-x: scroll;
   overflow-y: hidden;
   will-change: transform, opacity;
@@ -80,29 +92,23 @@ section {
       position: relative;
     }
   }
-
-  // @include mobile-landscape {
-  //   img {
-  //     @include size(auto, 100%);
-  //   }
-  // }
 }
 
 i {
-  @include size(px(20));
+  @include size(0.85rem);
   display: block;
   border-radius: 100%;
 
   &:first-child {
-    background: var(--red);
+    background: $pink;
   }
 
   &:nth-child(2) {
-    background: var(--yellow);
+    background: $yellow;
   }
 
   &:nth-child(3) {
-    background: var(--green);
+    background: $green;
   }
 }
 
@@ -112,5 +118,67 @@ i {
   :deep(> *) {
     scroll-snap-align: start;
   }
+}
+
+header {
+  @include size(100%, auto);
+  @include position(absolute, 0 0 null 0);
+  gap: calc(var(--base-spacer) / 2);
+  background-color: $black;
+  z-index: 10;
+  padding-left: var(--base-spacer);
+}
+header {
+  @include flex-row(space-between);
+  width: 100%;
+}
+
+header div {
+  @include box(0.5, 0.5);
+  margin: 0.5rem auto;
+  background: lighten($black, 5%);
+  border-radius: 0.5rem;
+}
+
+figure {
+  @include flex-row(start);
+  @include gap(0.35);
+  width: 125px;
+}
+
+.github {
+  @include size(2rem);
+  @include flex(end);
+  width: 125px;
+  padding: 0 1rem 0 0;
+
+  :deep(button) {
+    @include size(2rem);
+    @include flex;
+    background: transparent;
+    padding: 0;
+    box-shadow: none;
+    outline: 0;
+    margin: 0;
+  }
+
+  :deep(svg *) {
+    transition: var(--base-transition);
+    fill: $white;
+  }
+
+  &:hover :deep(svg *) {
+    fill: var(--blue);
+  }
+}
+
+.title {
+  padding: 0 0.5rem;
+  color: $pink;
+}
+
+.outer {
+  @include size(100vw, 100vh);
+  @include flex;
 }
 </style>

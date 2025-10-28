@@ -17,7 +17,9 @@ import { format } from 'date-fns'
 
 const dates = ref(['11052020', '08172021', '12252021', '09012022'])
 const active = ref(0)
-const src = computed(() => `http://covid-usa.herokuapp.com/#${dates.value[active.value]}`)
+const src = computed(
+  () => `https://covid-usa-6a51a4d99f96.herokuapp.com/#${dates.value[active.value]}`
+)
 
 function select(i: number) {
   active.value = i
@@ -61,7 +63,7 @@ iframe {
     flex-wrap: wrap;
   }
 
- .tab {
+  .tab {
     width: 50% !important;
   }
 }

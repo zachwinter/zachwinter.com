@@ -1,14 +1,14 @@
+@use '@wearekaleidosync/sass' as *;
+@use './mixins/center.scss';
+
 // Web Fonts
 
 @import url('https://fonts.googleapis.com/css2?family=Alata&family=Bungee&family=Bungee+Hairline&family=Bungee+Outline&family=Inconsolata:wght@300;700&family=Kristi&family=Red+Hat+Mono:wght@300;700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 // Colors (Sass -> CSS Variables)
 
 :root {
-  @each $color in $colors {
-    --#{nth($color, 1)}: #{nth($color, 2)};
-  }
-
+  @include map-colors;
   --background-color: var(--black);
   --ui-background: rgba(0, 0, 0, 0.7);
 }
@@ -18,6 +18,7 @@
 :root {
   --mobile-viewport: 375;
   --tablet-viewport: 768;
+
   --laptop-viewport: 1280;
   --desktop-viewport: 1650;
   --viewport-reference: var(--desktop-viewport);
@@ -27,9 +28,9 @@
 // Typography
 
 :root {
-  --font-family: 'Inconsolata', sans-serif;
+  --font-family: 'Space Mono', monospace;
   --font-weight: 300;
-  --font-size: #{px(20)};
+  --font-size: 1rem;
   --text-rendering: optimizeLegibility;
   --webkit-font-smoothing: antialiased;
   --moz-osx-font-smoothing: grayscale;
@@ -38,16 +39,14 @@
 // Elements / Layout
 
 :root {
-  --header-height: #{px(70)};
-  --element-height: #{px(70)};
-  --base-spacer: #{px(20)};
+  --header-height: 5rem;
+  --element-height: 5rem;
+  --base-spacer: 1rem;
   --outer-padding: calc(2 * var(--base-spacer));
-  --sidebar-width: #{px(600)};
   --min-element-height: 30px;
-  --page-shift: #{px(500)};
   --border: 1px solid rgba(255, 255, 255, 0.1);
   --horizontal-offset: #{px(50)};
-  --border-radius: #{px(20)};
+  --border-radius: 1rem;
 }
 
 // Animations
@@ -58,7 +57,7 @@
   --page-duration: 2000ms;
   --intro-duration: 2000ms;
   --easing: cubic-bezier(0.13, 0.58, 0.18, 1);
-  --base-transition: all var(--duration) var(--easing);//, opacity var(--duration) var(--easing);
+  --base-transition: all var(--duration) var(--easing); //, opacity var(--duration) var(--easing);
   --hover-transition: all var(--hover-duration) var(--easing);
   --page-transition: all var(--page-duration) var(--easing),
     opacity var(--page-duration) var(--easing);
@@ -139,9 +138,6 @@ $justify: (
   margin: 0;
   padding: 0;
   position: relative;
-  font-weight: inherit;
-  font-size: inherit;
-  color: inherit;
 
   &::-webkit-scrollbar {
     display: none;
@@ -153,8 +149,13 @@ body,
 #app {
   @include scroll-bar;
   @include size(100%, 100vh);
-  overflow-x: hidden;
+  overflow: hidden;
+
   // overflow: hidden;
+}
+
+html {
+  /* background: rgba(black, 0.5); */
 }
 
 body {
@@ -179,7 +180,7 @@ body {
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: all var(--page-duration) var(--easing);
+  transition: all 750ms var(--easing);
 }
 
 .fade-enter-from,
@@ -189,7 +190,7 @@ body {
 
 .page-enter-active,
 .page-leave-active {
-  transition: all var(--page-duration) var(--easing);
+  transition: all 1000ms var(--easing);
 }
 
 .page-enter-from,

@@ -48,9 +48,12 @@ export default defineConfig({
       scss: {
         additionalData: `
           @use 'sass:math';
-          @use './src/styles/imports.scss' as *;
-          @import './src/styles/functions/units.scss';
-          @import './src/styles/functions/spacer.scss';
+          @use './src/styles/mixins/center.scss' as *;
+          @use './src/styles/mixins/type.scss' as *;
+          @use "@wearekaleidosync/sass" as *;
+          @use './src/styles/functions/units.scss' as *;
+          @use './src/styles/functions/spacer.scss' as *;
+
         `
       }
     }

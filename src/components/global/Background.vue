@@ -1,15 +1,14 @@
 <template>
   <Shader
-    v-if="viewport.refreshRate"
+    class="background"
     ref="shader"
-    position="fixed"
-    :animate="false"
     :shader="background.shader"
     :uniforms="background.uniforms"
     :width="viewport.width"
+    :stream="background.stream"
+    :volume="background.volume"
     :height="viewport.height"
     :dpr="viewport.dpr"
-    :scroll="background.scroll"
   />
 </template>
 
@@ -20,16 +19,25 @@ const viewport = useViewport()
 const background = useBackground()
 
 onMounted(() => {
+  raf.remove('background')
   raf.add(
-    {
-      tick({ now }: { now: DOMHighResTimeStamp }) {
-        background.tick(now)
-        shader.value.instance.stream = background.stream
-        shader.value.instance.volume = background.volume
-        shader.value.instance.tick(window.performance.now())
-      }
+    () => {
+      background.tick()
+      if (!shader.value.instance) return
     },
-    'background'
+    { id: 'background' }
   )
 })
+
+onBeforeUnmount(() => {
+  raf.remove('background')
+})
 </script>
+
+<style lang="scss" scoped>
+.background {
+  z-index: 0;
+  mix-blend-mode: exclusion;
+  pointer-events: none;
+}
+</style>

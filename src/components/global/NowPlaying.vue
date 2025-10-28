@@ -10,7 +10,7 @@
       <button :class="{ visible: background.playing }" @click="background.pause()">
         <PauseIcon />
       </button>
-      <button :class="{ visible: !background.playing }" @click="background.init()">
+      <button :class="{ visible: !background.playing }" @click="background.play()">
         <PlayIcon />
       </button>
       <img :src="src" :alt="alt" />
@@ -19,8 +19,8 @@
 </template>
 
 <script lang="ts" setup>
-import PlayIcon from '@/assets/svg/play.svg'
-import PauseIcon from '@/assets/svg/pause.svg'
+import PlayIcon from '../../assets/svg/play.svg'
+import PauseIcon from '../../assets/svg/pause.svg'
 
 const background = useBackground()
 const props = defineProps<{
@@ -78,11 +78,7 @@ figure {
     overflow: hidden;
     &:before {
       @include position(absolute, 0 0 0 0);
-      background: linear-gradient(
-        to top right,
-        rgba(map-get($colors, 'blue'), 0.2),
-        rgba(map-get($colors, 'pink'), 0.6)
-      );
+      background: linear-gradient(to top right, rgba($blue, 0.5), rgba($pink, 0.5));
       content: '';
       z-index: 10;
     }

@@ -1,7 +1,6 @@
 import type { Coords2D } from '@/interfaces/animations'
 import type { ComputedRef, Ref } from 'vue'
 import { acceptHMRUpdate, defineStore } from 'pinia'
-import { determineRefreshRate } from '@/util/monitor'
 
 export const MOBILE_BREAKPOINT: number = 320
 export const TABLET_BREAKPOINT: number = 768
@@ -32,10 +31,6 @@ export const useViewport = defineStore('viewport', () => {
   const fullScreen = ref(false)
   const mouseProgress = ref(1)
   const tv = ref(`${navigator.userAgent}`.toUpperCase().includes('WEBOS'))
-
-  determineRefreshRate().then((val: number) => {
-    if (val !== Infinity) refreshRate.value = val
-  })
 
   const orientation: ComputedRef<'LANDSCAPE' | 'PORTRAIT'> = computed(() => {
     if (width.value >= height.value) return 'LANDSCAPE'
@@ -88,11 +83,11 @@ export const useViewport = defineStore('viewport', () => {
   const setBreakpoint = () => {
     if (mobile.value) {
       if (portrait.value) {
-        return setScale(2);
+        return setScale(2)
       }
 
       if (landscape.value) {
-        return setScale(.8)
+        return setScale(0.8)
       }
     }
 
@@ -118,41 +113,6 @@ export const useViewport = defineStore('viewport', () => {
     mouse.value = coords
   }
 
-  // 'ontouchstart' in window &&
-  //   (() => {
-  //     window.addEventListener('touchstart', ({ pageX, pageY }: any) => {
-  //       pointerMove(pageX, pageY)
-  //     })
-
-  //     window.addEventListener('touchmove', ({ pageX, pageY }: any) => {
-  //       pointerMove(pageX, pageY)
-  //     })
-  //   })()
-
-  // !('ontouchstart' in window) &&
-  //   (() => {
-  //     window.addEventListener('click', ({ pageX, pageY }: any) => {
-  //       pointerMove(pageX, pageY)
-  //     })
-
-  //     window.addEventListener('mousemove', ({ pageX, pageY }: any) => {
-  //       pointerMove(pageX, pageY)
-  //     })
-  //   })()
-
-  // window.addEventListener(
-  //   'wheel',
-  //   (e: any) => {
-  //     if (keyboard.pressed.value.includes(18)) {
-  //       e.preventDefault()
-  //       wheelX.value = e.deltaX
-  //     }
-  //   },
-  //   {
-  //     passive: false
-  //   }
-  // )
-
   const set = () => {
     const w = window.innerWidth
     const h = window.innerHeight
@@ -168,27 +128,6 @@ export const useViewport = defineStore('viewport', () => {
 
   window.addEventListener('resize', () => set())
   window.addEventListener('orientationchange', () => set())
-
-  window.addEventListener('keydown', (e: any) => {
-    if (e.key === 'Escape' || keyboard?.pressed?.value?.includes?.(18)) {
-      e.stopImmediatePropagation()
-      e.preventDefault()
-    }
-
-    if (Array.isArray(keyboard.pressed.value)) {
-      keyboard.pressed.value = [...new Set([...keyboard.pressed.value, e.keyCode])]
-    } else {
-      keyboard.pressed.value = [e.keyCode]
-    }
-  })
-
-  window.addEventListener('keyup', (e: any) => {
-    if (Array.isArray(keyboard.pressed?.value)) {
-      keyboard.pressed.value = keyboard.pressed.value.filter((v) => v !== e.keyCode)
-    } else {
-      keyboard.pressed.value = []
-    }
-  })
 
   return {
     width,

@@ -1,152 +1,58 @@
 <template>
-  <div class="container" ref="container" :class="{ open: ui.menuOpen, visible }" @click="toggle">
-    <Logo class="logo" />
+  <div class="logo" :class="{ active }">
+    <svg ref="svg" :viewBox="viewBox" :xmlns="xmlns">
+      <path ref="path" :d="d" :stroke-dasharray="pathLength" :stroke-dashoffset="pathLength" />
+    </svg>
   </div>
-
-  <nav :class="{ visible: ui.menuOpen }" @click="toggle">
-    <RouterLink to="/">
-      <H2>Home</H2>
-    </RouterLink>
-    <RouterLink to="/work">
-      <H2>Work</H2>
-    </RouterLink>
-
-    <RouterLink to="/contact">
-      <H2>Contact</H2>
-    </RouterLink>
-  </nav>
 </template>
 
 <script setup lang="ts">
-import Logo from '@/assets/svg/logo.svg?component'
+const svg = ref<SVGSVGElement | null>(null)
+const path = ref<SVGPathElement | null>(null)
+const xmlns = `http://www.w3.org/2000/svg`
+const viewBox = `23.403 24.491 323.086 453.476`
+const d = `M 39.64 279.401 C 39.64 279.401 540.9 -257.03 145.766 309.258 C 225.811 277.968 339.803 322.544 246.054 433.458 C 175.099 517.367 225.077 320.709 330.275 258.057`
+const pathLength = ref(0)
+const active = ref(false)
 
-defineProps<{ visible: boolean }>()
-
-const ui = useUI()
-const container = ref()
-
-function toggle() {
-  ui.menuOpen = !ui.menuOpen
-}
+onMounted(() => {
+  if (path.value) {
+    pathLength.value = path.value.getTotalLength()
+  }
+})
 </script>
 
 <style lang="scss" scoped>
-.container {
-  @include position(
-    fixed,
-    var(--outer-padding) null null calc(var(--outer-padding) + #{notch(left)})
-  );
-  @include size(px(120));
-  @include shadow;
+.logo {
+  @include position(fixed, 50% null null 50%);
   @include flex;
-  border-radius: var(--border-radius);
-  padding: px(10);
-  background: var(--black);
-  z-index: 200;
-  will-change: transform, opacity;
-  opacity: 0;
-
-  &.visible {
-    opacity: 1 !important;
-
-    :deep(*) {
-      opacity: 1 !important;
-    }
-  }
-
-  @include mobile-landscape {
-    @include size(px(150));
-  }
-
-  svg {
-    @include size(90%);
-    transition: all var(--duration) var(--easing);
-    position: relative;
-    z-index: 2;
-
-    :deep(*) {
-      transition: all var(--duration) var(--easing);
-    }
-  }
-
-  :deep(*) {
-    stroke: var(--white);
-  }
-
-  &:hover, &.open {
-    svg :deep(*) {
-      stroke: var(--pink);
-    }
-
-    svg :deep(*) {
-      stroke: var(--white);
-    }
-
-    background: lighten(map-get($colors, 'black'), 5%);
-  }
-
-  &:active svg {
-    transform: scale(0.8);
-  }
-}
-
-nav {
-  @include position(fixed, 0 null 0 0);
-  @include flex(flex-start, center, column);
-  width: var(--page-shift);
-  padding-left: calc(var(--outer-padding) + #{notch(left)});
-  transform: translateX(-50%);
-  gap: var(--outer-padding);
-  z-index: 100;
+  @include size(20rem);
+  transform: translateY(-50%) translateX(-50%);
+  z-index: 20;
+  border-radius: 100%;
   pointer-events: none;
-  transition: var(--base-transition);
-  opacity: 0;
-  background: linear-gradient(to right, rgba(map-get($colors, 'black'), 1), rgba(map-get($colors, 'black'), 0));
+  will-change: transform, opacity;
 
-  &.visible {
-    pointer-events: all;
-    transform: translateX(0%);
-    opacity: 1;
-  }
-
-  &.visible:before {
-    @include position(fixed, calc(-1 * var(--outer-padding)) 0 0 calc(-1 * var(--outer-padding)));
-    width: calc(100vw + 2 * var(--outer-padding));
-    height: calc(100vh + 2 * var(--outer-padding));
-    content: '';
-    background: var(--white);
-    z-index: 1;
-    transform-origin: top left;
-    transition: var(--base-transition);
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  a {
-    transition: var(--hover-transition);
-  }
-
-  :deep(a) {
-    text-decoration: none;
-    color: var(--white);
-    text-transform: none;
-  }
-
-  a:hover {
-    color: var(--pink);
+  &.active {
+    border-color: rgba($white, 0.26);
   }
 }
 
-h1 {
-  @include type(60, 60, 400);
-  transition: var(--hover-transition);
+svg {
+  @include size(25rem, auto);
+}
 
-  &:active {
-    transform: scale(0.9);
-  }
+path {
+  stroke: rgba(255, 255, 255, 1);
+  stroke-width: 0.1rem;
+  animation: draw 750ms var(--easing) forwards;
+  background-color: transparent;
+  fill: none;
+}
 
-  @include mobile-portrait {
-    @include type(100, 100, 400);
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
   }
 }
 </style>

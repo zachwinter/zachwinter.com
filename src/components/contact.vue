@@ -1,0 +1,61 @@
+<template>
+  <section>
+    <div>
+      <H2
+        >tell<br />
+        me<br />
+        your<br />
+        secrets</H2
+      >
+      <nav>
+        <a href="mailto:contact@zachwinter.com" target="email">Email</a>
+        <a href="tel:8508428313">Phone</a>
+        <a href="https://telegram.me/yozic" target="telegram">Telegram</a>
+        <a href="https://www.instagram.com/zachary.io" target="instagram">Instagram</a>
+      </nav>
+    </div>
+  </section>
+</template>
+
+<style lang="scss" scoped>
+section {
+  @include size(100vw, 100vh);
+  @include flex;
+  @include scroll-bar;
+  padding-left: notch(left);
+}
+
+nav {
+  // @include flex(center, flex-start, row);
+  width: 100%;
+  gap: var(--base-spacer);
+  padding: var(--outer-padding);
+}
+
+h2 {
+  width: 100%;
+  padding: var(--outer-padding);
+  font-weight: 700;
+}
+
+a {
+  font-family: 'Red Hat Mono';
+  text-decoration: none;
+  transform: none;
+  font-weight: 300;
+  // text-transform: uppercase;
+  background-color: var(--white);
+  padding: px(10) px(20);
+  font-size: px(22);
+  color: rgba(0, 0, 0, 0.5);
+  transition: var(--hover-transition);
+
+  &:hover {
+    color: var(--pink) !important;
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+}
+</style>
