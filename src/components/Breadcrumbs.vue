@@ -1,7 +1,6 @@
 <template>
   <nav>
     <fieldset>
-      <legend>work</legend>
       <a @click="$emit('select', 1)" :class="{ active: section === 1 }">kaleidosync</a>
       <a @click="$emit('select', 2)" :class="{ active: section === 2 }">covid-usa</a>
       <nav :class="{ visible: section === 2 }">
@@ -10,7 +9,8 @@
         <a @click="$emit('select-covid', 2)">12/25/2021</a>
       </nav>
     </fieldset>
-    <a @click="$emit('select', 3)" :class="{ active: section === 3 }">contact</a>
+    <a @click="$emit('select', 3)" :class="{ active: section === 3 }">mindful service foundation</a>
+    <a @click="$emit('select', 4)" :class="{ active: section === 4 }">contact</a>
   </nav>
 </template>
 
@@ -21,19 +21,21 @@ defineEmits(['select', 'select-covid'])
 
 <style lang="scss" scoped>
 nav {
-  @include position(fixed, null null 1rem 1rem);
-  @include flex-column(start, start);
+  @include position(fixed, null 1rem 1rem null);
+  @include flex-column(end, end);
   z-index: 9999;
-  /* transform: translateY(-50%); */
+  width: fit-content;
 
   nav {
-    @include flex-row;
+    @include flex-row(end, end);
+    margin-left: auto;
     position: static;
     transform: none;
     height: 0;
     transition: all 350ms var(--easing);
     opacity: 0;
     font-size: 0.8rem;
+    overflow: hidden;
 
     &.visible {
       height: 2rem;
@@ -66,13 +68,15 @@ a {
 
 fieldset,
 legend {
-  @include flex-column(start, start);
+  @include flex-column(end, end);
   border: 0;
   padding: 0;
   margin: 0;
+  margin-left: auto;
+  width: fit-content;
 }
 
 fieldset {
-  @include box(0.5 0, 0);
+  /* @include box(0.5 0, 0); */
 }
 </style>

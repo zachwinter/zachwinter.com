@@ -22,7 +22,7 @@ main {
   @include position(fixed, 0 null null 0);
   overflow: hidden;
   background: var(--black);
-  z-index: 2000;
+  z-index: 10000;
 }
 
 .spinner {

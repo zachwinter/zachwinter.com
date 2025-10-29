@@ -10,21 +10,33 @@
 
       <Section class="images">
         <header>
-          <img src="/kaleidosync.png" class="icon" />
           <h2>Kaleidosync</h2>
           <p>a webgl music visualizer</p>
         </header>
         <Scroller>
-          <img src="/screenshots/kaleidosync.01.png" />
-          <img src="/screenshots/kaleidosync.02.png" />
-          <img src="/screenshots/kaleidosync.03.png" />
-          <img src="/screenshots/kaleidosync.04.png" />
+          <img class="right" src="/screenshots/kaleidosync.01.png" />
+          <img class="right" src="/screenshots/kaleidosync.02.png" />
+          <img class="full" src="/screenshots/kaleidosync.03.png" />
+          <img class="left" src="/screenshots/kaleidosync.04.png" />
           <img src="/screenshots/kaleidosync.05.png" />
         </Scroller>
       </Section>
       <Section>
         <Map ref="covid" />
       </Section>
+      <Section class="images">
+        <header>
+          <h2>MSF</h2>
+          <p>a nonprofit recovery housing program</p>
+        </header>
+        <Scroller>
+          <img src="/screenshots/msf.01.jpg" class="full" />
+          <img src="/screenshots/msf.02.jpg" />
+          <img src="/screenshots/msf.03.jpg" />
+          <img src="/screenshots/msf.04.jpg" class="full" />
+        </Scroller>
+      </Section>
+
       <Contact />
     </Scroller>
   </main>
@@ -85,11 +97,42 @@ img {
 }
 
 .images {
-  margin-left: auto;
   width: 80vw;
 
   @include mobile {
     width: 100vw;
+  }
+
+  img {
+    /* transform: scale(0.98); */
+  }
+
+  section {
+    /* @include size(100vw); */
+
+    img {
+      @include size(100%, auto);
+    }
+
+    @include mobile {
+      @include size(100vw, auto);
+
+      img.left {
+        margin-left: auto;
+      }
+
+      img.right {
+        margin-right: auto;
+      }
+      img.full {
+        width: 100%;
+        height: auto;
+      }
+
+      img {
+        @include size(100%, auto);
+      }
+    }
   }
 }
 

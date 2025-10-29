@@ -7,6 +7,8 @@ import Sprite, { type Artboard, type SpriteOptions } from './Sprite'
 import { TWO_PI } from '../util/canvas'
 import { interpolateNumber, interpolateZoom } from 'd3-interpolate'
 import { ease } from '../util/easing'
+import DatumComputeShader from './DatumComputeShader'
+import { perfMonitor } from '../util/performance'
 type CanvasName = 'map' | 'datums' | 'cursor'
 type Canvases = Record<CanvasName, HTMLCanvasElement>
 type SpriteName = 'map' | 'datum'
@@ -110,6 +112,11 @@ export default class CovidMap {
   private dataBuffer: Float32Array | null = null
   private stateBuffer: Map<string, Float32Array> = new Map()
 
+  // GPU compute shader (progressive enhancement)
+  private computeShader: DatumComputeShader | null = null
+  private useGPU: boolean = false
+  public gpuEnabled: boolean = false
+
   constructor({ canvases, onMouseMove, hideToolTip, onZoom }: MapConfig) {
     this.locations = []
     this.totalLocations = 0
@@ -160,6 +167,24 @@ export default class CovidMap {
     }
 
     this.raf = requestAnimationFrame(tick)
+
+    // Try to initialize GPU compute shader
+    this.initGPU()
+  }
+
+  async initGPU() {
+    try {
+      this.computeShader = new DatumComputeShader()
+      const initialized = await this.computeShader.init()
+      if (initialized) {
+        console.log('[CovidMap] GPU compute shader available')
+        this.gpuEnabled = true
+      }
+    } catch (error) {
+      console.log('[CovidMap] GPU compute shader unavailable, using CPU fallback')
+      this.computeShader = null
+      this.gpuEnabled = false
+    }
   }
 
   async fetchData() {
@@ -202,6 +227,13 @@ export default class CovidMap {
     this.coords = this.calculateDatumCoordinates()
     this.transformedCoords = this.transformDatumCoordinates()
     this.resetZoom()
+
+    // Setup GPU compute shader if available
+    if (this.computeShader && this.gpuEnabled) {
+      // await this.computeShader.setup(this.totalLocations)
+      // this.useGPU = true
+      // console.log('[CovidMap] GPU compute enabled for', this.totalLocations, 'datums')
+    }
   }
 
   tick() {
@@ -530,9 +562,17 @@ export default class CovidMap {
       const [width, height] = this.size
       this.state.transform = transform
       this.transformedCoords = this.transformDatumCoordinates()
+
       this.ctx.cursor.clearRect(0, 0, width, height)
 
-      this.frame()
+      // Always repaint the map
+      this.paintMap()
+
+      // If tweening, let the tween loop handle datums
+      // Otherwise paint immediately
+      if (!this.tweening) {
+        this.paintDatums()
+      }
 
       // Emit zoom state
       this.onZoom({
@@ -543,11 +583,11 @@ export default class CovidMap {
     })
 
     _zoom.filter(function (e) {
-      if (typeof TouchEvent !== 'undefined' && e instanceof TouchEvent) {
-        return e.touches.length > 1
-      }
-
-      return true
+      // if (typeof TouchEvent !== 'undefined' && e instanceof TouchEvent) {
+      //   return e.touches.length > 1
+      // }
+      // return true
+      return false
     })
 
     _zoom.touchable()
@@ -775,19 +815,94 @@ export default class CovidMap {
     map.restore()
   }
 
-  calculateDatumSizes() {
-    console.log('Map.ts:calculateDatumSizes()')
-    this.last = this.next
-    const next: number[] = new Array(this.totalLocations).fill(0)
-    for (let i = 0; i < this.totalLocations; i++) {
-      const size = this.getDatumBaseSize(i)
-      if (!Number.isFinite(size)) {
-        next[i] = 0
-      } else {
-        next[i] = Math.max(size, 0)
+  async calculateDatumSizes() {
+    console.log('Map.ts:calculateDatumSizes()', this.useGPU ? '[GPU]' : '[CPU]')
+
+    // Store last state BEFORE calculating new values
+    // This is critical for interpolation!
+    if (!this.last || this.last.length === 0) {
+      this.last = new Array(this.totalLocations).fill(0)
+    } else {
+      this.last = [...this.next]
+    }
+
+    // GPU path
+    if (this.useGPU && this.computeShader) {
+      try {
+        await perfMonitor.measure('calculateDatumSizes', 'GPU', async () => {
+          const result = await this.calculateDatumSizesGPU()
+          if (result) {
+            this.next = Array.from(result.sizes)
+            this.transformedCoords = []
+            for (let i = 0; i < this.totalLocations; i++) {
+              this.transformedCoords.push([
+                result.transformedCoords[i * 2],
+                result.transformedCoords[i * 2 + 1]
+              ])
+            }
+          }
+        })
+        return
+      } catch (error) {
+        console.warn('[CovidMap] GPU compute failed, falling back to CPU:', error)
+        this.useGPU = false
       }
     }
-    this.next = next
+
+    // CPU fallback
+    await perfMonitor.measure('calculateDatumSizes', 'CPU', () => {
+      const next: number[] = new Array(this.totalLocations).fill(0)
+      for (let i = 0; i < this.totalLocations; i++) {
+        const size = this.getDatumBaseSize(i)
+        if (!Number.isFinite(size)) {
+          next[i] = 0
+        } else {
+          next[i] = Math.max(size, 0)
+        }
+      }
+      this.next = next
+      this.transformedCoords = this.transformDatumCoordinates()
+    })
+  }
+
+  async calculateDatumSizesGPU() {
+    if (!this.computeShader || !this.today) return null
+
+    // Prepare input data
+    const coords = new Float32Array(this.totalLocations * 2)
+    const values = new Float32Array(this.totalLocations)
+    const populations = new Float32Array(this.totalLocations)
+
+    for (let i = 0; i < this.totalLocations; i++) {
+      const coord = this.coords[i]
+      if (coord) {
+        coords[i * 2] = coord[0]
+        coords[i * 2 + 1] = coord[1]
+      }
+
+      const location = this.locations[i]
+      const offset = i * 3
+      values[i] = this.today[offset + this.state.datasetIndex]
+      populations[i] = location.population
+    }
+
+    const transform = new Float32Array([
+      this.state.transform.x,
+      this.state.transform.y,
+      this.state.transform.k
+    ])
+
+    // Execute GPU compute
+    const result = await this.computeShader.compute(
+      { coords, values, populations, transform },
+      {
+        perCapita: this.state.perCapita,
+        datasetIndex: this.state.datasetIndex,
+        viewport: [this.size[0], this.size[1]]
+      }
+    )
+
+    return result
   }
 
   paintDatums() {
@@ -893,5 +1008,6 @@ export default class CovidMap {
   destroy() {
     console.log('destroy()')
     cancelAnimationFrame(this.raf)
+    this.computeShader?.destroy()
   }
 }

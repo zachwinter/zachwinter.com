@@ -108,6 +108,10 @@ onMounted(() => {
     @include flex(center, space-between, row);
     width: 100%;
   }
+
+  @include mobile {
+    display: none;
+  }
 }
 
 .key {

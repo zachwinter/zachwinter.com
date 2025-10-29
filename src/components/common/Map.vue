@@ -1,17 +1,19 @@
 <template>
-  <figure ref="container" class="container" @mouseout="hideToolTip" @click="selectCounty">
-    <canvas ref="map" class="map" :width="width" :height="height" :style="css" />
-    <canvas ref="datums" class="datums" :width="width" :height="height" :style="css" />
-    <canvas ref="cursor" class="cursor" :width="width" :height="height" :style="css" />
-    <ToolTip
-      :visible="tooltip.visible"
-      :coords="tooltip.coords"
-      :datum="tooltip.datum"
-      :dataset-index="tooltip.datasetIndex"
-      :deltas="tooltip.deltas"
-      :state="tooltip.state"
-    />
-  </figure>
+  <Section class="outer">
+    <figure ref="container" class="container" @mouseout="hideToolTip" @click="selectCounty">
+      <canvas ref="map" class="map" :width="width" :height="height" :style="css" />
+      <canvas ref="datums" class="datums" :width="width" :height="height" :style="css" />
+      <canvas ref="cursor" class="cursor" :width="width" :height="height" :style="css" />
+      <ToolTip
+        :visible="tooltip.visible"
+        :coords="tooltip.coords"
+        :datum="tooltip.datum"
+        :dataset-index="tooltip.datasetIndex"
+        :deltas="tooltip.deltas"
+        :state="tooltip.state"
+      />
+    </figure>
+  </Section>
 </template>
 
 <script setup lang="ts">

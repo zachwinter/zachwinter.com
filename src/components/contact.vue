@@ -63,14 +63,15 @@ a {
   }
 }
 
-@media (max-width: 768px) {
+@include mobile {
   h2 {
     font-size: 1.5rem;
     line-height: 1;
   }
 
   nav {
-    @include flex-column(center, start);
+    @include flex-row(center, start);
+    flex-wrap: wrap;
   }
 
   a {
