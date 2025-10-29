@@ -22,6 +22,10 @@
         </Scroller>
       </Section>
       <Section>
+        <header>
+          <h2>COVID-USA</h2>
+          <p>county-level active cases per capita</p>
+        </header>
         <Map ref="covid" />
       </Section>
       <Section class="images">
@@ -87,6 +91,9 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+main {
+  mix-blend-mode: exclusion;
+}
 * {
   font-family: 'Space Mono';
   font-weight: 400;
