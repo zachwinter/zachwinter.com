@@ -26,7 +26,7 @@ onMounted(() => {
 
 html,
 body {
-  width: 100vh;
+  width: 100%;
   overflow-x: hidden;
 }
 </style>

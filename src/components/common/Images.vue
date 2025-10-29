@@ -168,7 +168,7 @@ figure {
 }
 
 .outer {
-  @include size(100vw, 100vh);
+  @include size(100vw, 100%);
   @include flex;
 }
 

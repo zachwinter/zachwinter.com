@@ -7,7 +7,9 @@
       <ul class="tags">
         <li v-for="(tag, i) in visibleItem?.tags || []">{{ tag }}</li>
       </ul>
-      <Button class="visit"><a :href="visibleItem?.link" :target="visibleItem?.title">Visit Project</a></Button>
+      <Button class="visit"
+        ><a :href="visibleItem?.link" :target="visibleItem?.title">Visit Project</a></Button
+      >
     </header>
     <section v-if="content === null" class="screenshots">
       <img v-for="(image, i) in visibleItem?.images || []" :src="image" />
@@ -50,7 +52,7 @@ const $emit = defineEmits(['close'])
 
 <style lang="scss" scoped>
 .view.expanded-work-item {
-  @include position(fixed, 100vh 0 0 0);
+  @include position(fixed, 100% 0 0 0);
   @include scroll-bar;
   display: block;
   padding: 0;
@@ -107,7 +109,7 @@ h1 {
 .visit {
   margin-top: calc(2 * var(--base-spacer));
   padding: 0;
-  
+
   a {
     @include size(100%);
     display: inline-block;

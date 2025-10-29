@@ -12,6 +12,7 @@ export const useBackground = defineStore('background', () => {
   const variant = ref(2)
   const scrollY = ref(0)
   const stream = ref(1)
+  const viewport = useViewport()
   const volume = ref(1)
   const shader = ref(DEFAULT_SKETCH.shader)
   const uniforms = ref(
@@ -30,6 +31,7 @@ export const useBackground = defineStore('background', () => {
   )
 
   watch(scrollY, (val) => {
+    if (viewport.mobile) return
     uniforms.value[1][2][0] = -val
   })
 

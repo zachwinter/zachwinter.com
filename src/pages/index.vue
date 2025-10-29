@@ -59,7 +59,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 main {
-  @include size(100vw, 100vh);
+  @include size(100vw, 100%);
   overflow-x: hidden;
   overflow-y: scroll;
 }

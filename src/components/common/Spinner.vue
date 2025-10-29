@@ -17,7 +17,7 @@
 }
 
 main {
-  @include size(100vw, 100vh);
+  @include size(100vw, 100%);
   @include flex;
   @include position(fixed, 0 null null 0);
   overflow: hidden;

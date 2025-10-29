@@ -19,7 +19,7 @@
 
 <style lang="scss" scoped>
 section {
-  @include size(100vw, 100vh);
+  @include size(100vw, 100%);
   @include flex;
   @include scroll-bar;
   padding-left: notch(left);

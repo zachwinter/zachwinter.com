@@ -11,7 +11,7 @@ const view = ref<HTMLElement | null>(null)
 <style lang="scss" scoped>
 main {
   @include position(fixed, 0 null null 0);
-  @include size(100vw, 100vh);
+  @include size(100vw, 100%);
   @include scroll-bar;
   overflow-y: scroll;
 }

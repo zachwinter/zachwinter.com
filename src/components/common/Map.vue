@@ -167,7 +167,7 @@ onBeforeUnmount(() => {
 
 <style lang="scss" scoped>
 figure.container {
-  @include size(100vw, 100vh);
+  @include size(100vw, 100%);
   pointer-events: none !important;
 }
 

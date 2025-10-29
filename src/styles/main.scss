@@ -148,7 +148,7 @@ html,
 body,
 #app {
   @include scroll-bar;
-  @include size(100%, 100vh);
+  @include size(100%, 100%);
   overflow: hidden;
 
   // overflow: hidden;

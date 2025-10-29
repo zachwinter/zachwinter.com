@@ -24,7 +24,7 @@ function onUpdate(e) {
 
 <style lang="scss" scoped>
 .editor {
-  @include size(100vw, 100vh);
+  @include size(100vw, 100%);
   display: flex;
   align-items: center;
 }
