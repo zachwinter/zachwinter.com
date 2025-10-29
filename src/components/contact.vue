@@ -72,5 +72,9 @@ a {
   nav {
     @include flex-column(center, start);
   }
+
+  a {
+    border-right: 1px solid rgba($purple, 0.25);
+  }
 }
 </style>
