@@ -29,13 +29,13 @@ nav {
   // @include flex(center, flex-start, row);
   width: 100%;
   gap: var(--base-spacer);
-  padding: var(--outer-padding);
+  padding: 1rem;
 }
 
 h2 {
   width: 100%;
-  padding: var(--outer-padding);
-  font-weight: 700;
+  font-weight: 400;
+  padding: 1rem;
 }
 
 a {
@@ -43,12 +43,16 @@ a {
   text-decoration: none;
   transform: none;
   font-weight: 300;
-  // text-transform: uppercase;
-  background-color: var(--white);
   padding: px(10) px(20);
   font-size: px(22);
-  color: rgba(0, 0, 0, 0.5);
+  color: $purple;
+  border: 1px solid rgba($purple, 0.25);
   transition: var(--hover-transition);
+  border-right: 0;
+
+  &:last-of-type {
+    border-right: 1px solid rgba($purple, 0.25);
+  }
 
   &:hover {
     color: var(--pink) !important;
@@ -56,6 +60,17 @@ a {
 
   &:active {
     transform: scale(0.9);
+  }
+}
+
+@media (max-width: 768px) {
+  h2 {
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  nav {
+    @include flex-column(center, start);
   }
 }
 </style>

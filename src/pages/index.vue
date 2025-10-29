@@ -25,7 +25,7 @@ const viewport = useViewport()
 const scrollTop = ref(0)
 const container = ref()
 const msf = ref({
-  title: 'Mindful Service Foundation',
+  title: 'MSF',
   images: [
     '/screenshots/msf.01.jpg',
     '/screenshots/msf.02.jpg',
@@ -60,6 +60,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 main {
   @include size(100vw, 100vh);
+  overflow-x: hidden;
   overflow-y: scroll;
 }
 

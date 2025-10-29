@@ -23,4 +23,10 @@ onMounted(() => {
 
 <style lang="scss">
 @import '@/styles/main.scss';
+
+html,
+body {
+  width: 100vh;
+  overflow-x: hidden;
+}
 </style>

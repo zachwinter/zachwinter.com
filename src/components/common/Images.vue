@@ -8,7 +8,7 @@
           <i />
         </figure>
 
-        <div>
+        <div class="title-link">
           <span class="title">{{ title }}</span>
           <span class="link">{{ link }}</span>
         </div>
@@ -36,13 +36,13 @@ defineProps<{
 </script>
 
 <style lang="scss" scoped>
-$header-height: 3rem;
+$header-height: 2rem;
 $border: none; //px(5) solid rgba(0, 0, 0, .1);
 
 .container {
   @include size(75vw, calc((9 / 16 * 75vw) + #{$header-height}));
   @include shadow;
-  position: realtive;
+  position: relative;
   margin: 0 auto;
   flex-shrink: 0;
   padding-top: $header-height;
@@ -58,18 +58,8 @@ $border: none; //px(5) solid rgba(0, 0, 0, .1);
   color: white;
 
   @include mobile-portrait {
-    @include size(100%, auto);
-    margin-right: 0;
-    margin-top: var(--outer-padding);
+    @include size(calc(100% - 2rem), auto);
     padding-left: 0;
-    border-radius: var(--border-radius);
-  }
-
-  @include mobile-landscape {
-    @include size(calc(50vw), calc((9 / 16 * calc(50vw)) + #{$header-height}));
-    border-top-right-radius: var(--border-radius);
-    border-bottom-right-radius: var(--border-radius);
-    margin-right: notch(right);
   }
 }
 
@@ -180,5 +170,17 @@ figure {
 .outer {
   @include size(100vw, 100vh);
   @include flex;
+}
+
+.title {
+  display: none;
+
+  @media (min-width: 768px) {
+    display: flex;
+  }
+}
+
+.title-link {
+  @include flex-row;
 }
 </style>
