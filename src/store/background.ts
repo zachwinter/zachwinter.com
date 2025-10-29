@@ -11,6 +11,7 @@ export const useBackground = defineStore('background', () => {
   const navigation = useNavigation()
   const variant = ref(2)
   const scrollY = ref(0)
+  const scrollX = ref(0)
   const stream = ref(1)
   const viewport = useViewport()
   const volume = ref(1)
@@ -35,16 +36,21 @@ export const useBackground = defineStore('background', () => {
     uniforms.value[1][2][0] = -val
   })
 
+  watch(scrollX, (val) => {
+    if (viewport.mobile) return
+    uniforms.value[2][2][0] = val
+  })
+
   function tweenToVariant(variantIndex: number, duration: number = 1500) {
     const from = uniforms.value.map((u: any) => [u[0], u[1], u[2]])
     const to = (DEFAULT_SKETCH as any).uniforms.map((u: any) => [u[0], u[1], u[2][variantIndex]])
     const interpolators = buildInterpolators(from, to)
     variant.value = variantIndex
-    console.log(variantIndex)
     raf.remove('variant')
     raf.add(
       (_, progress) => {
         interpolators.map((v, i) => {
+          if (uniforms.value[i][0] === 'scrollY' || uniforms.value[i][0] === 'scrollX') return
           const val = v(progress)
           uniforms.value[i][2] = val
         })
@@ -82,6 +88,7 @@ export const useBackground = defineStore('background', () => {
     play,
     pause,
     scrollY,
+    scrollX,
     setUniform
   }
 })

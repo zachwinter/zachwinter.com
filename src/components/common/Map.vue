@@ -80,21 +80,30 @@ function onMouseMove({ coords, datum }: any): void {
   if (!datum) return
 
   tooltip.value.datum.values = app.value?.getCountyValuesByFips(datum.fips)
-  tooltip.value.deltas = app.value?.getCountyDeltasByFips(datum.fips)
+  tooltip.value.deltas = app.value?.getCountyDeltasByFips(datum.fips)!
   tooltip.value.state = app.value?.getStateDataByFips(datum.stateFips)
 
   emit('hover', datum)
 
   showToolTip()
-  app.value?.paint()
+  app.value?.paintCursor()
 }
 
+let forceHide = false
+let timeout: any
+
 function showToolTip() {
+  if (forceHide) return
   tooltip.value.visible = true
 }
 
 function hideToolTip() {
   tooltip.value.visible = false
+  forceHide = true
+  clearTimeout(timeout)
+  timeout = setTimeout(() => {
+    forceHide = false
+  }, 150)
 }
 
 function selectCounty() {
@@ -112,7 +121,17 @@ function onZoom({ x, y, k }: { x: number; y: number; k: number }) {
 }
 
 const interval = shallowRef<any>()
-const examples = ['11052020', '08172021', '12252021', '09012022']
+const examples = ['11052020', '08172021', '12252021']
+const locs = ['46009', '28099', '36061']
+
+function selectExample(i: number) {
+  app.value!.chooseExample(examples[i])
+  app.value!.focusDatumByFIPS(locs[i])
+}
+
+defineExpose({
+  selectExample
+})
 
 async function init() {
   const { width, height } = container.value.getBoundingClientRect()
@@ -133,24 +152,11 @@ async function init() {
     onZoom
   })
 
-  // Fetch data and initialize
   await app.value.fetchData()
 
-  const locs = ['46009', '28099', '36061']
   initialized.value = true
 
-  let i = 0
-
-  // Go to first example and focus
-  app.value.chooseExample(examples[i])
-  app.value.focusDatumByFIPS(locs[i])
-
-  interval.value = setInterval(() => {
-    i++
-    if (i === locs.length) i = 0
-    app.value?.chooseExample(examples[i])
-    app.value?.focusDatumByFIPS(locs[i])
-  }, 4000)
+  selectExample(0)
 }
 
 onMounted(() => {
@@ -168,21 +174,23 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
 figure.container {
   @include size(100vw, 100vh);
-  pointer-events: none !important;
+  position: relative;
 }
 
 canvas {
-  @include position(absolute, 0 null null 0);
-
   display: block;
 
   &.map {
     z-index: 5;
   }
   &.datums {
+    @include position(absolute, 0 null null 0);
+
     z-index: 6;
   }
   &.cursor {
+    @include position(absolute, 0 null null 0);
+
     z-index: 7;
   }
 }

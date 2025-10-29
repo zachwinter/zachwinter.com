@@ -95,6 +95,11 @@ onMounted(() => {
   contain: strict;
   overflow: hidden;
 
+  * {
+    font-size: 0.8rem;
+    line-height: 1rem;
+  }
+
   &.visible {
     opacity: 1;
   }
@@ -103,11 +108,6 @@ onMounted(() => {
     @include flex(center, space-between, row);
     width: 100%;
   }
-}
-
-.key,
-.value {
-  font-size: 1rem;
 }
 
 .key {
@@ -123,6 +123,12 @@ onMounted(() => {
 
 .state {
   font-size: 0.75rem;
+}
+
+.row,
+.value {
+  @include flex-row;
+  @include gap;
 }
 
 .row + .row p {

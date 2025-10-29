@@ -429,7 +429,7 @@ export default class CovidMap {
   }
 
   buildScales(): Scales {
-    const viewport = scaleLinear([0, 1920], [0.6, 1])
+    const viewport = scaleLinear([0, 1920], [0.5, 1])
     const scale = viewport(this.size[0])
 
     const size = scaleLinear([1, 100, 1000, 10000], [1 * scale, 2 * scale, 15 * scale, 50 * scale])
@@ -531,8 +531,8 @@ export default class CovidMap {
       this.state.transform = transform
       this.transformedCoords = this.transformDatumCoordinates()
       this.ctx.cursor.clearRect(0, 0, width, height)
-      this.hideToolTip()
-      this.paint()
+
+      this.frame()
 
       // Emit zoom state
       this.onZoom({
@@ -791,7 +791,6 @@ export default class CovidMap {
   }
 
   paintDatums() {
-    console.log('Map.ts:paintDatums()')
     const [width, height] = this.size
     const calls = [() => this.ctx.datums.clearRect(0, 0, width, height)]
     for (let i = 0; i < this.totalLocations; i++) {
@@ -884,6 +883,11 @@ export default class CovidMap {
   paint() {
     this.paintMap()
     this.tweenDatums()
+  }
+
+  frame() {
+    this.paintMap()
+    this.paintDatums()
   }
 
   destroy() {

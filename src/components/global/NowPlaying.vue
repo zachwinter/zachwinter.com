@@ -25,9 +25,9 @@ import PauseIcon from '../../assets/svg/pause.svg'
 const background = useBackground()
 const props = defineProps<{
   src: string
-  alt: string
-  track: string
-  artist: string
+  alt?: string
+  track?: string
+  artist?: string
   controls?: boolean
 }>()
 const displayedTrack = ref()
@@ -45,11 +45,8 @@ watch(
 
 <style lang="scss" scoped>
 figure {
-  @include position(
-    fixed,
-    null null var(--outer-padding) calc(var(--outer-padding) + #{notch(left)})
-  );
-  z-index: 101;
+  @include position(fixed, 0 null null 0);
+  z-index: 1000;
   white-space: nowrap;
   will-change: transform, opacity;
   opacity: 0;

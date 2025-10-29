@@ -40,7 +40,7 @@ $header-height: 2rem;
 $border: none; //px(5) solid rgba(0, 0, 0, .1);
 
 .container {
-  @include size(75vw, calc((9 / 16 * 75vw) + #{$header-height}));
+  @include size(100%);
   @include shadow;
   position: relative;
   margin: 0 auto;
@@ -172,7 +172,7 @@ figure {
   @include flex;
 }
 
-.title {
+.link {
   display: none;
 
   @media (min-width: 768px) {

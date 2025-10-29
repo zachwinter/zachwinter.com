@@ -52,12 +52,12 @@ watch(
   () => ui.loading,
   async (val) => {
     if (val === false) {
-      // await pause(1500)
-      // blink.value = true
-      // await pause(500)
-      // await type()
-      // await pause(500)
-      // show.value = false
+      await pause(1500)
+      blink.value = true
+      await pause(500)
+      await type()
+      await pause(500)
+      show.value = false
     }
   }
 )

@@ -10,5 +10,6 @@ section {
   @include flex;
   @include scroll-bar;
   overflow-x: hidden;
+  flex-shrink: 0;
 }
 </style>

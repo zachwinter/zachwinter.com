@@ -5,6 +5,7 @@ export default `void main () {
   uv.x *= resolution.x/resolution.y;
   uv *= zoom;
   uv.y += scrollY;
+  uv.x += scrollX;
   uv *= k_rotate2d(stream / 5.);
   vec4 streamOffsets = vec4(stream/1.6, stream/-2., stream/2., stream/.5);
   vec2 uv0 = uv;

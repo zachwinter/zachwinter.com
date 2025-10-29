@@ -24,10 +24,8 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .logo {
-  @include position(fixed, 50% null null 50%);
   @include flex;
-  @include size(20rem);
-  transform: translateY(-50%) translateX(-50%);
+  @include size(25vw);
   z-index: 20;
   border-radius: 100%;
   pointer-events: none;
@@ -46,6 +44,7 @@ path {
   stroke: rgba(255, 255, 255, 1);
   stroke-width: 0.1rem;
   animation: draw 750ms var(--easing) forwards;
+  animation-delay: 150ms;
   background-color: transparent;
   fill: none;
 }

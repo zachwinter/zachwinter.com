@@ -147,11 +147,18 @@ $justify: (
 html,
 body,
 #app {
-  @include scroll-bar;
+  @include hide-scroll-bar;
   @include size(100%, 100%);
   overflow: hidden;
 
   // overflow: hidden;
+}
+
+main {
+  @include size(100vw, 100%);
+  @include hide-scroll-bar;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 html {
