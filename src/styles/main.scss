@@ -6,6 +6,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Alata&family=Bungee&family=Bungee+Hairline&family=Bungee+Outline&family=Inconsolata:wght@300;700&family=Kristi&family=Red+Hat+Mono:wght@300;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 // Colors (Sass -> CSS Variables)
+@import url('https://fonts.googleapis.com/css2?family=Doto:wght,ROND@100,0..100&display=swap');
 
 :root {
   @include map-colors;
@@ -28,8 +29,8 @@
 // Typography
 
 :root {
-  --font-family: 'Space Mono', monospace;
-  --font-weight: 300;
+  --font-family: 'Doto', monospace;
+  --font-weight: 100;
   --font-size: 1rem;
   --text-rendering: optimizeLegibility;
   --webkit-font-smoothing: antialiased;
@@ -138,6 +139,11 @@ $justify: (
   margin: 0;
   padding: 0;
   position: relative;
+  font-family: var(--font-family);
+  font-optical-sizing: auto;
+  font-weight: 100;
+  font-style: normal;
+  font-variation-settings: 'ROND' 50;
 
   &::-webkit-scrollbar {
     display: none;
@@ -147,18 +153,14 @@ $justify: (
 html,
 body,
 #app {
-  @include hide-scroll-bar;
-  @include size(100%, 100%);
+  @include size(100vw, 100%);
   overflow: hidden;
-
-  // overflow: hidden;
 }
 
 main {
-  @include size(100vw, 100%);
+  @include size(100vw, auto);
   @include hide-scroll-bar;
   overflow-x: hidden;
-  overflow-y: scroll;
 }
 
 html {
@@ -204,4 +206,10 @@ body {
 .page-leave-to {
   opacity: 0 !important;
   transform: scale(1.5);
+}
+
+img {
+  @include size(100%);
+  object-fit: contain;
+  display: block;
 }

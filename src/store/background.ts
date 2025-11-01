@@ -15,6 +15,7 @@ export const useBackground = defineStore('background', () => {
   const stream = ref(1)
   const viewport = useViewport()
   const volume = ref(1)
+  const velocity = ref(0)
   const shader = ref(DEFAULT_SKETCH.shader)
   const uniforms = ref(
     DEFAULT_SKETCH.uniforms.map((u: any) => {
@@ -31,9 +32,17 @@ export const useBackground = defineStore('background', () => {
     }
   )
 
-  watch(scrollY, (val) => {
+  let timeout: any
+
+  watch(scrollY, (val, old) => {
+    if (typeof old !== 'number') return
+    velocity.value = Math.abs(val - old)
     if (viewport.mobile) return
     uniforms.value[1][2][0] = -val
+    if (timeout) clearTimeout(timeout)
+    timeout = setTimeout(() => {
+      velocity.value = 0
+    }, 32)
   })
 
   watch(scrollX, (val) => {
@@ -64,7 +73,7 @@ export const useBackground = defineStore('background', () => {
 
   function tick() {
     const { motion, bloom } = context.tick(raf.frameRate)
-    stream.value += playing.value ? motion + 0.05 : 0.05
+    stream.value += velocity.value + (playing.value ? motion + 0.05 : 0.05)
     volume.value = bloom
   }
 

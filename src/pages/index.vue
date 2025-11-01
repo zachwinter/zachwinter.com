@@ -1,87 +1,41 @@
 <template>
-  <main ref="container">
-    <Breadcrumbs @select="scrollToSection" @select-covid="selectCovid" :section="section" />
-    <Scroller @scroll="onScrollY" ref="scroller">
-      <Section>
-        <Transition name="fade">
-          <Logo v-if="show && scrollTop < viewport.height / 2" />
-        </Transition>
-      </Section>
+  <Arrows />
 
-      <Section class="images">
-        <header>
-          <h2>Kaleidosync</h2>
-          <p>a webgl music visualizer</p>
-        </header>
-        <Scroller>
-          <img class="right" src="/screenshots/kaleidosync.01.png" />
-          <img class="right" src="/screenshots/kaleidosync.02.png" />
-          <img class="full" src="/screenshots/kaleidosync.03.png" />
-          <img class="left" src="/screenshots/kaleidosync.04.png" />
-          <img src="/screenshots/kaleidosync.05.png" />
-        </Scroller>
-      </Section>
-      <Section>
-        <header>
-          <h2>COVID-USA</h2>
-          <p>county-level active cases per capita</p>
-        </header>
-        <Map ref="covid" />
-      </Section>
-      <Section class="images">
-        <header>
-          <h2>MSF</h2>
-          <p>a nonprofit recovery housing program</p>
-        </header>
-        <Scroller>
-          <img src="/screenshots/msf.01.jpg" class="full" />
-          <img src="/screenshots/msf.02.jpg" />
-          <img src="/screenshots/msf.03.jpg" />
-          <img src="/screenshots/msf.04.jpg" class="full" />
-        </Scroller>
-      </Section>
+  <Scroller
+    @update:navigation="scroll.onMainNavigation"
+    @update:state="scroll.onMainState"
+    ref="mainScroller"
+  >
+    <Section title="Intro" description=" ">
+      <Transition name="fade">
+        <Logo v-if="show && scroll.mainState.activeIndex === 0" />
+      </Transition>
+    </Section>
 
-      <Contact />
-    </Scroller>
-  </main>
+    <Kaleidosync />
+    <COVID />
+    <MSF />
+    <Contact />
+  </Scroller>
+
+  <CanvasText
+    :text="scroll.text"
+    :fontSize="32"
+    :width="viewport.width"
+    :height="viewport.height"
+    color="#ffffff"
+    :cascadeDelay="12"
+    :enterDuration="200"
+  />
 </template>
 
 <script setup lang="ts">
 import { pause } from '../util/time'
+import { useScroll } from '../store/scroll'
 
-const background = useBackground()
 const show = ref(false)
 const viewport = useViewport()
-const scrollTop = ref(0)
-const covid = ref()
-const container = ref()
-const scroller = ref()
-const scrolling = ref(false)
-const section = computed(() => Math.round(scrollTop.value / viewport.height))
-let timeout: any
-
-function onScrollY(e: any) {
-  scrolling.value = true
-  scrollTop.value = Math.max(e.target.scrollTop, 0)
-  background.scrollY = (scrollTop.value / viewport.height) * 5
-  clearTimeout(timeout)
-  timeout = setTimeout(() => {
-    if (e.target.scrollTop % viewport.height === 0) {
-      scrolling.value = false
-    }
-  }, 30)
-}
-
-function scrollToSection(i: number) {
-  scroller.value.element.scrollTo({
-    top: i * viewport.height,
-    behavior: 'smooth'
-  })
-}
-
-function selectCovid(i: number) {
-  covid.value?.selectExample(i)
-}
+const scroll = useScroll()
 
 onMounted(() => {
   pause(2000).then(() => {
@@ -91,82 +45,15 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-main {
+.scroller {
   mix-blend-mode: exclusion;
 }
-* {
-  font-family: 'Space Mono';
-  font-weight: 400;
-}
 
-img {
-  @include size(100%, auto);
-}
-
-.images {
-  width: 80vw;
-
-  @include mobile {
-    width: 100vw;
-  }
-
-  img {
-    /* transform: scale(0.98); */
-  }
-
-  section {
-    /* @include size(100vw); */
-
-    img {
-      @include size(100%, auto);
-    }
-
-    @include mobile {
-      @include size(100vw, auto);
-
-      img.left {
-        margin-left: auto;
-      }
-
-      img.right {
-        margin-right: auto;
-      }
-      img.full {
-        width: 100%;
-        height: auto;
-      }
-
-      img {
-        @include size(100%, auto);
-      }
-    }
-  }
-}
-
-header {
-  @include flex-row(start, center);
+.canvas-text {
+  @include position(fixed, 50% null null 0);
   @include box;
-  width: 100%;
-  background: $black;
-
-  * {
-    font-size: 1rem;
-  }
-
-  @include mobile {
-    @include box(0.5, 0.5);
-    * {
-      font-size: 0.8rem;
-    }
-  }
-
-  h2 {
-    color: $purple;
-    font-weight: 100;
-  }
-}
-
-.icon {
-  @include size(1rem);
+  z-index: 1110;
+  transform: translateY(-50%);
+  background-image: linear-gradient(to top, rgba($purple, 0.25), rgba($black, 0.5));
 }
 </style>

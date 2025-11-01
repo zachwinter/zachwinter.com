@@ -53,7 +53,7 @@ const COLORS: Record<string, ColorValueHex> = {
   pointShadow: '#0F0611'
 }
 
-const BASE_DURATION = 1000
+const BASE_DURATION = 750
 const POINT_SIZE = 125
 const TARGET_DATUM_SIZE = 125
 type ZoomView = [number, number, number]
@@ -84,6 +84,7 @@ export default class CovidMap {
   public usa: any
   public last: number[] = []
   public next: number[] = []
+  public interpolators: any[] = []
   public tweening: boolean = false
   private canvasSelection: Selection<Element, unknown, null, undefined> | null = null
   private animations: Record<string, AniFrame> = {
@@ -353,6 +354,11 @@ export default class CovidMap {
   }
 
   setDateByIndex(i: number) {
+    if (this.state.day === i) {
+      console.log('[CovidMap] Already on day', i, '- skipping update')
+      return
+    }
+    console.log('[CovidMap] setDateByIndex:', i)
     this.state.day = i
     this.date = this.dates?.[this.state.day]
     this.tick()
@@ -360,7 +366,13 @@ export default class CovidMap {
   }
 
   setDateByDateObject(d: Date) {
-    this.state.day = this.DATE_MAP?.[d.valueOf()]
+    const targetDay = this.DATE_MAP?.[d.valueOf()]
+    if (this.state.day === targetDay) {
+      console.log('[CovidMap] Already on date', d, '- skipping update')
+      return
+    }
+    console.log('[CovidMap] setDateByDateObject:', d, 'day:', targetDay)
+    this.state.day = targetDay
     this.date = this.dates?.[this.state.day]
     this.tick()
     this.update()
@@ -373,6 +385,15 @@ export default class CovidMap {
       const year = example.slice(-4)
       const date = new Date(`${month}/${day}/${year}`)
       if (date) this.setDateByDateObject(date)
+    }
+  }
+
+  selectExample(index: number) {
+    // Map indices to example dates (Nov 2020, Aug 2021, Dec 2021)
+    const examples = ['11012020', '08012021', '12012021']
+    const example = examples[index]
+    if (example) {
+      this.chooseExample(example)
     }
   }
 
@@ -822,6 +843,15 @@ export default class CovidMap {
     // This is critical for interpolation!
     if (!this.last || this.last.length === 0) {
       this.last = new Array(this.totalLocations).fill(0)
+    } else if (this.tweening && this.interpolators && this.animations.tween.start > 0) {
+      // If we're mid-tween, capture the current interpolated values
+      // This prevents "snapping" when interrupting an animation
+      const elapsed = performance.now() - this.animations.tween.start
+      const t = ease(Math.min(elapsed / BASE_DURATION, 1))
+      this.last = this.interpolators.map((interp) => interp(t))
+      // Cancel the current tween so we can start a new one
+      this.tweening = false
+      this.animations.tween = { start: 0, tick: null }
     } else {
       this.last = [...this.next]
     }

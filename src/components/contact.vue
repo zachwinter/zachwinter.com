@@ -1,29 +1,22 @@
 <template>
-  <section>
-    <div>
-      <H2
-        >tell<br />
-        me<br />
-        your<br />
-        secrets</H2
-      >
-      <nav>
-        <a href="mailto:contact@zachwinter.com" target="email">Email</a>
-        <a href="tel:8508428313">Phone</a>
-        <a href="https://telegram.me/yozic" target="telegram">Telegram</a>
-        <a href="https://www.instagram.com/zachary.io" target="instagram">Instagram</a>
-      </nav>
-    </div>
-  </section>
+  <Section title="Contact" description=" ">
+    <H2
+      >tell<br />
+      me<br />
+      your<br />
+      secrets</H2
+    >
+    <nav>
+      <a href="mailto:contact@zachwinter.com" target="email">Email</a>
+      <a href="tel:8508428313">Phone</a>
+      <a href="https://telegram.me/yozic" target="telegram">Telegram</a>
+      <a href="https://www.instagram.com/zachary.io" target="instagram">Instagram</a>
+    </nav>
+  </Section>
 </template>
 
 <style lang="scss" scoped>
-section {
-  @include size(100vw, 100%);
-  @include flex;
-  @include scroll-bar;
-  padding-left: notch(left);
-}
+@import url('https://fonts.googleapis.com/css2?family=Doto:wght,ROND@100,0..100&family=League+Script&display=swap');
 
 nav {
   // @include flex(center, flex-start, row);
@@ -33,13 +26,18 @@ nav {
 }
 
 h2 {
+  font-family: 'League Script';
   width: 100%;
   font-weight: 400;
   padding: 1rem;
 }
 
+br {
+  display: none;
+}
+
 a {
-  font-family: 'Red Hat Mono';
+  font-family: 'Doto';
   text-decoration: none;
   transform: none;
   font-weight: 300;

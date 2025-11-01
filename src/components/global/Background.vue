@@ -2,6 +2,7 @@
   <Shader
     class="background"
     ref="shader"
+    :animate="false"
     :shader="background.shader"
     :uniforms="background.uniforms"
     :width="viewport.width"
@@ -24,6 +25,7 @@ onMounted(() => {
     () => {
       background.tick()
       if (!shader.value.instance) return
+      shader.value.instance.tick()
     },
     { id: 'background' }
   )
@@ -36,8 +38,7 @@ onBeforeUnmount(() => {
 
 <style lang="scss" scoped>
 .background {
-  z-index: 0;
-  mix-blend-mode: exclusion;
+  z-index: -1;
   pointer-events: none;
 }
 </style>

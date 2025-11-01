@@ -78,6 +78,7 @@ declare global {
   const useRAF: typeof import('./store/raf')['useRAF']
   const useRoute: typeof import('vue-router')['useRoute']
   const useRouter: typeof import('vue-router')['useRouter']
+  const useScroll: typeof import('./store/scroll')['useScroll']
   const useSlots: typeof import('vue')['useSlots']
   const useToast: typeof import('./store/toast')['useToast']
   const useUI: typeof import('./store/ui')['useUI']
@@ -170,6 +171,7 @@ declare module 'vue' {
     readonly useRAF: UnwrapRef<typeof import('./store/raf')['useRAF']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
+    readonly useScroll: UnwrapRef<typeof import('./store/scroll')['useScroll']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
     readonly useToast: UnwrapRef<typeof import('./store/toast')['useToast']>
     readonly useUI: UnwrapRef<typeof import('./store/ui')['useUI']>
@@ -256,6 +258,7 @@ declare module '@vue/runtime-core' {
     readonly useRAF: UnwrapRef<typeof import('./store/raf')['useRAF']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
+    readonly useScroll: UnwrapRef<typeof import('./store/scroll')['useScroll']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
     readonly useToast: UnwrapRef<typeof import('./store/toast')['useToast']>
     readonly useUI: UnwrapRef<typeof import('./store/ui')['useUI']>

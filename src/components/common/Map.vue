@@ -127,8 +127,8 @@ const examples = ['11052020', '08172021', '12252021']
 const locs = ['46009', '28099', '36061']
 
 function selectExample(i: number) {
-  app.value!.chooseExample(examples[i])
-  app.value!.focusDatumByFIPS(locs[i])
+  app.value?.chooseExample(examples[i])
+  app.value?.focusDatumByFIPS(locs[i])
 }
 
 defineExpose({
@@ -175,7 +175,7 @@ onBeforeUnmount(() => {
 
 <style lang="scss" scoped>
 figure.container {
-  @include size(100vw, 100vh);
+  @include size(100vw, 100%);
   position: relative;
 }
 

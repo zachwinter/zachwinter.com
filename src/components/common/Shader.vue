@@ -17,7 +17,7 @@ interface Props extends ShaderConfig {
 const props = withDefaults(defineProps<Props>(), {
   width: window.innerWidth,
   height: window.innerHeight,
-  dpr: Math.min(window.devicePixelRatio, 3),
+  dpr: Math.min(window.devicePixelRatio, 2),
   shader: `void main () { gl_FragColor = vec4(.8, .2, .6, 1.); }`,
   animate: true,
   fillViewport: false,
