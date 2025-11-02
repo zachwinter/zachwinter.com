@@ -27,4 +27,11 @@
 import { useScroll } from '../../store/scroll'
 
 const scroll = useScroll()
+const msfScroller = ref()
+
+onMounted(() => {
+  if (msfScroller.value) {
+    scroll.msfScrollerRef = msfScroller.value
+  }
+})
 </script>

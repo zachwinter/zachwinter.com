@@ -1,22 +1,22 @@
 <template>
   <aside class="arrows">
-    <div class="arrow-wrapper up" :class="[nav.up && 'visible']">
+    <div class="arrow-wrapper up" :class="[nav.up && 'visible']" @click="scroll.navigateUp">
       <div class="inner"><ArrowUp class="arrow" /></div>
       <span v-if="nav.up" class="label">{{ nav.up.label }}</span>
     </div>
-    <div class="arrow-wrapper right" :class="[nav.right && 'visible']">
+    <div class="arrow-wrapper right" :class="[nav.right && 'visible']" @click="scroll.navigateRight">
       <div class="inner">
         <ArrowRight class="arrow" />
       </div>
       <span v-if="nav.right" class="label">{{ nav.right.label }}</span>
     </div>
-    <div class="arrow-wrapper down" :class="[nav.down && 'visible']">
+    <div class="arrow-wrapper down" :class="[nav.down && 'visible']" @click="scroll.navigateDown">
       <div class="inner">
         <ArrowDown class="arrow" />
       </div>
       <span v-if="nav.down" class="label">{{ nav.down.label }}</span>
     </div>
-    <div class="arrow-wrapper left" :class="[nav.left && 'visible']">
+    <div class="arrow-wrapper left" :class="[nav.left && 'visible']" @click="scroll.navigateLeft">
       <div class="inner">
         <ArrowLeft class="arrow" />
       </div>

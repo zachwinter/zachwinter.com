@@ -36,11 +36,17 @@ import { useScroll } from '../store/scroll'
 const show = ref(false)
 const viewport = useViewport()
 const scroll = useScroll()
+const mainScroller = ref()
 
 onMounted(() => {
   pause(2000).then(() => {
     show.value = true
   })
+
+  // Set the main scroller ref in the store
+  if (mainScroller.value) {
+    scroll.mainScrollerRef = mainScroller.value
+  }
 })
 </script>
 

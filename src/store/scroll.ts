@@ -31,6 +31,12 @@ export const useScroll = defineStore('scroll', () => {
   const covidActiveIndex = ref(-1)
   const msfActiveIndex = ref(-1)
 
+  // Scroller refs
+  const mainScrollerRef = ref<any>(null)
+  const kaleidosyncScrollerRef = ref<any>(null)
+  const covidScrollerRef = ref<any>(null)
+  const msfScrollerRef = ref<any>(null)
+
   function onMainNavigation(navigation: any) {
     if (navigation?.current?.description) {
       text.value = navigation.current?.description
@@ -98,6 +104,41 @@ export const useScroll = defineStore('scroll', () => {
     }
   }
 
+  // Navigation methods for arrows
+  function navigateUp() {
+    if (mainScrollerRef.value) {
+      mainScrollerRef.value.prev()
+    }
+  }
+
+  function navigateDown() {
+    if (mainScrollerRef.value) {
+      mainScrollerRef.value.next()
+    }
+  }
+
+  function navigateLeft() {
+    const activeSection = mainState.value.activeIndex
+    if (activeSection === 1 && kaleidosyncScrollerRef.value) {
+      kaleidosyncScrollerRef.value.prev()
+    } else if (activeSection === 2 && covidScrollerRef.value) {
+      covidScrollerRef.value.prev()
+    } else if (activeSection === 3 && msfScrollerRef.value) {
+      msfScrollerRef.value.prev()
+    }
+  }
+
+  function navigateRight() {
+    const activeSection = mainState.value.activeIndex
+    if (activeSection === 1 && kaleidosyncScrollerRef.value) {
+      kaleidosyncScrollerRef.value.next()
+    } else if (activeSection === 2 && covidScrollerRef.value) {
+      covidScrollerRef.value.next()
+    } else if (activeSection === 3 && msfScrollerRef.value) {
+      msfScrollerRef.value.next()
+    }
+  }
+
   return {
     onCovidNavigation,
     onCovidScroll,
@@ -115,6 +156,16 @@ export const useScroll = defineStore('scroll', () => {
     kaleidosyncActiveIndex,
     covidActiveIndex,
     msfActiveIndex,
-    text
+    text,
+    // Scroller refs
+    mainScrollerRef,
+    kaleidosyncScrollerRef,
+    covidScrollerRef,
+    msfScrollerRef,
+    // Navigation methods
+    navigateUp,
+    navigateDown,
+    navigateLeft,
+    navigateRight
   }
 })

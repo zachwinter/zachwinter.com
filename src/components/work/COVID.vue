@@ -5,6 +5,7 @@
       axis="x"
       @update:navigation="scroll.onCovidNavigation"
       @update:state="scroll.onCovidScroll"
+      ref="covidScroller"
     >
       <Section
         title="Nov 2020"
@@ -28,6 +29,7 @@
 <script lang="ts" setup>
 import { useScroll } from '../../store/scroll'
 const covid = ref()
+const covidScroller = ref()
 const scroll = useScroll()
 
 watch(
@@ -36,6 +38,12 @@ watch(
     covid.value?.selectExample(val)
   }
 )
+
+onMounted(() => {
+  if (covidScroller.value) {
+    scroll.covidScrollerRef = covidScroller.value
+  }
+})
 </script>
 
 <style lang="scss" scoped>
