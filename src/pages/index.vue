@@ -51,10 +51,6 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.scroller {
-  mix-blend-mode: exclusion;
-}
-
 .canvas-text {
   @include position(fixed, 50% null null 0);
   @include box;

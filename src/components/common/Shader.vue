@@ -68,10 +68,3 @@ onBeforeUnmount(() => {
   instance.value?.destroy?.()
 })
 </script>
-
-<style lang="scss" scoped>
-.shader {
-  @include position(absolute, 0 null null 0);
-  z-index: 10;
-}
-</style>

@@ -38,6 +38,7 @@ onBeforeUnmount(() => {
 
 <style lang="scss" scoped>
 .background {
+  @include position(absolute, 0 null null 0);
   z-index: -1;
   pointer-events: none;
 }
