@@ -4,7 +4,11 @@
       <div class="inner"><ArrowUp class="arrow" /></div>
       <span v-if="nav.up" class="label">{{ nav.up.label }}</span>
     </div>
-    <div class="arrow-wrapper right" :class="[nav.right && 'visible']" @click="scroll.navigateRight">
+    <div
+      class="arrow-wrapper right"
+      :class="[nav.right && 'visible']"
+      @click="scroll.navigateRight"
+    >
       <div class="inner">
         <ArrowRight class="arrow" />
       </div>
@@ -72,6 +76,7 @@ $arrow-width: 0.5;
 
 .arrow-wrapper {
   @include box;
+  @include blur(1rem, rgba($purple, 0.25));
   position: fixed;
   display: flex;
   align-items: center;
@@ -80,11 +85,10 @@ $arrow-width: 0.5;
   will-change: transform, opacity;
   pointer-events: none;
   z-index: 100;
-  @include blur(1rem, rgba($purple, 0.25));
+
   .inner {
     @include flex;
     @include size(3rem);
-
     border-radius: 3rem;
   }
 
@@ -124,7 +128,6 @@ $arrow-width: 0.5;
     top: 50%;
     transform: translateY(-50%);
     flex-direction: row;
-    display: none;
   }
 
   .arrow {

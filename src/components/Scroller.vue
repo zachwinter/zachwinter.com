@@ -204,5 +204,6 @@ defineExpose({
   flex-wrap: no-wrap;
   overflow-x: scroll;
   scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
 }
 </style>

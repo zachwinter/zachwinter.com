@@ -43,7 +43,6 @@ onMounted(() => {
     show.value = true
   })
 
-  // Set the main scroller ref in the store
   if (mainScroller.value) {
     scroll.mainScrollerRef = mainScroller.value
   }
