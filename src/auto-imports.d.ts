@@ -72,7 +72,6 @@ declare global {
   const useBackground: typeof import('./store/background')['useBackground']
   const useCssModule: typeof import('vue')['useCssModule']
   const useCssVars: typeof import('vue')['useCssVars']
-  const useData: typeof import('./store/data')['useData']
   const useLink: typeof import('vue-router')['useLink']
   const useNavigation: typeof import('./store/navigation')['useNavigation']
   const useRAF: typeof import('./store/raf')['useRAF']
@@ -165,7 +164,6 @@ declare module 'vue' {
     readonly useBackground: UnwrapRef<typeof import('./store/background')['useBackground']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
-    readonly useData: UnwrapRef<typeof import('./store/data')['useData']>
     readonly useLink: UnwrapRef<typeof import('vue-router')['useLink']>
     readonly useNavigation: UnwrapRef<typeof import('./store/navigation')['useNavigation']>
     readonly useRAF: UnwrapRef<typeof import('./store/raf')['useRAF']>
@@ -252,7 +250,6 @@ declare module '@vue/runtime-core' {
     readonly useBackground: UnwrapRef<typeof import('./store/background')['useBackground']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
-    readonly useData: UnwrapRef<typeof import('./store/data')['useData']>
     readonly useLink: UnwrapRef<typeof import('vue-router')['useLink']>
     readonly useNavigation: UnwrapRef<typeof import('./store/navigation')['useNavigation']>
     readonly useRAF: UnwrapRef<typeof import('./store/raf')['useRAF']>

@@ -2,7 +2,7 @@
   <Shader
     class="background"
     ref="shader"
-    :animate="false"
+    :animate="true"
     :shader="background.shader"
     :uniforms="background.uniforms"
     :width="viewport.width"
@@ -10,6 +10,7 @@
     :volume="background.volume"
     :height="viewport.height"
     :dpr="viewport.dpr"
+    :useWorker="false"
   />
 </template>
 
@@ -24,8 +25,16 @@ onMounted(() => {
   raf.add(
     () => {
       background.tick()
-      if (!shader.value.instance) return
-      shader.value.instance.tick()
+      if (!shader.value?.instance) return
+
+      // Update stream and volume on shader instance (worker or main thread)
+      shader.value.instance.setStreamVolume(background.stream, background.volume)
+
+      // Update all uniforms (for variant tweening)
+      // Note: This runs every frame to catch variant tween updates
+      if (shader.value.instance.updateAllUniforms) {
+        shader.value.instance.updateAllUniforms(background.uniforms)
+      }
     },
     { id: 'background' }
   )
@@ -41,5 +50,7 @@ onBeforeUnmount(() => {
   @include position(absolute, 0 null null 0);
   z-index: -1;
   pointer-events: none;
+  width: 100vw;
+  height: 100vh;
 }
 </style>

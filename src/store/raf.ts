@@ -91,16 +91,17 @@ export const useRAF = defineStore('raf', () => {
       fn(_now)
     })
 
-    queue.value.forEach((animation: Animation, i: number) => {
+    queue.value = queue.value.filter((animation: Animation) => {
       const elapsed = now.value - (animation?.start || 0)
       const duration = animation.duration || Infinity
       const progress = animation.easing?.(elapsed / duration) as number
       animation.tick?.(now.value, progress, elapsed)
       if (progress === 1) {
-        queue.value.splice(i, 1)
         promises?.[animation.id]?.()
         delete promises[animation.id]
+        return false
       }
+      return true
     })
 
     const keys = Object.keys(map.value)

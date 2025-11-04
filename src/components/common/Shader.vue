@@ -3,12 +3,29 @@
 </template>
 
 <script setup lang="ts">
-import Shader from 'fragment-shader/classes/Shader'
-import { type ShaderConfig } from 'fragment-shader/types/shader'
+import { ShaderWorkerManager } from '@/util/shader-worker'
+import type { ShaderWorkerConfig } from '@/util/shader-worker'
 
 defineEmits(['click'])
 
-interface Props extends ShaderConfig {
+interface Props {
+  // ShaderConfig props
+  parent?: HTMLElement
+  shader?: string
+  uniforms?: any[]
+  width?: number
+  height?: number
+  dpr?: number
+  fillViewport?: boolean
+  fillContainer?: boolean
+  animate?: boolean
+  debug?: boolean
+  onError?: Function
+  onSuccess?: Function
+  onResize?: Function
+  useWorker?: boolean
+
+  // Additional props
   stream?: number
   volume?: number
   scroll?: number
@@ -21,11 +38,11 @@ const props = withDefaults(defineProps<Props>(), {
   shader: `void main () { gl_FragColor = vec4(.8, .2, .6, 1.); }`,
   animate: true,
   fillViewport: false,
-  variant: 0,
+  useWorker: true, // Enable worker by default!
   scroll: 0
 })
 
-const instance: Ref<Shader | null> = ref(null)
+const instance: Ref<ShaderWorkerManager | null> = ref(null)
 const container: Ref<HTMLElement | undefined> = ref()
 
 defineExpose({ instance })
@@ -34,7 +51,7 @@ watch(
   () => [props.width, props.height, props.dpr],
   ([width, height, dpr]) => {
     if (!instance.value) return
-    instance.value.size = { width, height, dpr }
+    instance.value.size = { width, height, dpr } as any
   }
 )
 
@@ -50,17 +67,30 @@ watch(
   () => [props.stream, props.volume],
   ([stream, volume]) => {
     if (!instance.value) return
-    if (typeof stream === 'number') instance.value.stream = stream
-    if (typeof volume === 'number') instance.value.volume = volume
+    if (typeof stream === 'number' && typeof volume === 'number') {
+      instance.value.setStreamVolume(stream, volume)
+    }
   }
 )
 
 onMounted(() => {
   if (!container.value) return
 
-  instance.value = new Shader({
-    ...props,
-    parent: container.value
+  instance.value = new ShaderWorkerManager({
+    parent: container.value,
+    shader: props.shader,
+    uniforms: props.uniforms,
+    width: props.width,
+    height: props.height,
+    dpr: props.dpr,
+    animate: props.animate,
+    fillViewport: props.fillViewport,
+    fillContainer: props.fillContainer,
+    debug: props.debug,
+    onError: props.onError,
+    onSuccess: props.onSuccess,
+    onResize: props.onResize,
+    useWorker: props.useWorker
   })
 })
 

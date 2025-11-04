@@ -3,12 +3,12 @@ import { zoom, zoomIdentity, type ZoomBehavior, type ZoomTransform } from 'd3-zo
 import { scaleLinear } from 'd3-scale'
 import { GeoProjection, geoAlbersUsa, geoPath, geoDistance } from 'd3-geo'
 import { select, type Selection } from 'd3-selection'
-import Sprite, { type Artboard, type SpriteOptions } from './Sprite'
-import { TWO_PI } from '../util/canvas'
+import Sprite from './Sprite'
 import { interpolateNumber, interpolateZoom } from 'd3-interpolate'
 import { ease } from '../util/easing'
-import DatumComputeShader from './DatumComputeShader'
-import { perfMonitor } from '../util/performance'
+import { loadBinaryStats, type BinaryStats } from '../util/binary-loader'
+import { buildSpritesOptimized } from '../util/sprite-renderer'
+import { calculateCoordinatesOptimized, buildProjectionSync } from '../util/coordinate-calculator'
 type CanvasName = 'map' | 'datums' | 'cursor'
 type Canvases = Record<CanvasName, HTMLCanvasElement>
 type SpriteName = 'map' | 'datum'
@@ -43,15 +43,7 @@ interface MapState {
   day: number
 }
 
-const COLORS: Record<string, ColorValueHex> = {
-  background: `#0F0611`,
-  countyFill: '#1B0B1C',
-  countyStroke: '#996699',
-  stateStroke: '#996699',
-  nationStroke: '#996699',
-  pointColor: '#E80040',
-  pointShadow: '#0F0611'
-}
+const BACKGROUND_COLOR = '#0F0611'
 
 const BASE_DURATION = 750
 const POINT_SIZE = 125
@@ -95,7 +87,7 @@ export default class CovidMap {
   // Data properties
   public loaded: boolean = false
   public locationData: any
-  public statsData: any
+  public statsData: BinaryStats | null = null
   public populationData: any
   public stateData: any
   public dayData: any
@@ -112,11 +104,6 @@ export default class CovidMap {
   // Pre-allocated buffers for performance
   private dataBuffer: Float32Array | null = null
   private stateBuffer: Map<string, Float32Array> = new Map()
-
-  // GPU compute shader (progressive enhancement)
-  private computeShader: DatumComputeShader | null = null
-  private useGPU: boolean = false
-  public gpuEnabled: boolean = false
 
   constructor({ canvases, onMouseMove, hideToolTip, onZoom }: MapConfig) {
     this.locations = []
@@ -168,38 +155,18 @@ export default class CovidMap {
     }
 
     this.raf = requestAnimationFrame(tick)
-
-    // Try to initialize GPU compute shader
-    this.initGPU()
-  }
-
-  async initGPU() {
-    try {
-      this.computeShader = new DatumComputeShader()
-      const initialized = await this.computeShader.init()
-      if (initialized) {
-        console.log('[CovidMap] GPU compute shader available')
-        this.gpuEnabled = true
-      }
-    } catch (error) {
-      console.log('[CovidMap] GPU compute shader unavailable, using CPU fallback')
-      this.computeShader = null
-      this.gpuEnabled = false
-    }
   }
 
   async fetchData() {
-    const [collection, days, map, population, states, stats, usaData] = await Promise.all(
-      [
-        '/data.collection.json',
-        '/data.days.json',
-        '/data.map.json',
-        '/data.population.json',
-        '/data.states.json',
-        '/data.stats.json',
-        '/data.usa.json'
-      ].map(async (file) => await fetch(file).then((res) => res.json()))
-    )
+    const [collection, days, map, population, states, stats, usaData] = await Promise.all([
+      fetch('/data.collection.json').then((res) => res.json()),
+      fetch('/data.days.json').then((res) => res.json()),
+      fetch('/data.map.json').then((res) => res.json()),
+      fetch('/data.population.json').then((res) => res.json()),
+      fetch('/data.states.json').then((res) => res.json()),
+      loadBinaryStats('/data.stats.bin'),
+      fetch('/data.usa.json').then((res) => res.json())
+    ])
 
     this.fipsData = map
     this.populationData = population
@@ -223,18 +190,18 @@ export default class CovidMap {
     this.setDateByIndex(0)
 
     // Rebuild everything with loaded data
-    this.projection = this.buildProjection()
-    this.sprites = this.buildSprites()
-    this.coords = this.calculateDatumCoordinates()
+    // Calculate coordinates and build sprites in parallel (both use workers!)
+    // Note: Projection is built lazily on first mouse interaction to avoid blocking
+    const [coords, sprites] = await Promise.all([
+      calculateCoordinatesOptimized(this.size[0], this.size[1], this.usa, this.locations),
+      this.buildSprites()
+    ])
+
+    this.coords = coords
+    this.sprites = sprites
     this.transformedCoords = this.transformDatumCoordinates()
     this.resetZoom()
-
-    // Setup GPU compute shader if available
-    if (this.computeShader && this.gpuEnabled) {
-      // await this.computeShader.setup(this.totalLocations)
-      // this.useGPU = true
-      // console.log('[CovidMap] GPU compute enabled for', this.totalLocations, 'datums')
-    }
+    this.paint()
   }
 
   tick() {
@@ -265,16 +232,33 @@ export default class CovidMap {
     // Single pass through all locations
     const day = this.state.day
     const prevDay = Math.max(0, day - 1)
+    const binaryData = this.statsData.data
+    const numDays = this.statsData.header.numDays
 
     for (let i = 0; i < numLocations; i++) {
       const location = this.locationData[i]
       const dataIndex = this.fipsData?.[location?.fips]
       const offset = i * stride
 
-      if (dataIndex !== undefined && this.statsData[dataIndex]) {
-        const todayData = this.statsData[dataIndex][day] || [0, 0, 0]
-        const yesterdayData =
-          day === 0 ? [0, 0, 0] : this.statsData[dataIndex][prevDay] || [0, 0, 0]
+      if (dataIndex !== undefined) {
+        // Calculate binary data offsets
+        // Binary format: [location][day][field]
+        const todayOffset = (dataIndex * numDays * stride) + (day * stride)
+        const yesterdayOffset = (dataIndex * numDays * stride) + (prevDay * stride)
+
+        // Read today's values
+        const todayData = [
+          binaryData[todayOffset],
+          binaryData[todayOffset + 1],
+          binaryData[todayOffset + 2]
+        ]
+
+        // Read yesterday's values
+        const yesterdayData = day === 0 ? [0, 0, 0] : [
+          binaryData[yesterdayOffset],
+          binaryData[yesterdayOffset + 1],
+          binaryData[yesterdayOffset + 2]
+        ]
 
         // Write today's values
         this.today![offset] = todayData[0]
@@ -313,7 +297,27 @@ export default class CovidMap {
   }
 
   getHistoricalCountyValuesByFips(fips: any): any[] {
-    return this.statsData?.[this.fipsData?.[fips]] || []
+    if (!this.statsData || !this.fipsData) return []
+
+    const dataIndex = this.fipsData[fips]
+    if (dataIndex === undefined) return []
+
+    const binaryData = this.statsData.data
+    const numDays = this.statsData.header.numDays
+    const stride = this.statsData.header.stride
+    const result = []
+
+    // Extract all days for this location
+    for (let day = 0; day < numDays; day++) {
+      const offset = (dataIndex * numDays * stride) + (day * stride)
+      result.push([
+        binaryData[offset],
+        binaryData[offset + 1],
+        binaryData[offset + 2]
+      ])
+    }
+
+    return result
   }
 
   getCountyValuesByFips(fips: any): [number, number, number] {
@@ -430,38 +434,7 @@ export default class CovidMap {
 
     if (!this.usa || !this.loaded) return null
 
-    try {
-      if (this.usa?.objects?.nation) {
-        return geoAlbersUsa().fitExtent(
-          [
-            [20, 50],
-            [width - 20, height - 50]
-          ],
-          topojson.feature(this.usa as any, this.usa?.objects?.nation as any)
-        )
-      }
-
-      return null
-    } catch (e) {
-      console.warn(e)
-      return null
-    }
-  }
-
-  calculateDatumCoordinates(): ([number, number] | null)[] {
-    let i = 0
-
-    const coordinates = []
-
-    if (!this.projection) return []
-
-    for (; i < this.totalLocations; i++) {
-      const coords = this.projection([this.locations[i].lon, this.locations[i].lat])
-
-      coordinates.push(coords)
-    }
-
-    return coordinates
+    return buildProjectionSync(width, height, this.usa)
   }
 
   transformDatumCoordinates(): ([number, number] | null)[] {
@@ -497,69 +470,23 @@ export default class CovidMap {
     }
   }
 
-  buildSprites(): Record<SpriteName, Sprite> {
+  async buildSprites(): Promise<Record<SpriteName, Sprite>> {
     const [width, height] = this.size
-    const {
-      projection,
-      scales: { feature },
-      usa
-    } = this
+    const { usa } = this
 
     this.sprites?.map?.destroy()
     this.sprites?.datum?.destroy()
 
-    if (!this.loaded || !usa || !projection) {
+    if (!this.loaded || !usa) {
       return {
         map: new Sprite({ width: 1, height: 1, paint: () => {} }),
         datum: new Sprite({ width: POINT_SIZE, height: POINT_SIZE, paint: () => {} })
       }
     }
 
-    const map: SpriteOptions = {
-      width: width * 2,
-      height: height * 2,
-      paint({ ctx }: Artboard) {
-        ctx.scale(2, 2)
-        ctx.lineWidth = feature(width) / 10
-        ctx.fillStyle = COLORS.countyFill
-        ctx.strokeStyle = COLORS.countyStroke
-        ctx.beginPath()
-        const path = geoPath(projection, ctx)
-        path(topojson.feature(usa as any, usa.objects.counties as any))
-        ctx.fill()
-        ctx.stroke()
-        ctx.lineWidth = feature(width) / 3
-        ctx.strokeStyle = COLORS.stateStroke
-        ctx.beginPath()
-        path(topojson.mesh(usa as any, usa.objects.states as any))
-        ctx.stroke()
-        ctx.lineWidth = feature(width) / 3
-        ctx.strokeStyle = COLORS.nationStroke
-        ctx.beginPath()
-        path(topojson.mesh(usa as any, usa.objects.nation as any))
-        ctx.stroke()
-      }
-    }
-
-    const datum: SpriteOptions = {
-      width: POINT_SIZE,
-      height: POINT_SIZE,
-      paint({ ctx }: Artboard) {
-        ctx.fillStyle = COLORS.pointColor
-        ctx.strokeStyle = 'rgba(0, 0, 0, 1'
-        ctx.shadowBlur = POINT_SIZE / 1.5
-        ctx.shadowColor = COLORS.pointShadow
-        ctx.lineWidth = 5
-        ctx.beginPath()
-        ctx.arc(POINT_SIZE / 2, POINT_SIZE / 2, POINT_SIZE / 4, 0, TWO_PI)
-        ctx.fill()
-      }
-    }
-
-    return {
-      map: new Sprite(map),
-      datum: new Sprite(datum)
-    }
+    // Use optimized sprite rendering (worker when available, fallback to main thread)
+    // Note: projection can be null here if called in parallel - worker rebuilds it anyway
+    return buildSpritesOptimized(width, height, usa, this.projection)
   }
 
   initZoom(): ZoomBehavior<Element, unknown> {
@@ -769,6 +696,11 @@ export default class CovidMap {
 
       this.state.mouse = [e.pageX, e.pageY]
 
+      // Lazy build projection on first mouse interaction (avoids blocking init)
+      if (!this.projection && this.loaded) {
+        this.projection = this.buildProjection()
+      }
+
       const coords = this.projection?.invert?.(this.state.transform.invert(this.state.mouse))
 
       if (!coords) return
@@ -807,7 +739,7 @@ export default class CovidMap {
     })
   }
 
-  resize() {
+  async resize() {
     const dpr = this.size[2]
     this.ctx.map.resetTransform()
     this.ctx.map.scale(dpr, dpr)
@@ -816,9 +748,17 @@ export default class CovidMap {
     this.ctx.cursor.resetTransform()
     this.ctx.cursor.scale(dpr, dpr)
     this.scales = this.buildScales()
-    this.projection = this.buildProjection()
-    this.sprites = this.buildSprites()
-    this.coords = this.calculateDatumCoordinates()
+
+    // Calculate coordinates and build sprites in parallel (both use workers!)
+    // Note: Projection will be rebuilt lazily on next mouse interaction
+    this.projection = null  // Invalidate old projection
+    const [coords, sprites] = await Promise.all([
+      calculateCoordinatesOptimized(this.size[0], this.size[1], this.usa, this.locations),
+      this.buildSprites()
+    ])
+
+    this.coords = coords
+    this.sprites = sprites
     this.resetZoom()
     this.paint()
   }
@@ -827,7 +767,7 @@ export default class CovidMap {
     const [width, height] = this.size
     const { map } = this.ctx
     const { x, y, k } = this.state.transform
-    map.fillStyle = COLORS.background
+    map.fillStyle = BACKGROUND_COLOR
     map.clearRect(0, 0, width, height)
     map.save()
     map.translate(x, y)
@@ -836,9 +776,7 @@ export default class CovidMap {
     map.restore()
   }
 
-  async calculateDatumSizes() {
-    console.log('Map.ts:calculateDatumSizes()', this.useGPU ? '[GPU]' : '[CPU]')
-
+  calculateDatumSizes() {
     // Store last state BEFORE calculating new values
     // This is critical for interpolation!
     if (!this.last || this.last.length === 0) {
@@ -856,83 +794,17 @@ export default class CovidMap {
       this.last = [...this.next]
     }
 
-    // GPU path
-    if (this.useGPU && this.computeShader) {
-      try {
-        await perfMonitor.measure('calculateDatumSizes', 'GPU', async () => {
-          const result = await this.calculateDatumSizesGPU()
-          if (result) {
-            this.next = Array.from(result.sizes)
-            this.transformedCoords = []
-            for (let i = 0; i < this.totalLocations; i++) {
-              this.transformedCoords.push([
-                result.transformedCoords[i * 2],
-                result.transformedCoords[i * 2 + 1]
-              ])
-            }
-          }
-        })
-        return
-      } catch (error) {
-        console.warn('[CovidMap] GPU compute failed, falling back to CPU:', error)
-        this.useGPU = false
-      }
-    }
-
-    // CPU fallback
-    await perfMonitor.measure('calculateDatumSizes', 'CPU', () => {
-      const next: number[] = new Array(this.totalLocations).fill(0)
-      for (let i = 0; i < this.totalLocations; i++) {
-        const size = this.getDatumBaseSize(i)
-        if (!Number.isFinite(size)) {
-          next[i] = 0
-        } else {
-          next[i] = Math.max(size, 0)
-        }
-      }
-      this.next = next
-      this.transformedCoords = this.transformDatumCoordinates()
-    })
-  }
-
-  async calculateDatumSizesGPU() {
-    if (!this.computeShader || !this.today) return null
-
-    // Prepare input data
-    const coords = new Float32Array(this.totalLocations * 2)
-    const values = new Float32Array(this.totalLocations)
-    const populations = new Float32Array(this.totalLocations)
-
+    const next: number[] = new Array(this.totalLocations).fill(0)
     for (let i = 0; i < this.totalLocations; i++) {
-      const coord = this.coords[i]
-      if (coord) {
-        coords[i * 2] = coord[0]
-        coords[i * 2 + 1] = coord[1]
+      const size = this.getDatumBaseSize(i)
+      if (!Number.isFinite(size)) {
+        next[i] = 0
+      } else {
+        next[i] = Math.max(size, 0)
       }
-
-      const location = this.locations[i]
-      const offset = i * 3
-      values[i] = this.today[offset + this.state.datasetIndex]
-      populations[i] = location.population
     }
-
-    const transform = new Float32Array([
-      this.state.transform.x,
-      this.state.transform.y,
-      this.state.transform.k
-    ])
-
-    // Execute GPU compute
-    const result = await this.computeShader.compute(
-      { coords, values, populations, transform },
-      {
-        perCapita: this.state.perCapita,
-        datasetIndex: this.state.datasetIndex,
-        viewport: [this.size[0], this.size[1]]
-      }
-    )
-
-    return result
+    this.next = next
+    this.transformedCoords = this.transformDatumCoordinates()
   }
 
   paintDatums() {
@@ -1038,6 +910,5 @@ export default class CovidMap {
   destroy() {
     console.log('destroy()')
     cancelAnimationFrame(this.raf)
-    this.computeShader?.destroy()
   }
 }

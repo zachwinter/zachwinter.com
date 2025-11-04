@@ -1,0 +1,27 @@
+{
+  "name": "fragment-shader",
+  "version": "0.2.3",
+  "description": "A lightweight, performant WebGL fragment shader renderer.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zachwinter/fragment-shader.git"
+  },
+  "keywords": [
+    "WebGL",
+    "fragment",
+    "shader",
+    "renderer"
+  ],
+  "author": "Zach Winter",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zachwinter/fragment-shader/issues"
+  },
+  "homepage": "https://github.com/zachwinter/fragment-shader#readme",
+  "dependencies": {},
+  "devDependencies": {}
+}

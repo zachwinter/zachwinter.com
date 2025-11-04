@@ -43,8 +43,8 @@ svg {
 path {
   stroke: rgba(255, 255, 255, 1);
   stroke-width: 0.1rem;
-  animation: draw 750ms var(--easing) forwards;
-  animation-delay: 150ms;
+  animation: draw 1000ms var(--easing) forwards;
+  animation-delay: 500ms;
   background-color: transparent;
   fill: none;
 }

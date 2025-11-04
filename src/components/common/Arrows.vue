@@ -1,7 +1,24 @@
 <template>
   <aside class="arrows">
     <div class="arrow-wrapper up" :class="[nav.up && 'visible']" @click="scroll.navigateUp">
-      <div class="inner"><ArrowUp class="arrow" /></div>
+      <div class="inner">
+        <svg
+          data-v-48d84c02=""
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide arrow lucide-arrow-up-icon lucide-arrow-up arrow"
+        >
+          <path d="m5 12 7-7 7 7"></path>
+          <path d="M12 19V5"></path>
+        </svg>
+      </div>
       <span v-if="nav.up" class="label">{{ nav.up.label }}</span>
     </div>
     <div
@@ -10,19 +27,64 @@
       @click="scroll.navigateRight"
     >
       <div class="inner">
-        <ArrowRight class="arrow" />
+        <svg
+          data-v-48d84c02=""
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide arrow lucide-arrow-right-icon lucide-arrow-right arrow"
+        >
+          <path d="M5 12h14"></path>
+          <path d="m12 5 7 7-7 7"></path>
+        </svg>
       </div>
       <span v-if="nav.right" class="label">{{ nav.right.label }}</span>
     </div>
     <div class="arrow-wrapper down" :class="[nav.down && 'visible']" @click="scroll.navigateDown">
       <div class="inner">
-        <ArrowDown class="arrow" />
+        <svg
+          data-v-48d84c02=""
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide arrow lucide-arrow-down-icon lucide-arrow-down arrow"
+        >
+          <path d="M12 5v14"></path>
+          <path d="m19 12-7 7-7-7"></path>
+        </svg>
       </div>
       <span v-if="nav.down" class="label">{{ nav.down.label }}</span>
     </div>
     <div class="arrow-wrapper left" :class="[nav.left && 'visible']" @click="scroll.navigateLeft">
       <div class="inner">
-        <ArrowLeft class="arrow" />
+        <svg
+          data-v-48d84c02=""
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide arrow lucide-arrow-left-icon lucide-arrow-left arrow"
+        >
+          <path d="m12 19-7-7 7-7"></path>
+          <path d="M19 12H5"></path>
+        </svg>
       </div>
       <span v-if="nav.left" class="label">{{ nav.left.label }}</span>
     </div>
@@ -30,7 +92,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ArrowUp, ArrowRight, ArrowDown, ArrowLeft } from 'lucide-vue-next'
 import { useScroll } from '../../store/scroll'
 
 const scroll = useScroll()

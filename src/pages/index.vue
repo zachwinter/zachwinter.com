@@ -32,16 +32,20 @@
 <script setup lang="ts">
 import { pause } from '../util/time'
 import { useScroll } from '../store/scroll'
+import { useUI } from '../store/ui'
+import { useBackground } from '../store/background'
 
+const background = useBackground()
+const ui = useUI()
 const show = ref(false)
 const viewport = useViewport()
 const scroll = useScroll()
 const mainScroller = ref()
 
 onMounted(() => {
-  pause(2000).then(() => {
-    show.value = true
-  })
+  show.value = true
+  ui.loading = false
+  background.tweenToVariant(0)
 
   if (mainScroller.value) {
     scroll.mainScrollerRef = mainScroller.value
